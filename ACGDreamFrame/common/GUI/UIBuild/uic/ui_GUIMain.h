@@ -1,0 +1,141 @@
+/********************************************************************************
+** Form generated from reading UI file 'GUIMain.ui'
+**
+** Created by: Qt User Interface Compiler version 5.15.2
+**
+** WARNING! All changes made in this file will be lost when recompiling UI file!
+********************************************************************************/
+
+#ifndef UI_GUIMAIN_H
+#define UI_GUIMAIN_H
+
+#include <QtCore/QVariant>
+#include <QtWidgets/QApplication>
+#include <QtWidgets/QGridLayout>
+#include <QtWidgets/QHBoxLayout>
+#include <QtWidgets/QSpacerItem>
+#include <QtWidgets/QSplitter>
+#include <QtWidgets/QVBoxLayout>
+#include <QtWidgets/QWidget>
+#include "../../Components/Components.h"
+
+QT_BEGIN_NAMESPACE
+
+class Ui_GUIMain
+{
+public:
+    QHBoxLayout *horizontalLayout_2;
+    ScrollAreaStyle1 *scrollArea;
+    QWidget *scrollAreaWidgetContents;
+    QHBoxLayout *horizontalLayout;
+    QSpacerItem *horizontalSpacer;
+    QWidget *widget;
+    QVBoxLayout *verticalLayout;
+    QSplitter *splitter;
+    QSpacerItem *verticalSpacer_2;
+    QWidget *widget_3;
+    QGridLayout *gridLayout;
+
+    void setupUi(QWidget *GUIMain)
+    {
+        if (GUIMain->objectName().isEmpty())
+            GUIMain->setObjectName(QString::fromUtf8("GUIMain"));
+        GUIMain->resize(1024, 600);
+        QFont font;
+        font.setFamily(QString::fromUtf8("\350\220\235\350\216\211\344\275\223"));
+        GUIMain->setFont(font);
+        horizontalLayout_2 = new QHBoxLayout(GUIMain);
+        horizontalLayout_2->setSpacing(6);
+        horizontalLayout_2->setContentsMargins(11, 11, 11, 11);
+        horizontalLayout_2->setObjectName(QString::fromUtf8("horizontalLayout_2"));
+        scrollArea = new ScrollAreaStyle1(GUIMain);
+        scrollArea->setObjectName(QString::fromUtf8("scrollArea"));
+        QSizePolicy sizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding);
+        sizePolicy.setHorizontalStretch(0);
+        sizePolicy.setVerticalStretch(0);
+        sizePolicy.setHeightForWidth(scrollArea->sizePolicy().hasHeightForWidth());
+        scrollArea->setSizePolicy(sizePolicy);
+        scrollArea->setMinimumSize(QSize(100, 0));
+        scrollArea->setMaximumSize(QSize(100, 16777215));
+        scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+        scrollArea->setWidgetResizable(true);
+        scrollAreaWidgetContents = new QWidget();
+        scrollAreaWidgetContents->setObjectName(QString::fromUtf8("scrollAreaWidgetContents"));
+        scrollAreaWidgetContents->setGeometry(QRect(0, 0, 98, 580));
+        horizontalLayout = new QHBoxLayout(scrollAreaWidgetContents);
+        horizontalLayout->setSpacing(0);
+        horizontalLayout->setContentsMargins(11, 11, 11, 11);
+        horizontalLayout->setObjectName(QString::fromUtf8("horizontalLayout"));
+        horizontalLayout->setSizeConstraint(QLayout::SetDefaultConstraint);
+        horizontalLayout->setContentsMargins(0, 0, 0, 0);
+        horizontalSpacer = new QSpacerItem(10, 20, QSizePolicy::Fixed, QSizePolicy::Minimum);
+
+        horizontalLayout->addItem(horizontalSpacer);
+
+        widget = new QWidget(scrollAreaWidgetContents);
+        widget->setObjectName(QString::fromUtf8("widget"));
+        QSizePolicy sizePolicy1(QSizePolicy::Fixed, QSizePolicy::Preferred);
+        sizePolicy1.setHorizontalStretch(0);
+        sizePolicy1.setVerticalStretch(0);
+        sizePolicy1.setHeightForWidth(widget->sizePolicy().hasHeightForWidth());
+        widget->setSizePolicy(sizePolicy1);
+        verticalLayout = new QVBoxLayout(widget);
+        verticalLayout->setSpacing(6);
+        verticalLayout->setContentsMargins(11, 11, 11, 11);
+        verticalLayout->setObjectName(QString::fromUtf8("verticalLayout"));
+        splitter = new QSplitter(widget);
+        splitter->setObjectName(QString::fromUtf8("splitter"));
+        QSizePolicy sizePolicy2(QSizePolicy::Maximum, QSizePolicy::Preferred);
+        sizePolicy2.setHorizontalStretch(0);
+        sizePolicy2.setVerticalStretch(0);
+        sizePolicy2.setHeightForWidth(splitter->sizePolicy().hasHeightForWidth());
+        splitter->setSizePolicy(sizePolicy2);
+        splitter->setMaximumSize(QSize(16777215, 16777215));
+        splitter->setOrientation(Qt::Vertical);
+        splitter->setOpaqueResize(true);
+        splitter->setHandleWidth(0);
+
+        verticalLayout->addWidget(splitter);
+
+        verticalSpacer_2 = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::MinimumExpanding);
+
+        verticalLayout->addItem(verticalSpacer_2);
+
+
+        horizontalLayout->addWidget(widget);
+
+        scrollArea->setWidget(scrollAreaWidgetContents);
+
+        horizontalLayout_2->addWidget(scrollArea);
+
+        widget_3 = new QWidget(GUIMain);
+        widget_3->setObjectName(QString::fromUtf8("widget_3"));
+        gridLayout = new QGridLayout(widget_3);
+        gridLayout->setSpacing(6);
+        gridLayout->setContentsMargins(11, 11, 11, 11);
+        gridLayout->setObjectName(QString::fromUtf8("gridLayout"));
+
+        horizontalLayout_2->addWidget(widget_3);
+
+        horizontalLayout_2->setStretch(0, 1);
+        horizontalLayout_2->setStretch(1, 12);
+
+        retranslateUi(GUIMain);
+
+        QMetaObject::connectSlotsByName(GUIMain);
+    } // setupUi
+
+    void retranslateUi(QWidget *GUIMain)
+    {
+        GUIMain->setWindowTitle(QCoreApplication::translate("GUIMain", "ACGDream\345\267\245\345\205\267\347\256\261", nullptr));
+    } // retranslateUi
+
+};
+
+namespace Ui {
+    class GUIMain: public Ui_GUIMain {};
+} // namespace Ui
+
+QT_END_NAMESPACE
+
+#endif // UI_GUIMAIN_H

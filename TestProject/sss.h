@@ -1,0 +1,4 @@
+class KKK
+{ 
+	public: KKK() {} 
+};
