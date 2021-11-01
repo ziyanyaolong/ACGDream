@@ -26,16 +26,35 @@
     <QtRcc Include="SteamWorkshopTool.qrc">
       <Filter>Resource Files</Filter>
     </QtRcc>
-    <ClCompile Include="common\main\SteamWorkshopTool.cpp">
+    <ClCompile Include="common\GUI\SteamWorkshopTool.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="common\main\plugCalplugin.json" />
+    <None Include="common\GUI\SteamWorkshopTool.json" />
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="common\main\SteamWorkshopTool.h">
+    <QtMoc Include="common\GUI\SteamWorkshopTool.h">
       <Filter>Header Files</Filter>
     </QtMoc>
+    <QtMoc Include="common\Network\WebCrawler\WebCrawler.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="common\Network\WebsiteAnalytic\WebsiteAnalytic.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+  </ItemGroup>
+  <ItemGroup>
+    <QtUic Include="common\GUI\SteamWorkshopTool.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="common\Network\WebCrawler\WebCrawler.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="common\Network\WebsiteAnalytic\WebsiteAnalytic.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

@@ -6,6 +6,7 @@
 #include <QDir>
 #include <QPluginLoader>
 #include <QMessageBox>
+#include <QEventLoop>
 
 #include "../ACGDreamFrame/include/ACGDreamFrameH.h"
 #pragma comment (lib,"../.build/vs/ACGDreamFrame/lib/ACGDreamFrame.lib")
@@ -20,9 +21,12 @@ class ACGDream : public ACGDreamFrame
 private:
 	PluginCalInterface* m_pInterface = nullptr;
 
+protected:
+	virtual void closeEvent(QCloseEvent* e);
+
 public:
 	ACGDream(QWidget *parent = Q_NULLPTR);
 	~ACGDream();
-	bool loadPlugin();
-	
+	bool loadPluginAll();
+
 };

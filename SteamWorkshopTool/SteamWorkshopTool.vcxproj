@@ -32,12 +32,12 @@
   </ImportGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="QtSettings">
     <QtInstall>5.15.2_msvc2019_64</QtInstall>
-    <QtModules>core;gui;widgets</QtModules>
+    <QtModules>core;network;gui;multimedia;widgets;webchannel;websockets</QtModules>
     <QtBuildConfig>debug</QtBuildConfig>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'" Label="QtSettings">
     <QtInstall>5.15.2_msvc2019_64</QtInstall>
-    <QtModules>core;gui;widgets</QtModules>
+    <QtModules>core;network;gui;multimedia;widgets;webchannel;websockets</QtModules>
     <QtBuildConfig>release</QtBuildConfig>
   </PropertyGroup>
   <Target Name="QtMsBuildNotFound" BeforeTargets="CustomBuild;ClCompile" Condition="!Exists('$(QtMsBuild)\qt.targets') or !Exists('$(QtMsBuild)\qt.props')">
@@ -107,12 +107,23 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="common\Network\WebCrawler\WebCrawler.cpp" />
+    <ClCompile Include="common\Network\WebsiteAnalytic\WebsiteAnalytic.cpp" />
     <QtRcc Include="SteamWorkshopTool.qrc" />
-    <QtMoc Include="common\main\SteamWorkshopTool.h" />
-    <ClCompile Include="common\main\SteamWorkshopTool.cpp" />
+    <QtMoc Include="common\GUI\SteamWorkshopTool.h" />
+    <ClCompile Include="common\GUI\SteamWorkshopTool.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="common\main\plugCalplugin.json" />
+    <None Include="common\GUI\SteamWorkshopTool.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <QtUic Include="common\GUI\SteamWorkshopTool.ui" />
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="common\Network\WebCrawler\WebCrawler.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="common\Network\WebsiteAnalytic\WebsiteAnalytic.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">
