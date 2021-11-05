@@ -3,7 +3,7 @@
 void iii()
 {}
 
-ACGDreamFrame::ACGDreamFrame(QWidget *parent)
+ACGDreamFrame::ACGDreamFrame(QMainWindow*parent)
 	: GUIMain(parent)
 	//: QObject(parent)
 {

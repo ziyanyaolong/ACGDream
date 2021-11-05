@@ -23,7 +23,7 @@ private:
 	//Animation* animation = nullptr;
 
 public:
-	explicit ACGDreamFrame(QWidget* parent = Q_NULLPTR);
+	explicit ACGDreamFrame(QMainWindow* parent = Q_NULLPTR);
 	~ACGDreamFrame();
 
 	//GUIMain* readGUI() { return guiMain; }

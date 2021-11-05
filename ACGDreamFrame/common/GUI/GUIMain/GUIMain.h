@@ -1,6 +1,6 @@
 #pragma once
 
-#include <QWidget>
+#include <QMainWindow>
 #include <QPushButton>
 #include <QPainter>
 #include <QImage>
@@ -14,7 +14,7 @@
 #include "../UIBuild/uic/ui_GUIMain.h"
 #include "../../Components/Components.h"
 
-class GUIMain : public QWidget
+class GUIMain : public QMainWindow
 {
 	Q_OBJECT
 
@@ -24,12 +24,12 @@ public:
 		AutoDelete,
 		ManualDelete
 	};
-	explicit GUIMain(QWidget *parent = Q_NULLPTR);
+	explicit GUIMain(QMainWindow*parent = Q_NULLPTR);
 	~GUIMain();
 	QPushButton* addWidght(QWidget* widget);
 
 private:
-	Ui::GUIMain ui;
+	Ui_MainWindow ui;
 	bool beginEndValue = false;
 
 	QImage* background;

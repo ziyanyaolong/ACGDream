@@ -19,11 +19,11 @@
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
     <PlatformToolset>v142</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
     <PlatformToolset>v142</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
@@ -33,12 +33,12 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="QtSettings">
     <QtBuildConfig>debug</QtBuildConfig>
     <QtInstall>5.15.2_msvc2019_64</QtInstall>
-    <QtModules>core;opengl;network;gui;widgets;winextras;</QtModules>
+    <QtModules>core;opengl;network;gui;xmlpatterns;multimedia;uitools;widgets;webchannel;websockets;winextras;multimediawidgets;webengine;webenginewidgets;</QtModules>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'" Label="QtSettings">
     <QtBuildConfig>release</QtBuildConfig>
     <QtInstall>5.15.2_msvc2019_64</QtInstall>
-    <QtModules>core;opengl;network;gui;widgets;winextras;</QtModules>
+    <QtModules>core;opengl;network;gui;xmlpatterns;multimedia;uitools;widgets;webchannel;websockets;winextras;multimediawidgets;webengine;webenginewidgets;</QtModules>
   </PropertyGroup>
   <Target Name="QtMsBuildNotFound" BeforeTargets="CustomBuild;ClCompile" Condition="!Exists('$(QtMsBuild)\qt.targets') or !Exists('$(QtMsBuild)\qt.props')">
     <Message Importance="High" Text="QtMsBuild: could not locate qt.targets, qt.props; project may not build correctly." />
@@ -55,8 +55,10 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <OutDir>$(SolutionDir)ACGDream\lib\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutDir>$(SolutionDir)ACGDream\lib\</OutDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -106,14 +108,15 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\FirstClass.cpp" />
-    <ClCompile Include="src\main.cpp" />
-    <ClCompile Include="sss.h" />
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="src\FirstClass.h" />
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="src\FirstClass.ui" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="src\FirstClass.json" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">

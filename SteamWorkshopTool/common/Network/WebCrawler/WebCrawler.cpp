@@ -3,13 +3,19 @@
 WebCrawler::WebCrawler(QObject *parent)
 	: QObject(parent)
 {
+	codec = QTextCodec::codecForName("utf8");
 	web = new QNetworkAccessManager(this);
 	webData = new QString("");
-	connect(web, &QNetworkAccessManager::finished, this, &WebCrawler::setWebData);
+	webAddress = new QString("");
+	connect(web, &QNetworkAccessManager::finished, this, &WebCrawler::setWebsiteData);
+	connect(this, &WebCrawler::websiteLink, this, &WebCrawler::startWebsiteLink);
 }
 
 WebCrawler::~WebCrawler()
 {
+	if (webAddress)
+		delete webAddress;
+
 	if (webData)
 		delete webData;
 
@@ -17,10 +23,14 @@ WebCrawler::~WebCrawler()
 		delete web;
 }
 
-void WebCrawler::setWebData(QNetworkReply* reply)
+void WebCrawler::startWebsiteLink(const QString& address)
 {
-	QTextCodec* codec = QTextCodec::codecForName("utf8");
+	web->get(QNetworkRequest(QUrl(address)));
+}
+
+void WebCrawler::setWebsiteData(QNetworkReply* reply)
+{
 	*webData = codec->toUnicode(reply->readAll());
 	reply->deleteLater();
-	emit this->finish();
+	emit this->finish(*webData);
 }

@@ -26,15 +26,15 @@
     <QtRcc Include="SteamWorkshopTool.qrc">
       <Filter>Resource Files</Filter>
     </QtRcc>
-    <ClCompile Include="common\GUI\SteamWorkshopTool.cpp">
+    <ClCompile Include="main\SteamWorkshopTool.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="common\GUI\SteamWorkshopTool.json" />
+    <None Include="main\SteamWorkshopTool.json" />
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="common\GUI\SteamWorkshopTool.h">
+    <QtMoc Include="main\SteamWorkshopTool.h">
       <Filter>Header Files</Filter>
     </QtMoc>
     <QtMoc Include="common\Network\WebCrawler\WebCrawler.h">
@@ -43,9 +43,12 @@
     <QtMoc Include="common\Network\WebsiteAnalytic\WebsiteAnalytic.h">
       <Filter>Header Files</Filter>
     </QtMoc>
+    <QtMoc Include="common\GUI\SWTGUI.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
   </ItemGroup>
   <ItemGroup>
-    <QtUic Include="common\GUI\SteamWorkshopTool.ui">
+    <QtUic Include="common\GUI\SWTGUI.ui">
       <Filter>Form Files</Filter>
     </QtUic>
   </ItemGroup>
@@ -54,6 +57,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="common\Network\WebsiteAnalytic\WebsiteAnalytic.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="common\GUI\SWTGUI.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -23,13 +23,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\FirstClass.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="sss.h">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -42,5 +36,8 @@
     <QtUic Include="src\FirstClass.ui">
       <Filter>Form Files</Filter>
     </QtUic>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="src\FirstClass.json" />
   </ItemGroup>
 </Project>

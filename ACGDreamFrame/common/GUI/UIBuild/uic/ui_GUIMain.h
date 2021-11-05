@@ -13,17 +13,23 @@
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QGridLayout>
 #include <QtWidgets/QHBoxLayout>
+#include <QtWidgets/QMainWindow>
+#include <QtWidgets/QMenuBar>
 #include <QtWidgets/QSpacerItem>
 #include <QtWidgets/QSplitter>
+#include <QtWidgets/QStatusBar>
 #include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QWidget>
 #include "../../Components/Components.h"
 
 QT_BEGIN_NAMESPACE
 
-class Ui_GUIMain
+class Ui_MainWindow
 {
 public:
+    QWidget *centralwidget;
+    QGridLayout *gridLayout_2;
+    QWidget *widget_2;
     QHBoxLayout *horizontalLayout_2;
     ScrollAreaStyle1 *scrollArea;
     QWidget *scrollAreaWidgetContents;
@@ -35,20 +41,26 @@ public:
     QSpacerItem *verticalSpacer_2;
     QWidget *widget_3;
     QGridLayout *gridLayout;
+    QMenuBar *menubar;
+    QStatusBar *statusbar;
 
-    void setupUi(QWidget *GUIMain)
+    void setupUi(QMainWindow *MainWindow)
     {
-        if (GUIMain->objectName().isEmpty())
-            GUIMain->setObjectName(QString::fromUtf8("GUIMain"));
-        GUIMain->resize(1024, 600);
+        if (MainWindow->objectName().isEmpty())
+            MainWindow->setObjectName(QString::fromUtf8("MainWindow"));
+        MainWindow->resize(1024, 600);
         QFont font;
         font.setFamily(QString::fromUtf8("\350\220\235\350\216\211\344\275\223"));
-        GUIMain->setFont(font);
-        horizontalLayout_2 = new QHBoxLayout(GUIMain);
-        horizontalLayout_2->setSpacing(6);
-        horizontalLayout_2->setContentsMargins(11, 11, 11, 11);
+        MainWindow->setFont(font);
+        centralwidget = new QWidget(MainWindow);
+        centralwidget->setObjectName(QString::fromUtf8("centralwidget"));
+        gridLayout_2 = new QGridLayout(centralwidget);
+        gridLayout_2->setObjectName(QString::fromUtf8("gridLayout_2"));
+        widget_2 = new QWidget(centralwidget);
+        widget_2->setObjectName(QString::fromUtf8("widget_2"));
+        horizontalLayout_2 = new QHBoxLayout(widget_2);
         horizontalLayout_2->setObjectName(QString::fromUtf8("horizontalLayout_2"));
-        scrollArea = new ScrollAreaStyle1(GUIMain);
+        scrollArea = new ScrollAreaStyle1(widget_2);
         scrollArea->setObjectName(QString::fromUtf8("scrollArea"));
         QSizePolicy sizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding);
         sizePolicy.setHorizontalStretch(0);
@@ -61,10 +73,9 @@ public:
         scrollArea->setWidgetResizable(true);
         scrollAreaWidgetContents = new QWidget();
         scrollAreaWidgetContents->setObjectName(QString::fromUtf8("scrollAreaWidgetContents"));
-        scrollAreaWidgetContents->setGeometry(QRect(0, 0, 98, 580));
+        scrollAreaWidgetContents->setGeometry(QRect(0, 0, 98, 519));
         horizontalLayout = new QHBoxLayout(scrollAreaWidgetContents);
         horizontalLayout->setSpacing(0);
-        horizontalLayout->setContentsMargins(11, 11, 11, 11);
         horizontalLayout->setObjectName(QString::fromUtf8("horizontalLayout"));
         horizontalLayout->setSizeConstraint(QLayout::SetDefaultConstraint);
         horizontalLayout->setContentsMargins(0, 0, 0, 0);
@@ -80,8 +91,6 @@ public:
         sizePolicy1.setHeightForWidth(widget->sizePolicy().hasHeightForWidth());
         widget->setSizePolicy(sizePolicy1);
         verticalLayout = new QVBoxLayout(widget);
-        verticalLayout->setSpacing(6);
-        verticalLayout->setContentsMargins(11, 11, 11, 11);
         verticalLayout->setObjectName(QString::fromUtf8("verticalLayout"));
         splitter = new QSplitter(widget);
         splitter->setObjectName(QString::fromUtf8("splitter"));
@@ -108,32 +117,40 @@ public:
 
         horizontalLayout_2->addWidget(scrollArea);
 
-        widget_3 = new QWidget(GUIMain);
+        widget_3 = new QWidget(widget_2);
         widget_3->setObjectName(QString::fromUtf8("widget_3"));
         gridLayout = new QGridLayout(widget_3);
-        gridLayout->setSpacing(6);
-        gridLayout->setContentsMargins(11, 11, 11, 11);
         gridLayout->setObjectName(QString::fromUtf8("gridLayout"));
 
         horizontalLayout_2->addWidget(widget_3);
 
         horizontalLayout_2->setStretch(0, 1);
-        horizontalLayout_2->setStretch(1, 12);
 
-        retranslateUi(GUIMain);
+        gridLayout_2->addWidget(widget_2, 0, 0, 1, 1);
 
-        QMetaObject::connectSlotsByName(GUIMain);
+        MainWindow->setCentralWidget(centralwidget);
+        menubar = new QMenuBar(MainWindow);
+        menubar->setObjectName(QString::fromUtf8("menubar"));
+        menubar->setGeometry(QRect(0, 0, 1024, 22));
+        MainWindow->setMenuBar(menubar);
+        statusbar = new QStatusBar(MainWindow);
+        statusbar->setObjectName(QString::fromUtf8("statusbar"));
+        MainWindow->setStatusBar(statusbar);
+
+        retranslateUi(MainWindow);
+
+        QMetaObject::connectSlotsByName(MainWindow);
     } // setupUi
 
-    void retranslateUi(QWidget *GUIMain)
+    void retranslateUi(QMainWindow *MainWindow)
     {
-        GUIMain->setWindowTitle(QCoreApplication::translate("GUIMain", "ACGDream\345\267\245\345\205\267\347\256\261", nullptr));
+        MainWindow->setWindowTitle(QCoreApplication::translate("MainWindow", "MainWindow", nullptr));
     } // retranslateUi
 
 };
 
 namespace Ui {
-    class GUIMain: public Ui_GUIMain {};
+    class MainWindow: public Ui_MainWindow {};
 } // namespace Ui
 
 QT_END_NAMESPACE

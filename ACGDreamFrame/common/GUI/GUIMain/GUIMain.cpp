@@ -1,7 +1,7 @@
 #include "GUIMain.h"
 
-GUIMain::GUIMain(QWidget *parent)
-	: QWidget(parent)
+GUIMain::GUIMain(QMainWindow*parent)
+	: QMainWindow(parent)
 {
 	ui.setupUi(this);
 	background = new QImage("F:/1.jpg");

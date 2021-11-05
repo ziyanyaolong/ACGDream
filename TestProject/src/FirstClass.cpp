@@ -1,10 +1,12 @@
 #include "FirstClass.h"
 
-FirstClass::FirstClass(QWidget *parent)
-	: QWidget(parent)
+FirstClass::FirstClass(QWidget* parent)
+    : PluginCalInterface(parent)
 {
 	ui.setupUi(this);
-    createFile("","sss.h");
+    addGui(this);
+    view.setUrl(QUrl("http://www.cnblogs.com/mikezhang"));
+    view.show();
 }
 
 FirstClass::~FirstClass()

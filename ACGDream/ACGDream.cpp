@@ -1,8 +1,9 @@
 #include "include/ACGDream.h"
 
-ACGDream::ACGDream(QWidget* parent)
+ACGDream::ACGDream(QMainWindow* parent)
 	: ACGDreamFrame(parent)
 {
+	QTextCodec::setCodecForLocale(QTextCodec::codecForName("UTF-8"));
 	if (!loadPluginAll()) {
 		QMessageBox::warning(this, "Error", "Could not load the plugin");
 	}
@@ -29,7 +30,8 @@ bool ACGDream::loadPluginAll()
 
 	bool isLoad = false;
 
-	foreach(QString fileName, pluginsDir.entryList(QDir::Files)) {
+	foreach(QString fileName, pluginsDir.entryList(QDir::Files)) 
+	{
 		QPluginLoader pluginLoader(pluginsDir.absoluteFilePath(fileName));
 		QObject* plugin = pluginLoader.instance();
 		if (!pluginLoader.isLoaded())
@@ -38,7 +40,14 @@ bool ACGDream::loadPluginAll()
 			m_pInterface = qobject_cast<PluginCalInterface*>(plugin);
 			if (m_pInterface)
 			{
-				this->addWidght(m_pInterface);
+				foreach (QWidget* i, m_pInterface->readGuiList())
+				{
+					i->hide();
+					this->addWidght(i);
+				}
+				QThread* temp = new QThread(this);
+				m_pInterface->moveToThread(temp);
+				temp->start();
 				m_pInterface->pluginRun(0, nullptr, this);
 				isLoad = true;
 			}
