@@ -24,7 +24,7 @@ private:
 
 public:
 	explicit ACGDreamFrame(QMainWindow* parent = Q_NULLPTR);
-	~ACGDreamFrame();
+	virtual ~ACGDreamFrame();
 
 	//GUIMain* readGUI() { return guiMain; }
 

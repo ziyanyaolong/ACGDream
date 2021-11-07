@@ -17,10 +17,10 @@ class WebCrawler : public QObject
 	Q_OBJECT
 
 private:
-	QNetworkAccessManager* web;
-	QString* webData;
-	QString* webAddress;
-	QTextCodec* codec;
+	QNetworkAccessManager* web = nullptr;
+	QString* webData = nullptr;
+	QString* webAddress = nullptr;
+	QTextCodec* codec = nullptr;
 
 public:
 	WebCrawler(QObject *parent = Q_NULLPTR);

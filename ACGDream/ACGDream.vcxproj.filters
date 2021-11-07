@@ -35,10 +35,4 @@
       <Filter>Header Files</Filter>
     </QtMoc>
   </ItemGroup>
-  <ItemGroup>
-    <Library Include="lib\SteamWorkshopTool.lib" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="lib\SteamWorkshopTool.dll" />
-  </ItemGroup>
 </Project>

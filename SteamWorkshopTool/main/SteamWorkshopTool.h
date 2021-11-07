@@ -5,7 +5,7 @@
 #include "../common/Network/WebsiteAnalytic/WebsiteAnalytic.h"
 #include "../../ACGDreamLoadPlugs/include/ACGDreamLoadPlugs.h"
 
-//#pragma comment(lib,"../../../.build/vs/ACGDreamLoadPlugs/libACGDreamLoadPlugs.lib")
+#pragma comment(lib,"../.build/vs/ACGDreamLoadPlugs/lib/ACGDreamLoadPlugs.lib")
 
 class _declspec(dllexport) SteamWorkshopTool : public PluginCalInterface
 {
@@ -13,14 +13,14 @@ class _declspec(dllexport) SteamWorkshopTool : public PluginCalInterface
 		RegPlugin("SteamWorkshopTool.json")
 
 private:
-	SWTGUI* gui;
-	WebCrawler* webCrawler;
-	WebsiteAnalytic* websiteAnalytic;
+	SWTGUI* gui = nullptr;
+	WebCrawler* webCrawler = nullptr;
+	WebsiteAnalytic* websiteAnalytic = nullptr;
 
 public:
 	SteamWorkshopTool();
 	virtual ~SteamWorkshopTool();
-	virtual void run() override;
+	virtual void pRun() override;
 
 signals:
 

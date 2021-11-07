@@ -9,7 +9,7 @@ ScrollAreaStyle1::ScrollAreaStyle1(QWidget* parent)
 	timer = new QTimer(this);
 	setAttribute(Qt::WA_Hover, true);
 	setFrameShape(QFrame::NoFrame);
-	QFile* file = new QFile("G:/QT/VS/ACGDream/ACGDreamFrame/common/Components/StyleSheet/ScrollBar/ScrollBarStyle1.qss");
+	QFile* file = new QFile("../StyleSheet/ScrollBar/ScrollBarStyle1.qss");
 	if (file->open(QFile::ReadOnly | QIODevice::Text))
 		this->verticalScrollBar()->setStyleSheet(file->readAll());
 
@@ -50,21 +50,6 @@ ScrollAreaStyle1::ScrollAreaStyle1(QWidget* parent)
 
 ScrollAreaStyle1::~ScrollAreaStyle1()
 {
-	if (timer)
-	{
-		timer->stop();
-		delete timer;
-	}
-	if (fadeIn)
-	{
-		fadeIn->stop();
-		delete fadeIn;
-	}
-	if (fadeOut)
-	{
-		fadeOut->stop();
-		delete fadeOut;
-	}
 }
 
 bool ScrollAreaStyle1::eventFilter(QObject* target, QEvent* event)

@@ -4,19 +4,19 @@ GUIMain::GUIMain(QMainWindow*parent)
 	: QMainWindow(parent)
 {
 	ui.setupUi(this);
-	background = new QImage("F:/1.jpg");
-	setAttribute(Qt::WA_TranslucentBackground);
+	background = QSharedPointer<QImage>(new QImage("F:/1.jpg"));
 }
 
 GUIMain::~GUIMain()
 {
-	if (background)
-		delete background;
 	for (QMap<QObject*, QWidget*>::iterator i = pushButtonMap.begin(); i != pushButtonMap.end(); i++)
 	{
-		if (i.key() != nullptr)
-			delete i.key();
+		if (i.key())
+		{
+			i.key()->deleteLater();
+		}
 	}
+	close();
 }
 
 void GUIMain::paintEvent(QPaintEvent* event)

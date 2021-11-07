@@ -3,63 +3,76 @@
 ACGDream::ACGDream(QMainWindow* parent)
 	: ACGDreamFrame(parent)
 {
+	pluginReg = new PluginReg(this);
 	QTextCodec::setCodecForLocale(QTextCodec::codecForName("UTF-8"));
-	if (!loadPluginAll()) {
+	if (!pluginReg->loadPluginAll(QDir::currentPath() + "/lib")) {
 		QMessageBox::warning(this, "Error", "Could not load the plugin");
+	}
+	else
+	{
+		foreach (auto plugin, pluginReg->readPluginList())
+		{
+			foreach(QWidget * i, plugin->readGuiList())
+			{
+				i->hide();
+				this->addWidght(i);
+			}
+		}
 	}
 	show();
 }
 
 ACGDream::~ACGDream()
 {
+	/*if (pluginReg)
+		delete pluginReg;*/
 }
 
 void ACGDream::closeEvent(QCloseEvent* e)
 {
-	if (m_pInterface)
-		delete m_pInterface;
 }
 
-bool ACGDream::loadPluginAll()
-{
-	QDir pluginsDir(QDir::currentPath() + "/lib");
-
-	QStringList filters;
-	filters.append("*.dll");
-	pluginsDir.setNameFilters(filters);
-
-	bool isLoad = false;
-
-	foreach(QString fileName, pluginsDir.entryList(QDir::Files)) 
-	{
-		QPluginLoader pluginLoader(pluginsDir.absoluteFilePath(fileName));
-		QObject* plugin = pluginLoader.instance();
-		if (!pluginLoader.isLoaded())
-			qDebug() << __FUNCTION__ << pluginLoader.errorString();
-		if (plugin) {
-			m_pInterface = qobject_cast<PluginCalInterface*>(plugin);
-			if (m_pInterface)
-			{
-				foreach (QWidget* i, m_pInterface->readGuiList())
-				{
-					i->hide();
-					this->addWidght(i);
-				}
-				QThread* temp = new QThread(this);
-				m_pInterface->moveToThread(temp);
-				temp->start();
-				m_pInterface->pluginRun(0, nullptr, this);
-				isLoad = true;
-			}
-		}
-	}
-	
-	if (isLoad)
-	{
-		return true;
-	}else
-		return false;
-}
+//bool ACGDream::loadPluginAll()
+//{
+//	QDir pluginsDir(QDir::currentPath() + "/lib");
+//
+//	QStringList filters;
+//	filters.append("*.dll");
+//	pluginsDir.setNameFilters(filters);
+//
+//	bool isLoad = false;
+//
+//	foreach(QString fileName, pluginsDir.entryList(QDir::Files)) 
+//	{
+//		QPluginLoader pluginLoader(pluginsDir.absoluteFilePath(fileName));
+//		QObject* plugin = pluginLoader.instance();
+//		if (!pluginLoader.isLoaded())
+//			qDebug() << __FUNCTION__ << pluginLoader.errorString();
+//		if (plugin) {
+//			auto pluginClass = qobject_cast<PluginCalInterface*>(plugin);
+//			if (m_pInterface.indexOf(pluginClass) == -1)
+//			{
+//				m_pInterface.push_back(pluginClass);
+//			}
+//			if (pluginClass)
+//			{
+//				foreach (QWidget* i, pluginClass->readGuiList())
+//				{
+//					i->hide();
+//					this->addWidght(i);
+//				}
+//				emit pluginClass->pluginRun(this);
+//				isLoad = true;
+//			}
+//		}
+//	}
+//	
+//	if (isLoad)
+//	{
+//		return true;
+//	}else
+//		return false;
+//}
 
 //bool ACGDream::loadPlugin()
 //{

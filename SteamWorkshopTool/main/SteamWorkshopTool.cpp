@@ -8,7 +8,7 @@ SteamWorkshopTool::SteamWorkshopTool()
 	websiteAnalytic = new WebsiteAnalytic(this);
 	addGui(gui);
 
-	connect(gui, &SWTGUI::haveWebAddress, webCrawler, &WebCrawler::websiteLink);
+	connect(gui, &SWTGUI::haveWebAddress, webCrawler, &WebCrawler::websiteLink, Qt::QueuedConnection);
 
 	void (WebsiteAnalytic:: * analyticWebsiteData)(const QString & data) = &WebsiteAnalytic::analyticWebsiteData;
 
@@ -20,20 +20,16 @@ SteamWorkshopTool::SteamWorkshopTool()
 
 SteamWorkshopTool::~SteamWorkshopTool()
 {
-	if (gui)
-	{
-		gui->close();
-		delete gui;
-	}
-
-	if (webCrawler)
-		delete webCrawler;
 
 	if (websiteAnalytic)
-		delete websiteAnalytic;
+		websiteAnalytic->deleteLater();
+
+	if (webCrawler)
+		webCrawler->deleteLater();
+
+	
 }
 
-void SteamWorkshopTool::run()
+void SteamWorkshopTool::pRun()
 {
-	setOpenEventLoop(true);
 }

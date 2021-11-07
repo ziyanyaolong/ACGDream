@@ -5,22 +5,22 @@ WebCrawler::WebCrawler(QObject *parent)
 {
 	codec = QTextCodec::codecForName("utf8");
 	web = new QNetworkAccessManager(this);
-	webData = new QString("");
 	webAddress = new QString("");
-	connect(web, &QNetworkAccessManager::finished, this, &WebCrawler::setWebsiteData);
-	connect(this, &WebCrawler::websiteLink, this, &WebCrawler::startWebsiteLink);
+	webData = new QString("");
+	connect(web, &QNetworkAccessManager::finished, this, &WebCrawler::setWebsiteData, Qt::QueuedConnection);
+	connect(this, &WebCrawler::websiteLink, this, &WebCrawler::startWebsiteLink, Qt::QueuedConnection);
 }
 
 WebCrawler::~WebCrawler()
 {
+	if (web)
+		web->deleteLater();
+
 	if (webAddress)
 		delete webAddress;
 
 	if (webData)
 		delete webData;
-
-	if (web)
-		delete web;
 }
 
 void WebCrawler::startWebsiteLink(const QString& address)

@@ -4,11 +4,21 @@
 #include <QFile>
 #include <QDir>
 #include <QDebug>
-#include <QWebEngineView>
+//#include <QWebEngineView>
 
 #include "ui_FirstClass.h"
 
 #include "../../ACGDreamLoadPlugs/include/ACGDreamLoadPlugs.h"
+#pragma comment(lib,"../.build/vs/ACGDreamLoadPlugs/lib/ACGDreamLoadPlugs.lib")
+
+class mui : public QWidget
+{
+	Q_OBJECT
+
+public:
+	mui() : QWidget() { ui.setupUi(this); }
+	Ui::FirstClass ui;
+};
 
 class _declspec(dllexport) FirstClass : public PluginCalInterface
 {
@@ -16,12 +26,14 @@ class _declspec(dllexport) FirstClass : public PluginCalInterface
 		RegPlugin("FirstClass.json")
 
 public:
-	FirstClass(QWidget *parent = Q_NULLPTR);
+	FirstClass(QObject *parent = Q_NULLPTR);
 	~FirstClass();
 	void createFile(QString filePath, QString fileName);
-	virtual void run() override { setOpenEventLoop(true); }
+	virtual void pRun() override {  }
 
 private:
-	Ui::FirstClass ui;
-	QWebEngineView view;
+	//QWebEngineView* view;
+	mui* _mui_;
 };
+
+

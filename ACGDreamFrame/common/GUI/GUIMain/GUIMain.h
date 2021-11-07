@@ -10,6 +10,7 @@
 #include <QVector>
 #include <QGraphicsBlurEffect>
 #include <QPropertyAnimation>
+#include <QSharedPointer>
 
 #include "../UIBuild/uic/ui_GUIMain.h"
 #include "../../Components/Components.h"
@@ -25,14 +26,14 @@ public:
 		ManualDelete
 	};
 	explicit GUIMain(QMainWindow*parent = Q_NULLPTR);
-	~GUIMain();
+	virtual ~GUIMain();
 	QPushButton* addWidght(QWidget* widget);
 
 private:
 	Ui_MainWindow ui;
 	bool beginEndValue = false;
 
-	QImage* background;
+	QSharedPointer<QImage> background;
 	QMap<QObject*, QWidget*> pushButtonMap;
 	QMap<QObject*, QPropertyAnimation*> propertyAnimationMap;
 	QVector<QWidget*> widgetList;

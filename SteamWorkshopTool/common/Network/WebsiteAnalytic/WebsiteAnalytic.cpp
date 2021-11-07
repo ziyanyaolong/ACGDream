@@ -21,10 +21,6 @@ void WebsiteAnalytic::analyticWebsiteData(const QString& data)
 
 void WebsiteAnalytic::analyticWebsiteData()
 {
-	/*while ( != )
-	{
-
-	}*/
 	finishData[0] = webData->mid(webData->indexOf("<div class=\"workshopBrowseItems\">"), webData->indexOf("<div class=\"workshopBrowsePaging\">"));
 	emit this->finish(finishData);
 }

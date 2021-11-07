@@ -56,11 +56,9 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
     <OutDir>$(SolutionDir).build\vs\$(ProjectName)\lib\</OutDir>
-    <IncludePath>$(SolutionDir).build\vs\ACGDreamFrame\lib\;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
     <OutDir>$(SolutionDir).build\vs\$(ProjectName)\lib\</OutDir>
-    <IncludePath>$(SolutionDir).build\vs\ACGDreamFrame\lib\;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -72,9 +70,7 @@
       <LanguageStandard_C>stdc17</LanguageStandard_C>
     </ClCompile>
     <Link />
-    <Link>
-      <AdditionalLibraryDirectories>ACGDreamFrame.dll;ACGDreamFrame.lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-    </Link>
+    <Link />
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -86,9 +82,7 @@
       <LanguageStandard_C>stdc17</LanguageStandard_C>
     </ClCompile>
     <Link />
-    <Link>
-      <AdditionalLibraryDirectories>ACGDreamFrame.dll;ACGDreamFrame.lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-    </Link>
+    <Link />
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="Configuration">
     <ClCompile>
@@ -122,12 +116,6 @@
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="include\ACGDream.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <Library Include="lib\SteamWorkshopTool.lib" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="lib\SteamWorkshopTool.dll" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">

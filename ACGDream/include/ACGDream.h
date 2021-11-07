@@ -12,7 +12,6 @@
 #include <QDebug>
 #include <QMap>
 #include <QDir>
-#include <QPluginLoader>
 #include <QMessageBox>
 #include <QEventLoop>
 #include <QTextCodec>
@@ -21,21 +20,20 @@
 #pragma comment (lib,"../.build/vs/ACGDreamFrame/lib/ACGDreamFrame.lib")
 
 #include "../ACGDreamLoadPlugs/include/ACGDreamLoadPlugs.h"
-//#pragma comment (lib,"../.build/vs/ACGDreamLoadPlugs/lib/ACGDreamLoadPlugs.lib")
+#pragma comment (lib,"../.build/vs/ACGDreamLoadPlugs/lib/ACGDreamLoadPlugs.lib")
 
 class ACGDream : public ACGDreamFrame
 {
 	Q_OBJECT
 
 private:
-	PluginCalInterface* m_pInterface = nullptr;
+	PluginReg* pluginReg;
 
 protected:
 	virtual void closeEvent(QCloseEvent* e);
 
 public:
-	ACGDream(QMainWindow*parent = Q_NULLPTR);
+	ACGDream(QMainWindow* parent = Q_NULLPTR);
 	~ACGDream();
-	bool loadPluginAll();
 
 };

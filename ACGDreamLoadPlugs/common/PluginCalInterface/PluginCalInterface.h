@@ -8,61 +8,34 @@
 #pragma execution_character_set("utf-8")
 #endif
 
-#include <QObject>
-#include <QWidget>
-#include <QThread>
-#include <QRunnable>
-#include <QThread>
-#include <QEventLoop>
-
 #define RegPlugin(fileName) \
 Q_INTERFACES(PluginCalInterface) \
 Q_PLUGIN_METADATA(IID PluginCalInterface_iid FILE fileName)	\
 
+#include <QObject>
+#include <QThread>
+#include <QThread>
+
 class ACGDream;
-class PluginCalInterface : virtual public QWidget, virtual public QRunnable
+class PluginCalInterface : public QObject
 {
+	Q_OBJECT
+
 private:
+	friend class PluginReg;
 	QVector<QWidget*> guiList;
-	ACGDream const* _acgDream = nullptr;
-	QEventLoop* eventLoop = nullptr;
-	bool _openEventLoop = false;
+	const ACGDream* _acgDream = nullptr;
+	bool separateThread = false;
 
 protected:
-	PluginCalInterface(QWidget* parent = Q_NULLPTR) : QRunnable(), QWidget(parent) {}
+	PluginCalInterface(QObject* parent = Q_NULLPTR) : QObject(parent) {}
+	virtual void pRun() = 0;
+	bool setSeparateThread(bool choice) { separateThread = choice; }
 
 public:
-	void closeEventLoop()
-	{
-		if (eventLoop)
-		{
-			eventLoop->exit();
-			delete eventLoop;
-			eventLoop = nullptr;
-		}
-	}
-	void openEventLoop()
-	{
-		closeEventLoop();
-		eventLoop = new QEventLoop(this);
-		eventLoop->exec();
-	}
 
 	virtual ~PluginCalInterface()
 	{ 
-		closeEventLoop();
-		exit(0);
-	}
-
-	int pluginRun(int argc, char* argv[], ACGDream const* acgDream) 
-	{ 
-		_acgDream = acgDream;
-		this->run();
-		if (_openEventLoop)
-		{
-			this->openEventLoop();
-		}
-		return 0;
 	}
 
 	bool addGui(QWidget* gui) 
@@ -77,8 +50,7 @@ public:
 
 	QVector<QWidget*>& readGuiList() { return guiList; }
 
-	ACGDream* getACGDream() {}
-	bool setOpenEventLoop(bool data) { return _openEventLoop = data; }
+	const ACGDream* getACGDream() { return _acgDream; }
 };
 
 #define PluginCalInterface_iid "net.ZiYanYaoLong.ACGDreamLoadPlugs.PluginCalInterface"

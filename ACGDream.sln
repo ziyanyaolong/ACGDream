@@ -4,9 +4,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 16.0.31424.327
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ACGDreamFrame", "ACGDreamFrame\ACGDreamFrame.vcxproj", "{FEF33D21-8F19-4A6B-9736-BE9222450269}"
-	ProjectSection(ProjectDependencies) = postProject
-		{DF065D9C-B383-4D41-B10A-1FBFDA4F6791} = {DF065D9C-B383-4D41-B10A-1FBFDA4F6791}
-	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".build", ".build", "{A92D00E9-02BE-4779-BD7A-AF5E86B3BFE6}"
 EndProject
@@ -21,15 +18,8 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "vs", "vs", "{8384B679-F6CB-466D-8EDF-3522EA3BD41C}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SteamWorkshopTool", "SteamWorkshopTool\SteamWorkshopTool.vcxproj", "{DF065D9C-B383-4D41-B10A-1FBFDA4F6791}"
-	ProjectSection(ProjectDependencies) = postProject
-		{1D9E6460-A57F-4E59-843F-FC92102B2B04} = {1D9E6460-A57F-4E59-843F-FC92102B2B04}
-		{EDEEAFBD-751B-4E5F-A498-1D083C0D44F0} = {EDEEAFBD-751B-4E5F-A498-1D083C0D44F0}
-	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TestProject", "TestProject\TestProject.vcxproj", "{1D9E6460-A57F-4E59-843F-FC92102B2B04}"
-	ProjectSection(ProjectDependencies) = postProject
-		{EDEEAFBD-751B-4E5F-A498-1D083C0D44F0} = {EDEEAFBD-751B-4E5F-A498-1D083C0D44F0}
-	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ACGDreamLoadPlugs", "ACGDreamLoadPlugs\ACGDreamLoadPlugs.vcxproj", "{EDEEAFBD-751B-4E5F-A498-1D083C0D44F0}"
 EndProject
