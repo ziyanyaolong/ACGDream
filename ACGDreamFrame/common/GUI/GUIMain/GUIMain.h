@@ -28,13 +28,18 @@ public:
 	explicit GUIMain(QMainWindow*parent = Q_NULLPTR);
 	virtual ~GUIMain();
 	QPushButton* addWidght(QWidget* widget);
+	void clearAllWidget();
+	Ui_MainWindow* readUI() { return &ui; }
+
+protected:
+	Ui_MainWindow ui;
 
 private:
-	Ui_MainWindow ui;
+	
 	bool beginEndValue = false;
 
 	QSharedPointer<QImage> background;
-	QMap<QObject*, QWidget*> pushButtonMap;
+	QMap<QPushButton*, QWidget*> pushButtonMap;
 	QMap<QObject*, QPropertyAnimation*> propertyAnimationMap;
 	QVector<QWidget*> widgetList;
 	 

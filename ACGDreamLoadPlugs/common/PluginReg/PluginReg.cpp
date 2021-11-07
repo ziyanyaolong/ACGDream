@@ -9,13 +9,19 @@ PluginReg::PluginReg(QObject *parent)
 
 PluginReg::~PluginReg()
 {
-	foreach(PluginCalInterface *plugin, plugins)
+	unloadAllPlugins();
+	thread->quit();
+	thread->wait();
+}
+
+void PluginReg::unloadAllPlugins()
+{
+	foreach(PluginCalInterface * plugin, plugins)
 	{
 		if (plugin)
 			plugin->deleteLater();
 	}
-	thread->quit();
-	thread->wait();
+	plugins.clear();
 }
 
 bool PluginReg::loadPlugin(const QString& filePath)
@@ -41,8 +47,9 @@ bool PluginReg::loadPlugin(const QString& filePath)
 	return true;
 }
 
-bool PluginReg::loadPluginAll(const QString& dirPath)
+bool PluginReg::loadAllPlugins(const QString& dirPath)
 {
+	unloadAllPlugins();
 	QDir pluginsDir(dirPath);
 
 	QStringList filters;

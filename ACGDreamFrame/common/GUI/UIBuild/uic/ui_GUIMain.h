@@ -10,10 +10,12 @@
 #define UI_GUIMAIN_H
 
 #include <QtCore/QVariant>
+#include <QtWidgets/QAction>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QGridLayout>
 #include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QMainWindow>
+#include <QtWidgets/QMenu>
 #include <QtWidgets/QMenuBar>
 #include <QtWidgets/QSpacerItem>
 #include <QtWidgets/QSplitter>
@@ -27,6 +29,7 @@ QT_BEGIN_NAMESPACE
 class Ui_MainWindow
 {
 public:
+    QAction *actions;
     QWidget *centralwidget;
     QGridLayout *gridLayout_2;
     QWidget *widget_2;
@@ -42,6 +45,10 @@ public:
     QWidget *widget_3;
     QGridLayout *gridLayout;
     QMenuBar *menubar;
+    QMenu *menu;
+    QMenu *menu_2;
+    QMenu *menu_3;
+    QMenu *menu_4;
     QStatusBar *statusbar;
 
     void setupUi(QMainWindow *MainWindow)
@@ -52,6 +59,8 @@ public:
         QFont font;
         font.setFamily(QString::fromUtf8("\350\220\235\350\216\211\344\275\223"));
         MainWindow->setFont(font);
+        actions = new QAction(MainWindow);
+        actions->setObjectName(QString::fromUtf8("actions"));
         centralwidget = new QWidget(MainWindow);
         centralwidget->setObjectName(QString::fromUtf8("centralwidget"));
         gridLayout_2 = new QGridLayout(centralwidget);
@@ -73,7 +82,7 @@ public:
         scrollArea->setWidgetResizable(true);
         scrollAreaWidgetContents = new QWidget();
         scrollAreaWidgetContents->setObjectName(QString::fromUtf8("scrollAreaWidgetContents"));
-        scrollAreaWidgetContents->setGeometry(QRect(0, 0, 98, 519));
+        scrollAreaWidgetContents->setGeometry(QRect(0, 0, 98, 517));
         horizontalLayout = new QHBoxLayout(scrollAreaWidgetContents);
         horizontalLayout->setSpacing(0);
         horizontalLayout->setObjectName(QString::fromUtf8("horizontalLayout"));
@@ -131,11 +140,26 @@ public:
         MainWindow->setCentralWidget(centralwidget);
         menubar = new QMenuBar(MainWindow);
         menubar->setObjectName(QString::fromUtf8("menubar"));
-        menubar->setGeometry(QRect(0, 0, 1024, 22));
+        menubar->setGeometry(QRect(0, 0, 1024, 23));
+        menu = new QMenu(menubar);
+        menu->setObjectName(QString::fromUtf8("menu"));
+        menu_2 = new QMenu(menubar);
+        menu_2->setObjectName(QString::fromUtf8("menu_2"));
+        menu_3 = new QMenu(menubar);
+        menu_3->setObjectName(QString::fromUtf8("menu_3"));
+        menu_4 = new QMenu(menubar);
+        menu_4->setObjectName(QString::fromUtf8("menu_4"));
         MainWindow->setMenuBar(menubar);
         statusbar = new QStatusBar(MainWindow);
         statusbar->setObjectName(QString::fromUtf8("statusbar"));
         MainWindow->setStatusBar(statusbar);
+
+        menubar->addAction(menu->menuAction());
+        menubar->addAction(menu_2->menuAction());
+        menubar->addAction(menu_3->menuAction());
+        menubar->addAction(menu_4->menuAction());
+        menu_3->addAction(actions);
+        menu_3->addSeparator();
 
         retranslateUi(MainWindow);
 
@@ -145,6 +169,11 @@ public:
     void retranslateUi(QMainWindow *MainWindow)
     {
         MainWindow->setWindowTitle(QCoreApplication::translate("MainWindow", "MainWindow", nullptr));
+        actions->setText(QCoreApplication::translate("MainWindow", "\351\207\215\350\275\275\345\205\250\351\203\250\346\211\251\345\261\225", nullptr));
+        menu->setTitle(QCoreApplication::translate("MainWindow", "\346\226\207\344\273\266", nullptr));
+        menu_2->setTitle(QCoreApplication::translate("MainWindow", "\347\274\226\350\276\221", nullptr));
+        menu_3->setTitle(QCoreApplication::translate("MainWindow", "\346\211\251\345\261\225", nullptr));
+        menu_4->setTitle(QCoreApplication::translate("MainWindow", "\345\270\256\345\212\251", nullptr));
     } // retranslateUi
 
 };

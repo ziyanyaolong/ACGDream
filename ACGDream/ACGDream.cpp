@@ -4,8 +4,27 @@ ACGDream::ACGDream(QMainWindow* parent)
 	: ACGDreamFrame(parent)
 {
 	pluginReg = new PluginReg(this);
+
+	connect(ui.actions, &QAction::triggered, this, [&]() {
+		this->clearAllWidget();
+		if (!pluginReg->loadAllPlugins(QDir::currentPath() + "/lib")) {
+			QMessageBox::warning(this, "Error", "Could not load the plugin");
+		}
+		else
+		{
+			foreach(auto plugin, pluginReg->readPluginList())
+			{
+				foreach(QWidget * i, plugin->readGuiList())
+				{
+					i->hide();
+					this->addWidght(i);
+				}
+			}
+		}
+		});
+
 	QTextCodec::setCodecForLocale(QTextCodec::codecForName("UTF-8"));
-	if (!pluginReg->loadPluginAll(QDir::currentPath() + "/lib")) {
+	if (!pluginReg->loadAllPlugins(QDir::currentPath() + "/lib")) {
 		QMessageBox::warning(this, "Error", "Could not load the plugin");
 	}
 	else

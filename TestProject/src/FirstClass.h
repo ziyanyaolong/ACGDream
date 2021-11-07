@@ -4,7 +4,7 @@
 #include <QFile>
 #include <QDir>
 #include <QDebug>
-//#include <QWebEngineView>
+#include <QWebEngineView>
 
 #include "ui_FirstClass.h"
 
@@ -32,7 +32,7 @@ public:
 	virtual void pRun() override {  }
 
 private:
-	//QWebEngineView* view;
+	QWebEngineView* view;
 	mui* _mui_;
 };
 

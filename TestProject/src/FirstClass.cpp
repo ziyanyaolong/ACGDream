@@ -3,10 +3,10 @@
 FirstClass::FirstClass(QObject* parent)
     : PluginCalInterface(parent)
 {
-    //view = new QWebEngineView(&_mui_);
-    //view->resize(_mui_.width(), _mui_.height());
-    //view->setUrl(QUrl("https://steamcommunity.com/workshop/browse/?appid=294100"));
     _mui_ = new mui();
+    view = new QWebEngineView(_mui_);
+    view->resize(_mui_->width(), _mui_->height());
+    view->setUrl(QUrl("https://steamcommunity.com/workshop/browse/?appid=294100"));
     addGui(_mui_);
 }
 

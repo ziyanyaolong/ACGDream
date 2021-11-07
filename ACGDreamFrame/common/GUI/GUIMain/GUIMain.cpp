@@ -9,14 +9,24 @@ GUIMain::GUIMain(QMainWindow*parent)
 
 GUIMain::~GUIMain()
 {
-	for (QMap<QObject*, QWidget*>::iterator i = pushButtonMap.begin(); i != pushButtonMap.end(); i++)
+	clearAllWidget();
+	close();
+}
+
+void GUIMain::clearAllWidget()
+{
+	for (QMap<QPushButton*, QWidget*>::iterator i = pushButtonMap.begin(); i != pushButtonMap.end(); i++)
 	{
 		if (i.key())
 		{
+			auto tempWidget = i.value();
+			if (tempWidget)
+				tempWidget->deleteLater();
+			i.key()->close();
 			i.key()->deleteLater();
 		}
 	}
-	close();
+	pushButtonMap.clear();
 }
 
 void GUIMain::paintEvent(QPaintEvent* event)
@@ -49,10 +59,6 @@ void GUIMain::resizeEvent(QResizeEvent* event)
 
 QPushButton* GUIMain::addWidght(QWidget* widget)
 {
-	if (pushButtonMap.count(widget) > 0)
-	{
-		return nullptr;
-	}
 	PushButtonStyle1* pushButton = new PushButtonStyle1(ui.splitter);
 	//QPropertyAnimation* pPosAnimation1 = new QPropertyAnimation(pushButton, "pos", ui.splitter);
 	pushButton->setMinimumHeight(50);
@@ -79,7 +85,7 @@ QPushButton* GUIMain::addWidght(QWidget* widget)
 	//connect(pPosAnimation1, &QPropertyAnimation::finished, pPosAnimation1, &QPropertyAnimation::stop);
 
 	connect(pushButton, &PushButtonStyle1::clicked, this, [&]() {
-		QWidget* tempSenderObject = (QWidget*)sender();
+		QPushButton* tempSenderObject = (QPushButton*)sender();
 		QWidget* tempWidgetP = pushButtonMap[tempSenderObject];
 		if (tempWidgetP->isHidden())
 		{

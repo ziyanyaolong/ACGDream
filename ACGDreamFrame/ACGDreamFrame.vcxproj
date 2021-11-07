@@ -68,11 +68,15 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
+      <BrowseInformation>true</BrowseInformation>
     </ClCompile>
     <QtUic />
     <QtUic>
       <QtUicDir>common\GUI\UIBuild\uic\</QtUicDir>
     </QtUic>
+    <Bscmake>
+      <PreserveSbr>true</PreserveSbr>
+    </Bscmake>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -121,6 +125,7 @@
     <ClCompile Include="common\Components\PushButton\PushButtonStyle1.cpp" />
     <ClCompile Include="common\Components\ScrollArea\ScrollAreaStyle1.cpp" />
     <ClCompile Include="common\Animation\MoveAnimation\MoveAnimation.cpp" />
+    <ClCompile Include="common\GUI\Settings\Settings.cpp" />
     <QtRcc Include="ACGDreamFrame.qrc" />
     <ClCompile Include="common\Components\Components.h" />
     <ClCompile Include="common\GUI\GUIMain\GUIMain.cpp" />
@@ -130,12 +135,14 @@
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="common\GUI\GUIMain\GUIMain.ui" />
+    <QtUic Include="common\GUI\Settings\Settings.ui" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="buildLib\config\config.h" />
     <ClInclude Include="common\GUI\UIBuild\uic\ui_GUIMain.h" />
     <ClInclude Include="common\GUI\UIBuild\uic\ui_testW.h" />
     <ClInclude Include="include\ACGDreamFrameH.h" />
+    <QtMoc Include="common\GUI\Settings\Settings.h" />
     <QtMoc Include="common\Animation\MoveAnimation\MoveAnimation.h" />
     <QtMoc Include="common\Animation\Animation.h" />
     <QtMoc Include="main\ACGDreamFrame.h" />

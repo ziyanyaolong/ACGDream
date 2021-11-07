@@ -52,6 +52,9 @@
     <ClCompile Include="common\Animation\API\AnimationAPI.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="common\GUI\Settings\Settings.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="common\GUI\GUIMain\GUIMain.h">
@@ -69,9 +72,15 @@
     <QtMoc Include="main\ACGDreamFrame.h">
       <Filter>Header Files</Filter>
     </QtMoc>
+    <QtMoc Include="common\GUI\Settings\Settings.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="common\GUI\GUIMain\GUIMain.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="common\GUI\Settings\Settings.ui">
       <Filter>Form Files</Filter>
     </QtUic>
   </ItemGroup>

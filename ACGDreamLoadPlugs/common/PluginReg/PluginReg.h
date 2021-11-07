@@ -27,7 +27,8 @@ public:
 	const QVector<PluginCalInterface*>& readPluginList() { return plugins; }
 
 public slots:
-	bool loadPluginAll(const QString & dirPath);
+	bool loadAllPlugins(const QString & dirPath);
 	bool loadPlugin(const QString& filePath);
+	void unloadAllPlugins();
 
 };
