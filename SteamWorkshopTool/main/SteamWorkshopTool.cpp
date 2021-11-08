@@ -14,7 +14,11 @@ SteamWorkshopTool::SteamWorkshopTool()
 
 	connect(webCrawler, &WebCrawler::finish, websiteAnalytic, analyticWebsiteData);
 	connect(websiteAnalytic, &WebsiteAnalytic::finish, this, [&](auto data) {
-		emit gui->printInfo(data[0]);
+		if (data.size() > 0)
+		{
+			qDebug() << data[0].title;
+			emit gui->printInfo(data[0].title);
+		}
 		});
 }
 

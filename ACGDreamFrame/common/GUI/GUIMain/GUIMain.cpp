@@ -17,13 +17,20 @@ void GUIMain::clearAllWidget()
 {
 	for (QMap<QPushButton*, QWidget*>::iterator i = pushButtonMap.begin(); i != pushButtonMap.end(); i++)
 	{
-		if (i.key())
+		auto tempWidget = i.value();
+		auto tempPushButton = i.key();
+		if (tempPushButton && tempWidget)
 		{
-			auto tempWidget = i.value();
 			if (tempWidget)
+			{
+				tempWidget->close();
 				tempWidget->deleteLater();
-			i.key()->close();
-			i.key()->deleteLater();
+				tempWidget = nullptr;
+			}
+			tempPushButton->hide();
+			tempPushButton->close();
+			tempPushButton->deleteLater();
+			tempPushButton = nullptr;
 		}
 	}
 	pushButtonMap.clear();
@@ -87,6 +94,11 @@ QPushButton* GUIMain::addWidght(QWidget* widget)
 	connect(pushButton, &PushButtonStyle1::clicked, this, [&]() {
 		QPushButton* tempSenderObject = (QPushButton*)sender();
 		QWidget* tempWidgetP = pushButtonMap[tempSenderObject];
+		if (tempWidgetP == nullptr)
+		{
+			qDebug() << "error!";
+			return;
+		}
 		if (tempWidgetP->isHidden())
 		{
 			tempWidgetP->resize(ui.widget_3->width(), ui.widget_3->height());

@@ -19,7 +19,10 @@ void PluginReg::unloadAllPlugins()
 	foreach(PluginCalInterface * plugin, plugins)
 	{
 		if (plugin)
+		{
 			plugin->deleteLater();
+			plugin = nullptr;
+		}
 	}
 	plugins.clear();
 }

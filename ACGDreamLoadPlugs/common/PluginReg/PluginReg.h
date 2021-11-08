@@ -19,8 +19,10 @@ class PluginReg : public QObject
 	Q_OBJECT
 
 private:
+	friend class ACGDream;
 	QVector<PluginCalInterface*> plugins;
 	QSharedPointer<QThread> thread;
+
 public:
 	PluginReg(QObject *parent = Q_NULLPTR);
 	~PluginReg();
