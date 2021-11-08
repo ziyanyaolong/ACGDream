@@ -4,7 +4,7 @@
 #include <QLineEdit>
 #include <QTextBrowser>
 #include <QTextEdit>
-#include <QRegExp>
+#include <QRegularExpression>
 #include <QString>
 
 #include "../GUI/GUI.h"

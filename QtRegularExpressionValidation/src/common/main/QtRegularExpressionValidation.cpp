@@ -15,13 +15,18 @@ QtRegularExpressionValidation::~QtRegularExpressionValidation()
 }
 
 void QtRegularExpressionValidation::management()
-{
-	qDebug() << ui->ui.lineEdit->text();
-	QRegExp regExp(ui->ui.lineEdit->text());
+{	
 	QString str2 = ui->ui.textEdit->toPlainText();
+	if (str2.isEmpty())
+		return;
+	QRegularExpression reg(ui->ui.lineEdit->text());
+	QRegularExpressionMatch match = reg.match(str2);
 	QString str3 = "";
-	uint64_t error = 0;
-	for (int pos = 0; pos = regExp.indexIn(str2, pos), pos >= 0; pos += regExp.matchedLength())
+	if (match.hasMatch())
+	{
+		str3 = match.captured(0);
+	}
+	/*for (int pos = 0; pos = regExp.indexIn(str2, pos), pos >= 0; pos += regExp.matchedLength())
 	{
 		if ((error <= 5000) && (str3 == ""))
 		{
@@ -31,7 +36,7 @@ void QtRegularExpressionValidation::management()
 			break;
 		str3 += regExp.cap(0);
 		error++;
-	}
+	}*/
 	emit this->sendInfo(str3);
 }
 
