@@ -1,3 +1,3 @@
 #pragma once
-#include "../common/PluginCalInterface/PluginCalInterface.h"
-#include "../common/PluginReg/PluginReg.h"
+#include "../dist/PluginCalInterface/PluginCalInterface.h"
+#include "../dist/PluginReg/PluginReg.h"

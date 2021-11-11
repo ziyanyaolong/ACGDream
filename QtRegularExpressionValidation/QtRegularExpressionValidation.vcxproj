@@ -107,20 +107,20 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <QtMoc Include="src\common\GUI\GUI.h" />
+    <QtMoc Include="src\dist\GUI\GUI.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\common\main\QtRegularExpressionValidation.cpp" />
-    <ClCompile Include="src\common\GUI\GUI.cpp" />
+    <ClCompile Include="src\dist\main\QtRegularExpressionValidation.cpp" />
+    <ClCompile Include="src\dist\GUI\GUI.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <QtUic Include="src\common\GUI\GUI.ui" />
+    <QtUic Include="src\dist\GUI\GUI.ui" />
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="src\common\main\QtRegularExpressionValidation.h" />
+    <QtMoc Include="src\dist\main\QtRegularExpressionValidation.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="src\common\main\QtRegularExpressionValidation.json" />
+    <None Include="src\dist\main\QtRegularExpressionValidation.json" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">

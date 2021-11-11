@@ -32,12 +32,12 @@
   </ImportGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="QtSettings">
     <QtInstall>5.15.2_msvc2019_64</QtInstall>
-    <QtModules>core;xml;opengl;network;gui;multimedia;widgets;webchannel;websockets;multimediawidgets;openglextensions;webengine;webenginewidgets;datavisualization;networkauth;webview</QtModules>
+    <QtModules>core;xml;sql;opengl;network;gui;multimedia;widgets;webchannel;websockets;multimediawidgets;openglextensions;webengine;webenginewidgets;datavisualization;networkauth;webview</QtModules>
     <QtBuildConfig>debug</QtBuildConfig>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'" Label="QtSettings">
     <QtInstall>5.15.2_msvc2019_64</QtInstall>
-    <QtModules>core;xml;opengl;network;gui;multimedia;widgets;webchannel;websockets;multimediawidgets;openglextensions;webengine;webenginewidgets;datavisualization;networkauth;webview</QtModules>
+    <QtModules>core;xml;sql;opengl;network;gui;multimedia;widgets;webchannel;websockets;multimediawidgets;openglextensions;webengine;webenginewidgets;datavisualization;networkauth;webview</QtModules>
     <QtBuildConfig>release</QtBuildConfig>
   </PropertyGroup>
   <Target Name="QtMsBuildNotFound" BeforeTargets="CustomBuild;ClCompile" Condition="!Exists('$(QtMsBuild)\qt.targets') or !Exists('$(QtMsBuild)\qt.props')">
@@ -111,27 +111,35 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="common\Network\WebCrawler\WebCrawler.cpp" />
-    <ClCompile Include="common\Network\WebsiteAnalytic\WebsiteAnalytic.cpp" />
-    <ClCompile Include="common\GUI\SWTGUI.cpp" />
+    <ClCompile Include="dist\DataBase\DataBase.cpp" />
+    <ClCompile Include="dist\Network\WebCrawler\WebCrawler.cpp" />
+    <ClCompile Include="dist\Network\WebsiteAnalytic\WebsiteAnalytic.cpp" />
+    <ClCompile Include="dist\GUI\SWTGUI.cpp" />
     <QtRcc Include="SteamWorkshopTool.qrc" />
-    <QtMoc Include="main\SteamWorkshopTool.h" />
-    <ClCompile Include="main\SteamWorkshopTool.cpp" />
+    <QtMoc Include="dist\main\SteamWorkshopTool.h" />
+    <ClCompile Include="dist\main\SteamWorkshopTool.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="main\SteamWorkshopTool.json" />
+    <None Include="dist\Network\WebsiteAnalytic\temp.js" />
+    <None Include="dist\main\SteamWorkshopTool.json" />
   </ItemGroup>
   <ItemGroup>
-    <QtUic Include="common\GUI\SWTGUI.ui" />
+    <QtUic Include="dist\GUI\SWTGUI.ui" />
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="common\Network\WebCrawler\WebCrawler.h" />
+    <QtMoc Include="dist\Network\WebCrawler\WebCrawler.h" />
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="common\Network\WebsiteAnalytic\WebsiteAnalytic.h" />
+    <QtMoc Include="dist\Network\WebsiteAnalytic\WebsiteAnalytic.h" />
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="common\GUI\SWTGUI.h" />
+    <QtMoc Include="dist\GUI\SWTGUI.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="dist\DataBase\DataBase.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="dist\ModDataTable\ModDataTable.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">

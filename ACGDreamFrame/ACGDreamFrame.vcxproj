@@ -119,39 +119,39 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="common\Animation\API\AnimationAPI.cpp" />
+    <ClCompile Include="dist\Animation\API\AnimationAPI.cpp" />
     <ClCompile Include="main\ACGDreamFrame.cpp" />
-    <ClCompile Include="common\Animation\Animation.cpp" />
-    <ClCompile Include="common\Components\PushButton\PushButtonStyle1.cpp" />
-    <ClCompile Include="common\Components\ScrollArea\ScrollAreaStyle1.cpp" />
-    <ClCompile Include="common\Animation\MoveAnimation\MoveAnimation.cpp" />
-    <ClCompile Include="common\GUI\Settings\Settings.cpp" />
+    <ClCompile Include="dist\Animation\Animation.cpp" />
+    <ClCompile Include="dist\Components\PushButton\PushButtonStyle1.cpp" />
+    <ClCompile Include="dist\Components\ScrollArea\ScrollAreaStyle1.cpp" />
+    <ClCompile Include="dist\Animation\MoveAnimation\MoveAnimation.cpp" />
+    <ClCompile Include="dist\GUI\Settings\Settings.cpp" />
     <QtRcc Include="ACGDreamFrame.qrc" />
-    <ClCompile Include="common\Components\Components.h" />
-    <ClCompile Include="common\GUI\GUIMain\GUIMain.cpp" />
+    <ClCompile Include="dist\Components\Components.h" />
+    <ClCompile Include="dist\GUI\GUIMain\GUIMain.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="common\GUI\GUIMain\GUIMain.h" />
+    <QtMoc Include="dist\GUI\GUIMain\GUIMain.h" />
   </ItemGroup>
   <ItemGroup>
-    <QtUic Include="common\GUI\GUIMain\GUIMain.ui" />
-    <QtUic Include="common\GUI\Settings\Settings.ui" />
+    <QtUic Include="dist\GUI\GUIMain\GUIMain.ui" />
+    <QtUic Include="dist\GUI\Settings\Settings.ui" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="buildLib\config\config.h" />
-    <ClInclude Include="common\GUI\UIBuild\uic\ui_GUIMain.h" />
+    <ClInclude Include="dist\GUI\UIBuild\uic\ui_GUIMain.h" />
     <ClInclude Include="common\GUI\UIBuild\uic\ui_testW.h" />
     <ClInclude Include="include\ACGDreamFrameH.h" />
-    <QtMoc Include="common\GUI\Settings\Settings.h" />
-    <QtMoc Include="common\Animation\MoveAnimation\MoveAnimation.h" />
-    <QtMoc Include="common\Animation\Animation.h" />
+    <QtMoc Include="dist\GUI\Settings\Settings.h" />
+    <QtMoc Include="dist\Animation\MoveAnimation\MoveAnimation.h" />
+    <QtMoc Include="dist\Animation\Animation.h" />
     <QtMoc Include="main\ACGDreamFrame.h" />
-    <ClInclude Include="common\Animation\API\AnimationAPI.h" />
-    <ClInclude Include="common\Components\PushButton\PushButtonStyle1.h" />
-    <QtMoc Include="common\Components\ScrollArea\ScrollAreaStyle1.h" />
+    <ClInclude Include="dist\Animation\API\AnimationAPI.h" />
+    <ClInclude Include="dist\Components\PushButton\PushButtonStyle1.h" />
+    <QtMoc Include="dist\Components\ScrollArea\ScrollAreaStyle1.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="common\Components\StyleSheet\ScrollBar\ScrollBarStyle1.qss" />
+    <None Include="dist\Components\StyleSheet\ScrollBar\ScrollBarStyle1.qss" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">

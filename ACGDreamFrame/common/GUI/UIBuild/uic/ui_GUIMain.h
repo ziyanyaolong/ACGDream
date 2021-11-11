@@ -30,6 +30,7 @@ class Ui_MainWindow
 {
 public:
     QAction *actions;
+    QAction *action;
     QWidget *centralwidget;
     QGridLayout *gridLayout_2;
     QWidget *widget_2;
@@ -61,6 +62,8 @@ public:
         MainWindow->setFont(font);
         actions = new QAction(MainWindow);
         actions->setObjectName(QString::fromUtf8("actions"));
+        action = new QAction(MainWindow);
+        action->setObjectName(QString::fromUtf8("action"));
         centralwidget = new QWidget(MainWindow);
         centralwidget->setObjectName(QString::fromUtf8("centralwidget"));
         gridLayout_2 = new QGridLayout(centralwidget);
@@ -158,6 +161,8 @@ public:
         menubar->addAction(menu_2->menuAction());
         menubar->addAction(menu_3->menuAction());
         menubar->addAction(menu_4->menuAction());
+        menu_2->addAction(action);
+        menu_2->addSeparator();
         menu_3->addAction(actions);
         menu_3->addSeparator();
 
@@ -170,6 +175,7 @@ public:
     {
         MainWindow->setWindowTitle(QCoreApplication::translate("MainWindow", "MainWindow", nullptr));
         actions->setText(QCoreApplication::translate("MainWindow", "\351\207\215\350\275\275\345\205\250\351\203\250\346\211\251\345\261\225", nullptr));
+        action->setText(QCoreApplication::translate("MainWindow", "\350\256\276\347\275\256", nullptr));
         menu->setTitle(QCoreApplication::translate("MainWindow", "\346\226\207\344\273\266", nullptr));
         menu_2->setTitle(QCoreApplication::translate("MainWindow", "\347\274\226\350\276\221", nullptr));
         menu_3->setTitle(QCoreApplication::translate("MainWindow", "\346\211\251\345\261\225", nullptr));

@@ -28,18 +28,18 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="common\PluginCalInterface\PluginCalInterface.cpp">
+    <ClCompile Include="dist\PluginCalInterface\PluginCalInterface.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="common\PluginReg\PluginReg.cpp">
+    <ClCompile Include="dist\PluginReg\PluginReg.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="common\PluginReg\PluginReg.h">
+    <QtMoc Include="dist\PluginReg\PluginReg.h">
       <Filter>Header Files</Filter>
     </QtMoc>
-    <QtMoc Include="common\PluginCalInterface\PluginCalInterface.h">
+    <QtMoc Include="dist\PluginCalInterface\PluginCalInterface.h">
       <Filter>Header Files</Filter>
     </QtMoc>
   </ItemGroup>

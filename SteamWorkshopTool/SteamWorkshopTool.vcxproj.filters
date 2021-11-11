@@ -26,41 +26,53 @@
     <QtRcc Include="SteamWorkshopTool.qrc">
       <Filter>Resource Files</Filter>
     </QtRcc>
-    <ClCompile Include="main\SteamWorkshopTool.cpp">
+    <ClCompile Include="dist\main\SteamWorkshopTool.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="main\SteamWorkshopTool.json" />
+    <None Include="dist\main\SteamWorkshopTool.json" />
+    <None Include="dist\Network\WebsiteAnalytic\temp.js" />
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="main\SteamWorkshopTool.h">
+    <QtMoc Include="dist\main\SteamWorkshopTool.h">
       <Filter>Header Files</Filter>
     </QtMoc>
-    <QtMoc Include="common\Network\WebCrawler\WebCrawler.h">
+    <QtMoc Include="dist\Network\WebCrawler\WebCrawler.h">
       <Filter>Header Files</Filter>
     </QtMoc>
-    <QtMoc Include="common\Network\WebsiteAnalytic\WebsiteAnalytic.h">
+    <QtMoc Include="dist\Network\WebsiteAnalytic\WebsiteAnalytic.h">
       <Filter>Header Files</Filter>
     </QtMoc>
-    <QtMoc Include="common\GUI\SWTGUI.h">
+    <QtMoc Include="dist\GUI\SWTGUI.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="dist\DataBase\DataBase.h">
       <Filter>Header Files</Filter>
     </QtMoc>
   </ItemGroup>
   <ItemGroup>
-    <QtUic Include="common\GUI\SWTGUI.ui">
+    <QtUic Include="dist\GUI\SWTGUI.ui">
       <Filter>Form Files</Filter>
     </QtUic>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="common\Network\WebCrawler\WebCrawler.cpp">
+    <ClCompile Include="dist\Network\WebCrawler\WebCrawler.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="common\Network\WebsiteAnalytic\WebsiteAnalytic.cpp">
+    <ClCompile Include="dist\Network\WebsiteAnalytic\WebsiteAnalytic.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="common\GUI\SWTGUI.cpp">
+    <ClCompile Include="dist\GUI\SWTGUI.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="dist\DataBase\DataBase.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="dist\ModDataTable\ModDataTable.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

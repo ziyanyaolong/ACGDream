@@ -111,15 +111,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <QtMoc Include="common\PluginCalInterface\PluginCalInterface.h" />
+    <QtMoc Include="dist\PluginCalInterface\PluginCalInterface.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\ACGDreamLoadPlugs.h" />
-    <QtMoc Include="common\PluginReg\PluginReg.h" />
+    <QtMoc Include="dist\PluginReg\PluginReg.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="common\PluginCalInterface\PluginCalInterface.cpp" />
-    <ClCompile Include="common\PluginReg\PluginReg.cpp" />
+    <ClCompile Include="dist\PluginCalInterface\PluginCalInterface.cpp" />
+    <ClCompile Include="dist\PluginReg\PluginReg.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">
