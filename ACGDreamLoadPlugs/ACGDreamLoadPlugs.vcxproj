@@ -118,7 +118,6 @@
     <QtMoc Include="dist\PluginReg\PluginReg.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="dist\PluginCalInterface\PluginCalInterface.cpp" />
     <ClCompile Include="dist\PluginReg\PluginReg.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

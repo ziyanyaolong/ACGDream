@@ -15,8 +15,7 @@ WebsiteAnalytic::~WebsiteAnalytic()
 	if (webData)
 		delete webData;
 
-	qDeleteAll(finishData.begin(), finishData.end());
-	finishData.clear();
+	clearModList();
 }
 
 void WebsiteAnalytic::analyticWebsiteData(const QString& data)
@@ -60,7 +59,8 @@ void WebsiteAnalytic::analyticWebsiteData()
 		dataTemp = tempStr.mid(headPos, tailPos + tail.size());
 		ModDataTable* modDataTable = new ModDataTable;
 		QString js = dataTemp.mid(dataTemp.indexOf(jsHead) + jsHead.size(), dataTemp.indexOf(jsTail));
-		dataTemp = dataTemp.mid(dataTemp.indexOf(imageHead) + imageHead.size());
+		dataTemp = dataTemp.mid(dataTemp.indexOf(imageHead1) + imageHead1.size());
+		dataTemp = dataTemp.mid(dataTemp.indexOf(imageHead2) + imageHead2.size());
 		dataTemp = dataTemp.mid(0, dataTemp.indexOf(imageTail));
 		modDataTable->image = dataTemp;
 		int number = 0;

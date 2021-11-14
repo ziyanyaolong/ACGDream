@@ -5,21 +5,15 @@ ACGDream::ACGDream(QMainWindow* parent)
 {
 	pluginReg = new PluginReg(this);
 
+	connect(pluginReg, &PluginReg::addGuiSignal, this, [&](QWidget* gui) {
+		this->addWidght(gui);
+		gui->hide();
+		},Qt::QueuedConnection);
+
 	connect(ui.actions, &QAction::triggered, this, [&]() {
 		this->clearAllWidget();
 		if (!pluginReg->loadAllPlugins(QDir::currentPath() + "/lib")) {
 			QMessageBox::warning(this, "Error", "Could not load the plugin");
-		}
-		else
-		{
-			foreach(auto plugin, pluginReg->readPluginList())
-			{
-				foreach(QWidget * i, plugin->readGuiList())
-				{
-					i->hide();
-					this->addWidght(i);
-				}
-			}
 		}
 		});
 
@@ -27,17 +21,7 @@ ACGDream::ACGDream(QMainWindow* parent)
 	if (!pluginReg->loadAllPlugins(QDir::currentPath() + "/lib")) {
 		QMessageBox::warning(this, "Error", "Could not load the plugin");
 	}
-	else
-	{
-		foreach (auto plugin, pluginReg->readPluginList())
-		{
-			foreach(QWidget * i, plugin->readGuiList())
-			{
-				this->addWidght(i);
-				i->hide();
-			}
-		}
-	}
+
 	show();
 }
 

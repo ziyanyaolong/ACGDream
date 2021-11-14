@@ -14,7 +14,7 @@ Q_PLUGIN_METADATA(IID PluginCalInterface_iid FILE fileName)	\
 
 #include <QObject>
 #include <QThread>
-#include <QThread>
+#include <QWidget>
 
 class ACGDream;
 class PluginCalInterface : public QObject
@@ -23,13 +23,14 @@ class PluginCalInterface : public QObject
 
 private:
 	friend class PluginReg;
-	QVector<QWidget*> guiList;
 	const ACGDream* _acgDream = nullptr;
 	bool separateThread = false;
 
+protected slots:
+	virtual void pRun() = 0;
+
 protected:
 	PluginCalInterface(QObject* parent = Q_NULLPTR) : QObject(parent) {}
-	virtual void pRun() = 0;
 	bool setSeparateThread(bool choice) { separateThread = choice; }
 
 public:
@@ -38,19 +39,11 @@ public:
 	{ 
 	}
 
-	bool addGui(QWidget* gui) 
-	{ 
-		if (guiList.indexOf(gui) == -1) 
-		{
-			guiList.push_back(gui);
-			return true;
-		}else
-			return false;
-	}
-
-	QVector<QWidget*>& readGuiList() { return guiList; }
-
 	const ACGDream* getACGDream() { return _acgDream; }
+
+signals:
+	void addGui(QWidget* gui);
+
 };
 
 #define PluginCalInterface_iid "net.ZiYanYaoLong.ACGDreamLoadPlugs.PluginCalInterface"

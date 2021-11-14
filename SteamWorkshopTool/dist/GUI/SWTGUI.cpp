@@ -10,6 +10,11 @@ SWTGUI::SWTGUI(QWidget *parent)
 
 SWTGUI::~SWTGUI()
 {
+	clearModList();
+}
+
+void SWTGUI::clearModList()
+{
 	ui.listWidget->clear();
 	qDeleteAll(list);
 	list.clear();

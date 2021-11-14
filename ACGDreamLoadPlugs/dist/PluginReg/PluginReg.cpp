@@ -30,18 +30,19 @@ void PluginReg::unloadAllPlugins()
 bool PluginReg::loadPlugin(const QString& filePath)
 {
 	QPluginLoader pluginLoader(filePath);
-	QObject* plugin = pluginLoader.instance();
+	PluginCalInterface* plugin = qobject_cast<PluginCalInterface*>(pluginLoader.instance());
+	PluginReg::connect(plugin, &PluginCalInterface::addGui, this, &PluginReg::addGuiSignal, Qt::QueuedConnection);
 	if (!pluginLoader.isLoaded())
 	{
 		qDebug() << filePath << __FUNCTION__ << pluginLoader.errorString();
 		return false;
 	}else if (plugin) {
-		auto pluginClass = qobject_cast<PluginCalInterface*>(plugin);
-		if (plugins.indexOf(pluginClass) == -1)
+		if (plugins.indexOf(plugin) == -1)
 		{
-			pluginClass->setParent(nullptr);
-			pluginClass->moveToThread(thread.get());
-			plugins.push_back(pluginClass);
+			plugin->setParent(nullptr);
+			plugin->moveToThread(thread.get());
+			plugins.push_back(plugin);
+			emit plugin->pRun();
 		}
 		else
 			return false;

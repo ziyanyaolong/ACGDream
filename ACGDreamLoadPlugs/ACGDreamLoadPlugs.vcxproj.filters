@@ -28,9 +28,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="dist\PluginCalInterface\PluginCalInterface.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="dist\PluginReg\PluginReg.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

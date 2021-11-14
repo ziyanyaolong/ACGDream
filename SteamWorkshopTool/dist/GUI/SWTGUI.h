@@ -45,4 +45,5 @@ private slots:
 public slots:
 	void printInfo(const QString& data) { ui.textBrowser->insertPlainText(QString(data + "\n")); }
 	void addMod(const ModDataTable& mod);
+	void clearModList();
 };

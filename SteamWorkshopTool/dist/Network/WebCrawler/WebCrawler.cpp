@@ -7,7 +7,7 @@ WebCrawler::WebCrawler(QObject *parent)
 	webAddress = new QString("");
 	webData = new QByteArray("");
 	connect(web, &QNetworkAccessManager::finished, this, &WebCrawler::setWebsiteData, Qt::QueuedConnection);
-	connect(this, &WebCrawler::websiteLink, this, &WebCrawler::startWebsiteLink, Qt::QueuedConnection);
+	connect(this, &WebCrawler::websiteLink, this, &WebCrawler::startWebsiteLink);
 }
 
 WebCrawler::~WebCrawler()

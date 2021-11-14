@@ -24,9 +24,12 @@ private:
 	QSharedPointer<QThread> thread;
 
 public:
-	PluginReg(QObject *parent = Q_NULLPTR);
+	explicit PluginReg(QObject *parent = Q_NULLPTR);
 	~PluginReg();
 	const QVector<PluginCalInterface*>& readPluginList() { return plugins; }
+
+signals:
+	void addGuiSignal(QWidget* gui);
 
 public slots:
 	bool loadAllPlugins(const QString & dirPath);
