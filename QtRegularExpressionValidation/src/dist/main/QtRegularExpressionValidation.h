@@ -12,7 +12,7 @@
 #include "../../../../ACGDreamLoadPlugs/include/ACGDreamLoadPlugs.h"
 #pragma comment(lib,"../.build/vs/ACGDreamLoadPlugs/lib/ACGDreamLoadPlugs.lib")
 
-class QtRegularExpressionValidation : public PluginCalInterface
+class Q_WIDGETS_EXPORT QtRegularExpressionValidation : public PluginCalInterface
 {
 	Q_OBJECT
 		RegPlugin("QtRegularExpressionValidation.json")

@@ -32,5 +32,4 @@ public slots:
 	bool loadAllPlugins(const QString & dirPath);
 	bool loadPlugin(const QString& filePath);
 	void unloadAllPlugins();
-
 };

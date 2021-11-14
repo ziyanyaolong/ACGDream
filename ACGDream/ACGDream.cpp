@@ -33,8 +33,8 @@ ACGDream::ACGDream(QMainWindow* parent)
 		{
 			foreach(QWidget * i, plugin->readGuiList())
 			{
-				i->hide();
 				this->addWidght(i);
+				i->hide();
 			}
 		}
 	}

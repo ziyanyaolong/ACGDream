@@ -1,4 +1,6 @@
 <RCC>
-    <qresource prefix="SteamWorkshopTool">
+    <qresource prefix="/SteamWorkshopTool">
+        <file>assets/Images/NSubscription.png</file>
+        <file>assets/Images/YSubscription.png</file>
     </qresource>
 </RCC>

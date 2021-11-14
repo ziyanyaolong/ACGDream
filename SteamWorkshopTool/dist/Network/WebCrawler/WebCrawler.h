@@ -7,7 +7,9 @@
 #include <QtNetwork/QNetworkRequest>
 #include <QtNetwork/QNetworkReply>
 #include <QTextCodec>
+#include <QByteArray>
 #include <QDebug>
+#include <QVector>
 
 class WebCrawler : public QObject
 {
@@ -15,18 +17,18 @@ class WebCrawler : public QObject
 
 private:
 	QNetworkAccessManager* web = nullptr;
-	QString* webData = nullptr;
+	QByteArray* webData = nullptr;
 	QString* webAddress = nullptr;
-	QTextCodec* codec = nullptr;
 
 public:
 	WebCrawler(QObject *parent = Q_NULLPTR);
 	~WebCrawler();
+	QVector<void*> otherData;
 
 	const QString& getWebData() { return *webData; }
 
 signals:
-	void finish(const QString& data);
+	void finish(const QByteArray& data);
 	void websiteLink(const QString& address);
 	
 private slots:

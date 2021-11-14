@@ -14,12 +14,23 @@
 #include <Qdebug>
 #include <QTextCodec>
 #include <QPushButton>
+#include <QListWidgetItem>
+#include <QCoreApplication>
+#include <QDir>
+#include <QVector>
 
 #include "ui_SWTGUI.h"
+#include "Components/ListWidgetItemWidget/ListWidgetItemWidget.h"
+#include "../ModDataTable/ModDataTable.h"
+#include "../Network/WebCrawler/WebCrawler.h"
 
 class SWTGUI : public QWidget
 {
 	Q_OBJECT
+
+private:
+	Ui::SteamWorkshopTool ui;
+	QVector<QWidget*> list;
 
 public:
 	SWTGUI(QWidget *parent = Q_NULLPTR);
@@ -28,13 +39,10 @@ public:
 signals:
 	void haveWebAddress(const QString&);
 
-private:
-	Ui::SteamWorkshopTool ui;
-
 private slots:
 	void pushButtonResponse_WebAddress();
 
 public slots:
 	void printInfo(const QString& data) { ui.textBrowser->insertPlainText(QString(data + "\n")); }
-
+	void addMod(const ModDataTable& mod);
 };

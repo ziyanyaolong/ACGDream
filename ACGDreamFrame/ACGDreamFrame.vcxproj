@@ -72,7 +72,7 @@
     </ClCompile>
     <QtUic />
     <QtUic>
-      <QtUicDir>common\GUI\UIBuild\uic\</QtUicDir>
+      <QtUicDir>dist\GUI\UIBuild\uic\</QtUicDir>
     </QtUic>
     <Bscmake>
       <PreserveSbr>true</PreserveSbr>
@@ -89,7 +89,7 @@
     </ClCompile>
     <QtUic />
     <QtUic>
-      <QtUicDir>common\GUI\UIBuild\uic\</QtUicDir>
+      <QtUicDir>dist\GUI\UIBuild\uic\</QtUicDir>
     </QtUic>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="Configuration">
@@ -122,12 +122,12 @@
     <ClCompile Include="dist\Animation\API\AnimationAPI.cpp" />
     <ClCompile Include="main\ACGDreamFrame.cpp" />
     <ClCompile Include="dist\Animation\Animation.cpp" />
-    <ClCompile Include="dist\Components\PushButton\PushButtonStyle1.cpp" />
-    <ClCompile Include="dist\Components\ScrollArea\ScrollAreaStyle1.cpp" />
+    <ClCompile Include="dist\GUI\Components\PushButton\PushButtonStyle1.cpp" />
+    <ClCompile Include="dist\GUI\Components\ScrollArea\ScrollAreaStyle1.cpp" />
     <ClCompile Include="dist\Animation\MoveAnimation\MoveAnimation.cpp" />
     <ClCompile Include="dist\GUI\Settings\Settings.cpp" />
     <QtRcc Include="ACGDreamFrame.qrc" />
-    <ClCompile Include="dist\Components\Components.h" />
+    <ClCompile Include="dist\GUI\Components\Components.h" />
     <ClCompile Include="dist\GUI\GUIMain\GUIMain.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -147,11 +147,11 @@
     <QtMoc Include="dist\Animation\Animation.h" />
     <QtMoc Include="main\ACGDreamFrame.h" />
     <ClInclude Include="dist\Animation\API\AnimationAPI.h" />
-    <ClInclude Include="dist\Components\PushButton\PushButtonStyle1.h" />
-    <QtMoc Include="dist\Components\ScrollArea\ScrollAreaStyle1.h" />
+    <ClInclude Include="dist\GUI\Components\PushButton\PushButtonStyle1.h" />
+    <QtMoc Include="dist\GUI\Components\ScrollArea\ScrollAreaStyle1.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="dist\Components\StyleSheet\ScrollBar\ScrollBarStyle1.qss" />
+    <None Include="dist\GUI\Components\StyleSheet\ScrollBar\ScrollBarStyle1.qss" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">

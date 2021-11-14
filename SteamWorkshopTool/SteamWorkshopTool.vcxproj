@@ -115,6 +115,7 @@
     <ClCompile Include="dist\Network\WebCrawler\WebCrawler.cpp" />
     <ClCompile Include="dist\Network\WebsiteAnalytic\WebsiteAnalytic.cpp" />
     <ClCompile Include="dist\GUI\SWTGUI.cpp" />
+    <ClCompile Include="dist\GUI\Components\ListWidgetItemWidget\ListWidgetItemWidget.cpp" />
     <QtRcc Include="SteamWorkshopTool.qrc" />
     <QtMoc Include="dist\main\SteamWorkshopTool.h" />
     <ClCompile Include="dist\main\SteamWorkshopTool.cpp" />
@@ -125,6 +126,7 @@
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="dist\GUI\SWTGUI.ui" />
+    <QtUic Include="dist\GUI\Components\ListWidgetItemWidget\ListWidgetItemWidget.ui" />
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="dist\Network\WebCrawler\WebCrawler.h" />
@@ -140,6 +142,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="dist\ModDataTable\ModDataTable.h" />
+    <QtMoc Include="dist\GUI\Components\ListWidgetItemWidget\ListWidgetItemWidget.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="assets\Images\NSubscription.png" />
+    <Image Include="assets\Images\YSubscription.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">

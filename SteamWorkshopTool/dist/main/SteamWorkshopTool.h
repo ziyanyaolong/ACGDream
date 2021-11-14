@@ -5,8 +5,7 @@
 #include "../Network/WebsiteAnalytic/WebsiteAnalytic.h"
 #include "../../../ACGDreamLoadPlugs/include/ACGDreamLoadPlugs.h"
 #include "../DataBase/DataBase.h"
-
-#include <QMetaType>
+#include "../GUI/Components/ListWidgetItemWidget/ListWidgetItemWidget.h"
 
 #pragma comment(lib,"../.build/vs/ACGDreamLoadPlugs/lib/ACGDreamLoadPlugs.lib")
 
@@ -27,7 +26,6 @@ public:
 	virtual void pRun() override;
 
 signals:
-	void haveNewWebDataTable(const QString&);
 
 public slots:
 };

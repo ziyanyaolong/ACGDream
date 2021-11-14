@@ -3,8 +3,9 @@
 
 struct ModDataTable
 {
-	QString image;
-	QString id;
-	QString appid;
-	QString title;
+	QString image = "";
+	QString id = "";
+	QString appid = "";
+	QString title = "";
+	bool isSubscribe = false;
 };

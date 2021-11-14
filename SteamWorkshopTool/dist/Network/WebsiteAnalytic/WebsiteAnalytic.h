@@ -23,6 +23,8 @@ private:
 	QString tail = QString("</script>");
 	QString jsHead = QString("SharedFileBindMouseHover(");
 	QString jsTail = QString(");");
+	QString imageHead = QString("<img class=\"workshopItemPreviewImage  aspectratio_16x9\" src=\"");
+	QString imageTail = QString("\">");
 	QStringList matchList;
 
 public:
@@ -38,6 +40,7 @@ signals:
 public slots:
 	void analyticWebsiteData();
 	void analyticWebsiteData(const QString& data);
+	void analyticWebsiteData(const QByteArray& data) { analyticWebsiteData(QString(data)); }
 
 };
 

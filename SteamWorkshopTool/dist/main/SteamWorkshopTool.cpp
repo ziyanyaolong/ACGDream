@@ -11,19 +11,13 @@ SteamWorkshopTool::SteamWorkshopTool()
 
 	connect(gui, &SWTGUI::haveWebAddress, webCrawler, &WebCrawler::websiteLink, Qt::QueuedConnection);
 
-	void (WebsiteAnalytic:: * analyticWebsiteData)(const QString & data) = &WebsiteAnalytic::analyticWebsiteData;
+	void (WebsiteAnalytic:: * analyticWebsiteData)(const QByteArray & data) = &WebsiteAnalytic::analyticWebsiteData;
 
 	connect(webCrawler, &WebCrawler::finish, websiteAnalytic, analyticWebsiteData);
-	connect(websiteAnalytic, &WebsiteAnalytic::newModDataTable, this, [&](const ModDataTable& data) {
-		/*if (data.size() > 0)
-		{
-			qDebug() << data[0].title;
-			emit gui->printInfo(data[0].title);
-		}*/
-		emit database->addModDataTable(&data);
-		emit this->haveNewWebDataTable(QString("name:" + data.title));
+	connect(websiteAnalytic, &WebsiteAnalytic::newModDataTable, this, [&](const ModDataTable& i) {
+		database->addModDataTable(i, DataBase::Way::Overlay);
 		});
-	connect(this, &SteamWorkshopTool::haveNewWebDataTable, gui, &SWTGUI::printInfo, Qt::QueuedConnection);
+	connect(websiteAnalytic, &WebsiteAnalytic::newModDataTable, gui, &SWTGUI::addMod, Qt::QueuedConnection);
 }
 
 SteamWorkshopTool::~SteamWorkshopTool()

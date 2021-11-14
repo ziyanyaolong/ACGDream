@@ -31,13 +31,13 @@
     <ClCompile Include="dist\GUI\GUIMain\GUIMain.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="dist\Components\Components.h">
+    <ClCompile Include="dist\GUI\Components\Components.h">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="dist\Components\PushButton\PushButtonStyle1.cpp">
+    <ClCompile Include="dist\GUI\Components\PushButton\PushButtonStyle1.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="dist\Components\ScrollArea\ScrollAreaStyle1.cpp">
+    <ClCompile Include="dist\GUI\Components\ScrollArea\ScrollAreaStyle1.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="dist\Animation\Animation.cpp">
@@ -60,7 +60,7 @@
     <QtMoc Include="dist\GUI\GUIMain\GUIMain.h">
       <Filter>Header Files</Filter>
     </QtMoc>
-    <QtMoc Include="dist\Components\ScrollArea\ScrollAreaStyle1.h">
+    <QtMoc Include="dist\GUI\Components\ScrollArea\ScrollAreaStyle1.h">
       <Filter>Header Files</Filter>
     </QtMoc>
     <QtMoc Include="dist\Animation\Animation.h">
@@ -85,7 +85,7 @@
     </QtUic>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="dist\Components\PushButton\PushButtonStyle1.h">
+    <ClInclude Include="dist\GUI\Components\PushButton\PushButtonStyle1.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="dist\Animation\API\AnimationAPI.h">
@@ -105,6 +105,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="dist\Components\StyleSheet\ScrollBar\ScrollBarStyle1.qss" />
+    <None Include="dist\GUI\Components\StyleSheet\ScrollBar\ScrollBarStyle1.qss" />
   </ItemGroup>
 </Project>

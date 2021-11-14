@@ -53,7 +53,6 @@ void WebsiteAnalytic::analyticWebsiteData()
 		(webData->indexOf("<div class=\"workshopBrowseItems\">") + QString("<div class=\"workshopBrowseItems\">").size()),
 		webData->indexOf("<div class=\"workshopBrowsePaging\">"));
 	QString dataTemp("");
-	//"\"<img class=\"workshopItemPreviewImage  aspectratio_16x9\" src=\"";
 	int headPos = tempStr.indexOf(head);
 	int tailPos = tempStr.indexOf(tail);
 	while ((headPos != -1) && (tailPos != -1))
@@ -61,10 +60,13 @@ void WebsiteAnalytic::analyticWebsiteData()
 		dataTemp = tempStr.mid(headPos, tailPos + tail.size());
 		ModDataTable* modDataTable = new ModDataTable;
 		QString js = dataTemp.mid(dataTemp.indexOf(jsHead) + jsHead.size(), dataTemp.indexOf(jsTail));
+		dataTemp = dataTemp.mid(dataTemp.indexOf(imageHead) + imageHead.size());
+		dataTemp = dataTemp.mid(0, dataTemp.indexOf(imageTail));
+		modDataTable->image = dataTemp;
 		int number = 0;
 		QRegularExpression regExp0("(?<=\"id\":\").*?(?=\")");
 		QRegularExpressionMatch match0 = regExp0.match(js);
-		QRegularExpression regExp1("(?<=\"appid\":).*?(?=\})");
+		QRegularExpression regExp1("(?<=\"appid\":).*?(?=\\})");
 		QRegularExpressionMatch match1 = regExp1.match(js);
 		QRegularExpression regExp2("(?<=\"title\":\").*?(?=\")");
 		QRegularExpressionMatch match2 = regExp2.match(js);

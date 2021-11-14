@@ -50,9 +50,15 @@
     <QtMoc Include="dist\DataBase\DataBase.h">
       <Filter>Header Files</Filter>
     </QtMoc>
+    <QtMoc Include="dist\GUI\Components\ListWidgetItemWidget\ListWidgetItemWidget.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="dist\GUI\SWTGUI.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="dist\GUI\Components\ListWidgetItemWidget\ListWidgetItemWidget.ui">
       <Filter>Form Files</Filter>
     </QtUic>
   </ItemGroup>
@@ -69,10 +75,21 @@
     <ClCompile Include="dist\DataBase\DataBase.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="dist\GUI\Components\ListWidgetItemWidget\ListWidgetItemWidget.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="dist\ModDataTable\ModDataTable.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="assets\Images\NSubscription.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="assets\Images\YSubscription.png">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>

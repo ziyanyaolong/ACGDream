@@ -13,7 +13,7 @@
 #include <QSharedPointer>
 
 #include "../UIBuild/uic/ui_GUIMain.h"
-#include "../../Components/Components.h"
+#include "../Components/Components.h"
 
 class GUIMain : public QMainWindow
 {

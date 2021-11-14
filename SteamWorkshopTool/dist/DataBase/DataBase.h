@@ -19,10 +19,15 @@ private:
 	QString dataBaseName = QCoreApplication::applicationDirPath() + "/SteamWorkshopTool.db";
 
 public:
+	enum Way
+	{
+		Normal,
+		Overlay
+	};
 	DataBase(QObject *parent);
 	~DataBase();
 
 public slots:
-	bool addModDataTable(const ModDataTable* data);
+	bool addModDataTable(const ModDataTable& data, DataBase::Way way = DataBase::Way::Normal);
 
 };

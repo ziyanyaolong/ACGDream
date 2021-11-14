@@ -18,6 +18,7 @@ DataBase::DataBase(QObject *parent)
         return;
     }
     database.close();
+    
 }
 
 DataBase::~DataBase()
@@ -25,14 +26,27 @@ DataBase::~DataBase()
     database.close();
 }
 
-bool DataBase::addModDataTable(const ModDataTable* data)
+bool DataBase::addModDataTable(const ModDataTable& data, DataBase::Way way)
 {
     if (!database.open())
         return false;
     QSqlQuery query(database);
-    query.exec("create table student(mkey text primary key, appid int, id int, title text, image text)");
-    QString insertSql = "insert into student(mkey,appid,id,title,image) values('%1',%2,%3,'%4','%5')";
-    insertSql = insertSql.arg(data->appid + data->id, data->appid, data->id, data->title, "");
+    query.exec("create table student(mkey text primary key, appid int, id int, title text, image text, isSubscribe int)");
+    QString insertSql;
+    if (way == DataBase::Way::Normal)
+    {
+        insertSql = "insert or ignore into student(mkey,appid,id,title,image,isSubscribe) values('%1',%2,%3,'%4','%5',%6)";
+    }
+    else if(way == DataBase::Way::Overlay)
+    {
+        insertSql = "insert or replace into student(mkey,appid,id,title,image,isSubscribe) values('%1',%2,%3,'%4','%5',%6)";
+    }
+    else
+    {
+        qDebug() << "error way!";
+    }
+    
+    insertSql = insertSql.arg(data.appid + data.id, data.appid, data.id, data.title, data.image, QString::number(static_cast<int>(data.isSubscribe)));
     query.exec(insertSql);
     database.close();
     return true;
