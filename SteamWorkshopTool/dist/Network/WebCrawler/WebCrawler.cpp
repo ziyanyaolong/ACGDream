@@ -31,5 +31,6 @@ void WebCrawler::setWebsiteData(QNetworkReply* reply)
 {
 	*webData = reply->readAll();
 	reply->deleteLater();
-	emit this->finish(*webData);
+	emit this->finish();
+	emit this->finished(*webData);
 }

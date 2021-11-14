@@ -37,11 +37,10 @@ public:
 	~SWTGUI();
 
 signals:
-	void haveWebAddress(const QString&);
-
-private slots:
-	void pushButtonResponse_WebAddress();
-
+	void pushButtonResponse_WebAddress(const QString& appid, const QString& page);
+	void pushButtonResponse_Next(const QString& appid, const QString& page);
+	void pushButtonResponse_Previous(const QString& appid ,const QString& page);
+	
 public slots:
 	void printInfo(const QString& data) { ui.textBrowser->insertPlainText(QString(data + "\n")); }
 	void addMod(const ModDataTable& mod);

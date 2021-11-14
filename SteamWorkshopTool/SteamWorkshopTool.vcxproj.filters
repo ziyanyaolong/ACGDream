@@ -32,7 +32,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="dist\main\SteamWorkshopTool.json" />
-    <None Include="dist\Network\WebsiteAnalytic\temp.js" />
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="dist\main\SteamWorkshopTool.h">
@@ -51,6 +50,9 @@
       <Filter>Header Files</Filter>
     </QtMoc>
     <QtMoc Include="dist\GUI\Components\ListWidgetItemWidget\ListWidgetItemWidget.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="dist\Network\ModAnalytic\ModAnalytic.h">
       <Filter>Header Files</Filter>
     </QtMoc>
   </ItemGroup>
@@ -76,6 +78,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="dist\GUI\Components\ListWidgetItemWidget\ListWidgetItemWidget.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="dist\Network\ModAnalytic\ModAnalytic.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

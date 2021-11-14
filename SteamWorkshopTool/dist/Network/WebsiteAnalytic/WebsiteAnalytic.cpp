@@ -12,10 +12,11 @@ WebsiteAnalytic::WebsiteAnalytic(QObject *parent)
 
 WebsiteAnalytic::~WebsiteAnalytic()
 {
+	clearModList();
+
 	if (webData)
 		delete webData;
 
-	clearModList();
 }
 
 void WebsiteAnalytic::analyticWebsiteData(const QString& data)
@@ -47,7 +48,7 @@ QString WebsiteAnalytic::unicodeToUtf8(const QString& str)
 
 void WebsiteAnalytic::analyticWebsiteData()
 {
-	finishData.clear();
+	clearModList();
 	QString tempStr = webData->mid(
 		(webData->indexOf("<div class=\"workshopBrowseItems\">") + QString("<div class=\"workshopBrowseItems\">").size()),
 		webData->indexOf("<div class=\"workshopBrowsePaging\">"));
@@ -88,6 +89,6 @@ void WebsiteAnalytic::analyticWebsiteData()
 		headPos = tempStr.indexOf(head);
 		tailPos = tempStr.indexOf(tail);
 	}
-	
-	emit this->finish(finishData);
+	emit this->finish();
+	emit this->finished(finishData);
 }

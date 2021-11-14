@@ -35,7 +35,8 @@ public:
 	QString unicodeToUtf8(const QString& str);
 
 signals:
-	void finish(const QVector<ModDataTable*>&);
+	void finish();
+	void finished(const QVector<ModDataTable*>&);
 	void newModDataTable(const ModDataTable&);
 
 public slots:

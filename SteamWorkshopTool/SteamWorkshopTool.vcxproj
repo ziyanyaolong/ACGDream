@@ -116,12 +116,12 @@
     <ClCompile Include="dist\Network\WebsiteAnalytic\WebsiteAnalytic.cpp" />
     <ClCompile Include="dist\GUI\SWTGUI.cpp" />
     <ClCompile Include="dist\GUI\Components\ListWidgetItemWidget\ListWidgetItemWidget.cpp" />
+    <ClCompile Include="dist\Network\ModAnalytic\ModAnalytic.cpp" />
     <QtRcc Include="SteamWorkshopTool.qrc" />
     <QtMoc Include="dist\main\SteamWorkshopTool.h" />
     <ClCompile Include="dist\main\SteamWorkshopTool.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="dist\Network\WebsiteAnalytic\temp.js" />
     <None Include="dist\main\SteamWorkshopTool.json" />
   </ItemGroup>
   <ItemGroup>
@@ -142,6 +142,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="dist\ModDataTable\ModDataTable.h" />
+    <QtMoc Include="dist\Network\ModAnalytic\ModAnalytic.h" />
     <QtMoc Include="dist\GUI\Components\ListWidgetItemWidget\ListWidgetItemWidget.h" />
   </ItemGroup>
   <ItemGroup>

@@ -28,7 +28,8 @@ public:
 	const QString& getWebData() { return *webData; }
 
 signals:
-	void finish(const QByteArray& data);
+	void finish();
+	void finished(const QByteArray& data);
 	void websiteLink(const QString& address);
 	
 private slots:

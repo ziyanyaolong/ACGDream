@@ -13,7 +13,7 @@
   <property name="windowTitle">
    <string>SteamWorkshopTool</string>
   </property>
-  <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="1,2">
+  <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="1,2">
    <item>
     <widget class="QWidget" name="widget_3" native="true">
      <layout class="QVBoxLayout" name="verticalLayout_2" stretch="0,0,1">
@@ -71,6 +71,36 @@
         <property name="text">
          <string>创意工坊：</string>
         </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QWidget" name="widget_5" native="true">
+        <layout class="QHBoxLayout" name="horizontalLayout_2">
+         <item>
+          <widget class="QPushButton" name="pushButton_previous">
+           <property name="text">
+            <string>上一页</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="label_page">
+           <property name="text">
+            <string>1</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="pushButton_next">
+           <property name="text">
+            <string>下一页</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
        </widget>
       </item>
       <item>
