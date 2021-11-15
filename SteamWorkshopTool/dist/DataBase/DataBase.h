@@ -19,15 +19,19 @@ private:
 	QString dataBaseName = QCoreApplication::applicationDirPath() + "/SteamWorkshopTool.db";
 
 public:
-	enum Way
+	enum class Way
 	{
-		Normal,
-		Overlay
+		Normal = 0x0,
+		Overlay = 0x1
 	};
-	DataBase(QObject *parent);
-	~DataBase();
+
+	explicit DataBase(QObject *parent = Q_NULLPTR);
+	virtual ~DataBase();
+
+	bool findModDataTable(const QString& key);
+	bool deleteModDataTable(const QString& key);
 
 public slots:
-	bool addModDataTable(const ModDataTable& data, DataBase::Way way = DataBase::Way::Normal);
+	bool addModDataTable(const ModDataTable* data, DataBase::Way way = DataBase::Way::Normal);
 
 };

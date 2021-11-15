@@ -14,16 +14,26 @@ public:
 	explicit ListWidgetItemWidget(QWidget *parent = Q_NULLPTR, QListWidgetItem* listWidgetItem = Q_NULLPTR);
 	~ListWidgetItemWidget();
 
-	QListWidgetItem* _listWidgetItem;
+	const QString& readId() { return mid; }
+	const QString& readTitle() { return ui.label_2->text(); }
+
+	QListWidgetItem* _listWidgetItem = nullptr;
 
 private:
+	bool _isSubscription = false;
 	static QIcon YSIcon;
 	static QIcon NSIcon;
 	Ui::ListWidgetItemWidget ui;
 	QPixmap _image;
+	QString mid = "";
+
+signals:
+	void pushButtonResponse_Subscription(bool isSubscription);
 
 public slots:
+	Ui::ListWidgetItemWidget* readUi() { return &ui; }
 	void setSubscription(bool subscription);
+	void setId(const QString& id) { mid = id; }
 	void setTitle(const QString& title) { ui.label_2->setText(title); }
 	void setImage(const QPixmap& image)
 	{

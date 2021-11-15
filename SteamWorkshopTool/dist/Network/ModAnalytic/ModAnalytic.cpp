@@ -22,6 +22,16 @@ inline void ModAnalytic::clearModList()
 	modList.clear();
 }
 
+ModDataTable* ModAnalytic::findMod(const QString& id)
+{
+	foreach (auto i, modList)
+	{
+		if ((i->appid + i->id) == id)
+			return i;
+	}
+	return nullptr;
+}
+
 void ModAnalytic::closeWebModule()
 {
 	if (webCrawler)

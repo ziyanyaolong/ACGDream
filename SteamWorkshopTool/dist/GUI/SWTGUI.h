@@ -40,7 +40,8 @@ signals:
 	void pushButtonResponse_WebAddress(const QString& appid, const QString& page);
 	void pushButtonResponse_Next(const QString& appid, const QString& page);
 	void pushButtonResponse_Previous(const QString& appid ,const QString& page);
-	
+	void pushButtonResponse_Subscription(bool isSubscription, const QString& id);
+
 public slots:
 	void printInfo(const QString& data) { ui.textBrowser->insertPlainText(QString(data + "\n")); }
 	void addMod(const ModDataTable& mod);

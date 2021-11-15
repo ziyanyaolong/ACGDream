@@ -27,8 +27,12 @@ SWTGUI::~SWTGUI()
 
 void SWTGUI::clearModList()
 {
+	foreach (auto i, list)
+	{
+		disconnect(i, 0, 0, 0);
+		delete i;
+	}
 	ui.listWidget->clear();
-	qDeleteAll(list);
 	list.clear();
 }
 
@@ -36,11 +40,17 @@ void SWTGUI::addMod(const ModDataTable& mod)
 {
 	QListWidgetItem* listWidgetItem = new QListWidgetItem;
 	ListWidgetItemWidget* listWidgetItemWidget = new ListWidgetItemWidget(ui.listWidget, listWidgetItem);
+	connect(listWidgetItemWidget, &ListWidgetItemWidget::pushButtonResponse_Subscription, this, [&](bool isSubscription) {
+		ListWidgetItemWidget* temp = static_cast<ListWidgetItemWidget*>(sender());
+		emit this->pushButtonResponse_Subscription(isSubscription, temp->readId());
+		}); 
 	list.push_back(listWidgetItemWidget);
 	listWidgetItem->setSizeHint(QSize(512, 128));
 	ui.listWidget->addItem(listWidgetItem);
 	ui.listWidget->setItemWidget(listWidgetItem, listWidgetItemWidget);
 	listWidgetItemWidget->setTitle(mod.title);
+	listWidgetItemWidget->setId(QString(mod.appid + mod.id));
+	listWidgetItemWidget->setSubscription(mod.isSubscribe);
 	if (mod.isSubscribe)
 	{
 		listWidgetItemWidget->setSubscription(true);

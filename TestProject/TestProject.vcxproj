@@ -33,12 +33,12 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="QtSettings">
     <QtBuildConfig>debug</QtBuildConfig>
     <QtInstall>5.15.2_msvc2019_64</QtInstall>
-    <QtModules>core;opengl;network;gui;xmlpatterns;multimedia;uitools;widgets;webchannel;websockets;winextras;multimediawidgets;webengine;webenginewidgets;</QtModules>
+    <QtModules>core;sql;opengl;network;gui;xmlpatterns;multimedia;uitools;widgets;webchannel;websockets;winextras;multimediawidgets;webengine;webenginewidgets;</QtModules>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'" Label="QtSettings">
     <QtBuildConfig>release</QtBuildConfig>
     <QtInstall>5.15.2_msvc2019_64</QtInstall>
-    <QtModules>core;opengl;network;gui;xmlpatterns;multimedia;uitools;widgets;webchannel;websockets;winextras;multimediawidgets;webengine;webenginewidgets;</QtModules>
+    <QtModules>core;sql;opengl;network;gui;xmlpatterns;multimedia;uitools;widgets;webchannel;websockets;winextras;multimediawidgets;webengine;webenginewidgets;</QtModules>
   </PropertyGroup>
   <Target Name="QtMsBuildNotFound" BeforeTargets="CustomBuild;ClCompile" Condition="!Exists('$(QtMsBuild)\qt.targets') or !Exists('$(QtMsBuild)\qt.props')">
     <Message Importance="High" Text="QtMsBuild: could not locate qt.targets, qt.props; project may not build correctly." />
@@ -62,7 +62,7 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <LanguageStandard>stdcpplatest</LanguageStandard>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -76,7 +76,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <LanguageStandard>stdcpplatest</LanguageStandard>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">

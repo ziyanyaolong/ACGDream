@@ -24,6 +24,7 @@ public:
 	explicit ModAnalytic(QObject *parent = Q_NULLPTR);
 	virtual ~ModAnalytic();
 	const QVector<ModDataTable*>& readModList() { return modList; }
+	ModDataTable* findMod(const QString& id);
 
 signals:
 	void finish();
