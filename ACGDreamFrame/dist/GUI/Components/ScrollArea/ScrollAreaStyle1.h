@@ -11,6 +11,7 @@
 #include <QPushButton>
 #include <QGraphicsOpacityEffect>
 #include <QScrollBar>
+#include <QDir>
 #include <QFile>
 
 class ScrollAreaStyle1 : public QScrollArea

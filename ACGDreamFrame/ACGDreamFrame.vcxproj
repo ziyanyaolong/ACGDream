@@ -151,7 +151,7 @@
     <QtMoc Include="dist\GUI\Components\ScrollArea\ScrollAreaStyle1.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="dist\GUI\Components\StyleSheet\ScrollBar\ScrollBarStyle1.qss" />
+    <None Include="assets\StyleSheet\ScrollBar\ScrollBarStyle1.qss" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">

@@ -6,12 +6,22 @@ ScrollAreaStyle1::ScrollAreaStyle1(QWidget* parent)
 	//QPalette pa = this->palette();
 	//pa.setBrush(QPalette::Window, Qt::transparent);
 	//this->setPalette(pa);
+	Q_INIT_RESOURCE(ACGDreamFrame);
 	timer = new QTimer(this);
+
 	setAttribute(Qt::WA_Hover, true);
 	setFrameShape(QFrame::NoFrame);
-	QFile* file = new QFile("../StyleSheet/ScrollBar/ScrollBarStyle1.qss");
-	if (file->open(QFile::ReadOnly | QIODevice::Text))
-		this->verticalScrollBar()->setStyleSheet(file->readAll());
+
+	QFile file(":/ACGDreamFrame/assets/StyleSheet/ScrollBar/ScrollBarStyle1.qss");
+
+	if (file.open(QFile::ReadOnly | QIODevice::Text))
+	{
+		this->verticalScrollBar()->setStyleSheet(file.readAll());
+	}
+	else
+	{
+		qDebug() << file.errorString();
+	}
 
 	((QWidget*)(this->verticalScrollBar()))->installEventFilter(this);
 

@@ -105,6 +105,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="dist\GUI\Components\StyleSheet\ScrollBar\ScrollBarStyle1.qss" />
+    <None Include="assets\StyleSheet\ScrollBar\ScrollBarStyle1.qss" />
   </ItemGroup>
 </Project>
