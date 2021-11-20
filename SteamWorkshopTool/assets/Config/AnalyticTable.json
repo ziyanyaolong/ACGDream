@@ -5,6 +5,7 @@
     "BaseHttp": "https://steamcommunity.com/workshop/browse/?appid=",
     "Page": "&actualsort=trend&p=",
     "Search": "&searchtext=",
+    "Sieve": "&requiredtags%5B%5D=",
 
     "Star": {
       "Zero": "https://community.akamai.steamstatic.com/public/images/sharedfiles/0-star.png?v=2",

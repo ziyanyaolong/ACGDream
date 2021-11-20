@@ -6,17 +6,26 @@ SWTGUI::SWTGUI(QWidget *parent)
 	ui.setupUi(this);
 	ui.textBrowser->insertPlainText(QString::fromUtf8("创意工坊工具启动完成\n"));
 	connect(ui.pushButton, &QPushButton::clicked, this, [&]() {
-		emit this->pushButtonResponse_WebAddress(ui.lineEdit->text(), ui.label_page->text());
+		datalist.clear();
+		datalist.push_back(ui.lineEdit->text());
+		datalist.push_back(ui.lineEdit_Search->text());
+		datalist.push_back(ui.label_page->text());
+		emit this->pushButtonResponse_WebAddress(datalist);
 		});
 
-	connect(ui.pushButton_previous, &QPushButton::clicked, this, [&]() {
+	connect(ui.pushButton_Previous, &QPushButton::clicked, this, [&]() {
 		ui.label_page->setText(QString::number(ui.label_page->text().toULongLong() - 1));
-		emit this->pushButtonResponse_Previous(ui.lineEdit->text(), ui.label_page->text());
+		emit ui.pushButton->clicked();
 		});
 
-	connect(ui.pushButton_next, &QPushButton::clicked, this, [&]() {
+	connect(ui.pushButton_Next, &QPushButton::clicked, this, [&]() {
 		ui.label_page->setText(QString::number(ui.label_page->text().toULongLong() + 1));
-		emit this->pushButtonResponse_Next(ui.lineEdit->text(), ui.label_page->text());
+		emit ui.pushButton->clicked();
+		});
+
+	connect(ui.pushButton_Search, &QPushButton::clicked, this, [&]() {
+		ui.label_page->setText(QString::number(1));
+		emit ui.pushButton->clicked();
 		});
 }
 
@@ -73,7 +82,8 @@ void SWTGUI::addMod(const ModDataTable& mod)
 			webCrawler->websiteLink(mod.image);
 			connect(webCrawler, &WebCrawler::finished, this, [&](const QByteArray& data) {
 				const ModDataTable* tMod = static_cast<const ModDataTable*>((static_cast<WebCrawler*>(sender()))->otherData[0]);
-				ListWidgetItemWidget* tListWidgetItemWidget = static_cast<ListWidgetItemWidget*>((static_cast<WebCrawler*>(sender()))->otherData[1]);
+				WebCrawler* web = static_cast<WebCrawler*>(sender());
+				ListWidgetItemWidget* tListWidgetItemWidget = static_cast<ListWidgetItemWidget*>(web->otherData[1]);
 				if ((tMod == nullptr) || (tListWidgetItemWidget == nullptr))
 					return;
 				QPixmap temp;
@@ -83,7 +93,7 @@ void SWTGUI::addMod(const ModDataTable& mod)
 					qDebug() << "error save Pixmap!" << QCoreApplication::applicationDirPath() + QString("/Caches/" + tMod->appid + "_" + tMod->id + ".png");
 				delete tMod;
 				tListWidgetItemWidget->setImage(temp);
-				((WebCrawler*)sender())->deleteLater();
+				web->deleteLater();
 				});
 		}
 	}

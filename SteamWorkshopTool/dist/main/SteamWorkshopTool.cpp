@@ -22,19 +22,10 @@ SteamWorkshopTool::SteamWorkshopTool()
 	JsonOperation json(file.readAll(), this);
 	SteamGet::instance()->addData(json.analyticAll());
 	
-	connect(gui, &SWTGUI::pushButtonResponse_WebAddress, this, [&](const QString& appid, const QString& page) {
+	connect(gui, &SWTGUI::pushButtonResponse_WebAddress, this, [&](const QStringList& list) {
 		SteamGet* getTemp = SteamGet::instance();
-		emit modAnalytic->analyticMods(getTemp->findData("SteamWorkShop.BaseHttp") + appid + getTemp->findData("SteamWorkShop.Page") + page);
+		emit modAnalytic->analyticMods(getTemp->findData("SteamWorkShop.BaseHttp") + list[0] + getTemp->findData("SteamWorkShop.Search") + list[1] + getTemp->findData("SteamWorkShop.Page") + list[2]);
 		}, Qt::QueuedConnection); 
-	connect(gui, &SWTGUI::pushButtonResponse_Previous, this, [&](const QString& appid, const QString& page) {
-		SteamGet* getTemp = SteamGet::instance();
-		emit modAnalytic->analyticMods(getTemp->findData("SteamWorkShop.BaseHttp") + appid + getTemp->findData("SteamWorkShop.Page") + page);
-		}, Qt::QueuedConnection);
-
-	connect(gui, &SWTGUI::pushButtonResponse_Next, this, [&](const QString& appid, const QString& page) {
-		SteamGet* getTemp = SteamGet::instance();
-		emit modAnalytic->analyticMods(getTemp->findData("SteamWorkShop.BaseHttp") + appid + getTemp->findData("SteamWorkShop.Page") + page);
-		}, Qt::QueuedConnection);
 
 	connect(gui, &SWTGUI::pushButtonResponse_Subscription, this, [&](bool isSubscription, const QString& id) {
 		ModDataTable* temp = modAnalytic->findMod(id);

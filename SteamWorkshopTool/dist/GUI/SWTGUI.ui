@@ -110,13 +110,6 @@
     <widget class="QWidget" name="widget_2" native="true">
      <layout class="QVBoxLayout" name="verticalLayout_3">
       <item>
-       <widget class="QLabel" name="label_3">
-        <property name="text">
-         <string>创意工坊：</string>
-        </property>
-       </widget>
-      </item>
-      <item>
        <widget class="QWidget" name="widget_6" native="true">
         <layout class="QHBoxLayout" name="horizontalLayout_4" stretch="0,0,0">
          <item>
@@ -139,7 +132,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QLineEdit" name="lineEdit_2">
+          <widget class="QLineEdit" name="lineEdit_Search">
            <property name="minimumSize">
             <size>
              <width>200</width>
@@ -149,7 +142,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="pushButton_2">
+          <widget class="QPushButton" name="pushButton_Search">
            <property name="minimumSize">
             <size>
              <width>32</width>
@@ -166,7 +159,8 @@
             <string/>
            </property>
            <property name="icon">
-            <iconset theme=":/SteamWorkshopTool/assets/Images/Search.png"/>
+            <iconset theme=":/SteamWorkshopTool/assets/Images/Search.png">
+             <normaloff>.</normaloff>.</iconset>
            </property>
            <property name="iconSize">
             <size>
@@ -186,7 +180,7 @@
        <widget class="QWidget" name="widget_5" native="true">
         <layout class="QHBoxLayout" name="horizontalLayout_2">
          <item>
-          <widget class="QPushButton" name="pushButton_previous">
+          <widget class="QPushButton" name="pushButton_Previous">
            <property name="minimumSize">
             <size>
              <width>200</width>
@@ -221,7 +215,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="pushButton_next">
+          <widget class="QPushButton" name="pushButton_Next">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
              <horstretch>0</horstretch>
@@ -246,6 +240,13 @@
           </widget>
          </item>
         </layout>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="label_3">
+        <property name="text">
+         <string>创意工坊：</string>
+        </property>
        </widget>
       </item>
       <item>

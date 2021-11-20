@@ -18,6 +18,7 @@
 #include <QCoreApplication>
 #include <QDir>
 #include <QVector>
+#include <QStringList>
 
 #include "ui_SWTGUI.h"
 #include "Components/ListWidgetItemWidget/ListWidgetItemWidget.h"
@@ -31,15 +32,14 @@ class SWTGUI : public QWidget
 private:
 	Ui::SteamWorkshopTool ui;
 	QVector<QWidget*> list;
+	QStringList datalist;
 
 public:
 	SWTGUI(QWidget *parent = Q_NULLPTR);
 	~SWTGUI();
 
 signals:
-	void pushButtonResponse_WebAddress(const QString& appid, const QString& page);
-	void pushButtonResponse_Next(const QString& appid, const QString& page);
-	void pushButtonResponse_Previous(const QString& appid ,const QString& page);
+	void pushButtonResponse_WebAddress(const QStringList& list);
 	void pushButtonResponse_Subscription(bool isSubscription, const QString& id);
 
 public slots:
