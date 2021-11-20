@@ -7,7 +7,9 @@
 #include <QNetworkReply>
 #include <QMetaType>
 
+#include "../../StaticData/SteamGet/SteamGet.h"
 #include "../../ModDataTable/ModDataTable.h"
+#include "../../JsonOperation/JsonOperation.h"
 
 //"https://steamcommunity.com/app/294100/workshop/"
 class WebsiteAnalytic : public QObject
@@ -19,14 +21,6 @@ public:
 private:
 	QString* webData;
 	QVector<ModDataTable*> finishData;
-	QString head = QString("<div class=\"workshopItem\">");
-	QString tail = QString("</script>");
-	QString jsHead = QString("SharedFileBindMouseHover(");
-	QString jsTail = QString(");");
-	QString imageHead1 = QString("<img class=\"");
-	QString imageHead2 = QString("src=\"");
-	QString imageTail = QString("\">");
-	QStringList matchList;
 
 public:
 	WebsiteAnalytic(QObject *parent = Q_NULLPTR);
@@ -50,5 +44,3 @@ public slots:
 	}
 
 };
-
-//Q_DECLARE_METATYPE(WebsiteAnalytic::ModDataTable)

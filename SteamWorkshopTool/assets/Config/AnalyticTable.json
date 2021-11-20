@@ -1,0 +1,56 @@
+{
+  "Version": "v0.0.1",
+
+  "SteamWorkShop": {
+    "BaseHttp": "https://steamcommunity.com/workshop/browse/?appid=",
+    "Page": "&actualsort=trend&p=",
+    "Search": "&searchtext=",
+
+    "Star": {
+      "Zero": "https://community.akamai.steamstatic.com/public/images/sharedfiles/0-star.png?v=2",
+      "One": "https://community.akamai.steamstatic.com/public/images/sharedfiles/1-star.png?v=2",
+      "Two": "https://community.akamai.steamstatic.com/public/images/sharedfiles/2-star.png?v=2",
+      "Three": "https://community.akamai.steamstatic.com/public/images/sharedfiles/3-star.png?v=2",
+      "Four": "https://community.akamai.steamstatic.com/public/images/sharedfiles/4-star.png?v=2",
+      "Five": "https://community.akamai.steamstatic.com/public/images/sharedfiles/5-star.png?v=2"
+    },
+
+    "Sort": {
+      "Actual Sort": "&actualsort=",
+      "Browse Sort": "&browsesort=",
+      "Way": {
+        "Trend": "trend",
+        "Mostrecent": "mostrecent",
+        "Lastupdated": "lastupdated",
+        "Totaluniquesubscribers": "totaluniquesubscribers"
+      },
+
+      "Time": {
+        "Today": "&days=1",
+        "One Week": "&days=7",
+        "Three Months": "&days=90",
+        "Half A Year": "&days=180",
+        "One Year": "&days=365",
+        "History": "&days=-1"
+      }
+    }
+  },
+
+  "ItemAnalytic": {
+    "Head": "<div class=\"workshopItem\">",
+    "Tail": "</script>",
+
+    "JsonAnalytic": {
+      "Head1": "SharedFileBindMouseHover(",
+      "Head2": "{",
+      "Tail1": ");",
+      "Tail2": "}",
+      "Image": {
+        "Head1": "<img class=\"",
+        "Head2": "src=\"",
+        "Tail": "\">"
+      }
+    }
+
+  }
+}

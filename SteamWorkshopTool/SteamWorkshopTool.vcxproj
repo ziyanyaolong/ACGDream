@@ -117,11 +117,14 @@
     <ClCompile Include="dist\GUI\SWTGUI.cpp" />
     <ClCompile Include="dist\GUI\Components\ListWidgetItemWidget\ListWidgetItemWidget.cpp" />
     <ClCompile Include="dist\Network\ModAnalytic\ModAnalytic.cpp" />
+    <ClCompile Include="dist\StaticData\SteamGet\SteamGet.cpp" />
+    <ClCompile Include="dist\JsonOperation\JsonOperation.cpp" />
     <QtRcc Include="SteamWorkshopTool.qrc" />
     <QtMoc Include="dist\main\SteamWorkshopTool.h" />
     <ClCompile Include="dist\main\SteamWorkshopTool.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="assets\Config\AnalyticTable.json" />
     <None Include="dist\main\SteamWorkshopTool.json" />
   </ItemGroup>
   <ItemGroup>
@@ -142,11 +145,14 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="dist\ModDataTable\ModDataTable.h" />
+    <QtMoc Include="dist\JsonOperation\JsonOperation.h" />
+    <QtMoc Include="dist\StaticData\SteamGet\SteamGet.h" />
     <QtMoc Include="dist\Network\ModAnalytic\ModAnalytic.h" />
     <QtMoc Include="dist\GUI\Components\ListWidgetItemWidget\ListWidgetItemWidget.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="assets\Images\NSubscription.png" />
+    <Image Include="assets\Images\Search.png" />
     <Image Include="assets\Images\YSubscription.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

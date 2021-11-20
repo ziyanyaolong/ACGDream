@@ -32,6 +32,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="dist\main\SteamWorkshopTool.json" />
+    <None Include="assets\Config\AnalyticTable.json" />
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="dist\main\SteamWorkshopTool.h">
@@ -53,6 +54,12 @@
       <Filter>Header Files</Filter>
     </QtMoc>
     <QtMoc Include="dist\Network\ModAnalytic\ModAnalytic.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="dist\StaticData\SteamGet\SteamGet.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="dist\JsonOperation\JsonOperation.h">
       <Filter>Header Files</Filter>
     </QtMoc>
   </ItemGroup>
@@ -83,6 +90,12 @@
     <ClCompile Include="dist\Network\ModAnalytic\ModAnalytic.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="dist\StaticData\SteamGet\SteamGet.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="dist\JsonOperation\JsonOperation.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="dist\ModDataTable\ModDataTable.h">
@@ -94,6 +107,9 @@
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="assets\Images\YSubscription.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="assets\Images\Search.png">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>

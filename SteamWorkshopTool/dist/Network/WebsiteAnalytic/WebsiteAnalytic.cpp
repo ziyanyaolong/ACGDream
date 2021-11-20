@@ -5,9 +5,6 @@ WebsiteAnalytic::WebsiteAnalytic(QObject *parent)
 {
 	webData = new QString("");
 	qRegisterMetaType<ModDataTable>("ModDataTable");
-	matchList.push_back("id");
-	matchList.push_back("appid");
-	matchList.push_back("title");
 }
 
 WebsiteAnalytic::~WebsiteAnalytic()
@@ -53,41 +50,40 @@ void WebsiteAnalytic::analyticWebsiteData()
 		(webData->indexOf("<div class=\"workshopBrowseItems\">") + QString("<div class=\"workshopBrowseItems\">").size()),
 		webData->indexOf("<div class=\"workshopBrowsePaging\">"));
 	QString dataTemp("");
-	int headPos = tempStr.indexOf(head);
-	int tailPos = tempStr.indexOf(tail);
+	QString jsonTemp("");
+	SteamGet* steamGet = SteamGet::instance();
+	QString jsonHead1 = steamGet->findData("ItemAnalytic.JsonAnalytic.Head1");
+	QString jsonHead2 = steamGet->findData("ItemAnalytic.JsonAnalytic.Head2");
+	QString jsonTail1 = steamGet->findData("ItemAnalytic.JsonAnalytic.Tail1");
+	QString jsonTail2 = steamGet->findData("ItemAnalytic.JsonAnalytic.Tail2");
+	QString itemHead = steamGet->findData("ItemAnalytic.Head");
+	QString itemTail = steamGet->findData("ItemAnalytic.Tail");
+	QString imageHead1 = steamGet->findData("ItemAnalytic.JsonAnalytic.Image.Head1");
+	QString imageHead2 = steamGet->findData("ItemAnalytic.JsonAnalytic.Image.Head2");
+	QString imageTail = steamGet->findData("ItemAnalytic.JsonAnalytic.Image.Tail");
+	int headPos = tempStr.indexOf(itemHead);
+	int tailPos = tempStr.indexOf(itemTail);
+
 	while ((headPos != -1) && (tailPos != -1))
 	{
-		dataTemp = tempStr.mid(headPos, tailPos + tail.size());
+		dataTemp = tempStr.mid(headPos + itemHead.size(), tailPos - (headPos + itemHead.size()));
 		ModDataTable* modDataTable = new ModDataTable;
-		QString js = dataTemp.mid(dataTemp.indexOf(jsHead) + jsHead.size(), dataTemp.indexOf(jsTail));
+		jsonTemp = dataTemp.mid(dataTemp.indexOf(jsonHead1) + jsonHead1.size(), dataTemp.lastIndexOf(jsonTail1) - (dataTemp.indexOf(jsonHead1) + jsonHead1.size()));
+		jsonTemp = jsonTemp.mid(jsonTemp.indexOf(jsonHead2), jsonTemp.lastIndexOf(jsonTail2) + jsonTemp.size() - jsonTemp.indexOf(jsonHead2));
+		jsonTemp = jsonTemp.replace("\\r", "");
+		JsonOperation json(jsonTemp);
 		dataTemp = dataTemp.mid(dataTemp.indexOf(imageHead1) + imageHead1.size());
 		dataTemp = dataTemp.mid(dataTemp.indexOf(imageHead2) + imageHead2.size());
 		dataTemp = dataTemp.mid(0, dataTemp.indexOf(imageTail));
 		modDataTable->image = dataTemp;
-		int number = 0;
-		QRegularExpression regExp0("(?<=\"id\":\").*?(?=\")");
-		QRegularExpressionMatch match0 = regExp0.match(js);
-		QRegularExpression regExp1("(?<=\"appid\":).*?(?=\\})");
-		QRegularExpressionMatch match1 = regExp1.match(js);
-		QRegularExpression regExp2("(?<=\"title\":\").*?(?=\")");
-		QRegularExpressionMatch match2 = regExp2.match(js);
-		if (match0.hasMatch())
-		{
-			modDataTable->id = match0.captured(0);
-		}
-		if (match1.hasMatch())
-		{
-			modDataTable->appid = match1.captured(0);
-		}
-		if (match2.hasMatch())
-		{
-			modDataTable->title = unicodeToUtf8(match2.captured(0));
-		}
+		modDataTable->id = json.analyticBackValue("id", 0);
+		modDataTable->appid = json.analyticBackValue("appid", 0);
+		modDataTable->title = json.analyticBackValue("title", 0);
 		finishData.push_back(modDataTable);
 		emit this->newModDataTable(*modDataTable);
-		tempStr = tempStr.mid(tailPos + tail.size(), tempStr.size());
-		headPos = tempStr.indexOf(head);
-		tailPos = tempStr.indexOf(tail);
+		tempStr = tempStr.mid(tailPos + itemTail.size(), tempStr.size());
+		headPos = tempStr.indexOf(itemHead);
+		tailPos = tempStr.indexOf(itemTail);
 	}
 	emit this->finish();
 	emit this->finished(finishData);

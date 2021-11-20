@@ -57,6 +57,7 @@ public:
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName(QString::fromUtf8("MainWindow"));
         MainWindow->resize(1024, 600);
+        MainWindow->setMinimumSize(QSize(512, 512));
         QFont font;
         font.setFamily(QString::fromUtf8("\350\220\235\350\216\211\344\275\223"));
         MainWindow->setFont(font);

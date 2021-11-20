@@ -2,5 +2,7 @@
     <qresource prefix="/SteamWorkshopTool">
         <file>assets/Images/NSubscription.png</file>
         <file>assets/Images/YSubscription.png</file>
+        <file>assets/Images/Search.png</file>
+        <file>assets/Config/AnalyticTable.json</file>
     </qresource>
 </RCC>
