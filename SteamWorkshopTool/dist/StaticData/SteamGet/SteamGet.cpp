@@ -1,7 +1,6 @@
 #include "SteamGet.h"
 
-static SteamGet steamGet;
-SteamGet* SteamGet::_me_ = &steamGet;
+SteamGet* SteamGet::_me_ = nullptr;
 
 SteamGet::SteamGet(QObject *parent)
 	: QObject(parent)
@@ -12,4 +11,6 @@ SteamGet::SteamGet(QObject *parent)
 
 SteamGet::~SteamGet()
 {
+	_me_->deleteLater();
+	_me_ = nullptr;
 }

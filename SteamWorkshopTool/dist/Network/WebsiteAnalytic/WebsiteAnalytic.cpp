@@ -85,6 +85,7 @@ void WebsiteAnalytic::analyticWebsiteData()
 		headPos = tempStr.indexOf(itemHead);
 		tailPos = tempStr.indexOf(itemTail);
 	}
+
 	emit this->finish();
 	emit this->finished(finishData);
 }

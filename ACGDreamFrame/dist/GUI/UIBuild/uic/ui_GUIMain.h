@@ -72,7 +72,9 @@ public:
         widget_2 = new QWidget(centralwidget);
         widget_2->setObjectName(QString::fromUtf8("widget_2"));
         horizontalLayout_2 = new QHBoxLayout(widget_2);
+        horizontalLayout_2->setSpacing(1);
         horizontalLayout_2->setObjectName(QString::fromUtf8("horizontalLayout_2"));
+        horizontalLayout_2->setContentsMargins(1, 1, 1, 1);
         scrollArea = new ScrollAreaStyle1(widget_2);
         scrollArea->setObjectName(QString::fromUtf8("scrollArea"));
         QSizePolicy sizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding);
@@ -86,7 +88,7 @@ public:
         scrollArea->setWidgetResizable(true);
         scrollAreaWidgetContents = new QWidget();
         scrollAreaWidgetContents->setObjectName(QString::fromUtf8("scrollAreaWidgetContents"));
-        scrollAreaWidgetContents->setGeometry(QRect(0, 0, 98, 517));
+        scrollAreaWidgetContents->setGeometry(QRect(0, 0, 98, 533));
         horizontalLayout = new QHBoxLayout(scrollAreaWidgetContents);
         horizontalLayout->setSpacing(0);
         horizontalLayout->setObjectName(QString::fromUtf8("horizontalLayout"));
@@ -133,7 +135,9 @@ public:
         widget_3 = new QWidget(widget_2);
         widget_3->setObjectName(QString::fromUtf8("widget_3"));
         gridLayout = new QGridLayout(widget_3);
+        gridLayout->setSpacing(1);
         gridLayout->setObjectName(QString::fromUtf8("gridLayout"));
+        gridLayout->setContentsMargins(1, 1, 1, 1);
 
         horizontalLayout_2->addWidget(widget_3);
 

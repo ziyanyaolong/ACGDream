@@ -23,6 +23,7 @@ void GUIMain::clearAllWidget()
 		{
 			if (tempWidget)
 			{
+				tempWidget->hide();
 				tempWidget->close();
 				tempWidget->deleteLater();
 				tempWidget = nullptr;

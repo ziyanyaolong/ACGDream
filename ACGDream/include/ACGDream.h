@@ -15,6 +15,7 @@
 #include <QMessageBox>
 #include <QEventLoop>
 #include <QTextCodec>
+#include <QDir>
 
 #include "../ACGDreamFrame/include/ACGDreamFrameH.h"
 #pragma comment (lib,"../.build/vs/ACGDreamFrame/lib/ACGDreamFrame.lib")

@@ -102,7 +102,6 @@ QMap<QString, QString> JsonOperation::analyticAll()
     {
         if (it.value().isObject())
         {
-            //listValue1[it.value().toObject()] = it.key() + ".";
             listValue1[QString(it.key() + ".")] = it.value().toObject();
         }
         else

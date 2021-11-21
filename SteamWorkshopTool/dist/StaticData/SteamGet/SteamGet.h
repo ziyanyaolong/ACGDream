@@ -31,7 +31,7 @@ public:
 	SteamGet(QObject *parent = Q_NULLPTR);
 	~SteamGet();
 
-	static SteamGet* instance() { return _me_; }
+	static SteamGet* instance() { if (_me_ == nullptr) _me_ = new SteamGet; return _me_; }
 
 signals:
 	void removeDataKey(const QString&);
@@ -49,7 +49,10 @@ public slots:
 
 	void addData(const QMap<QString, QString>& list)
 	{
-		_map.insert(list);
+		for (auto i = list.begin(); i != list.end() ; i++)
+		{
+			_map[i.key()] = i.value();
+		}
 	}
 
 	void addData(const QString& key, const QString& value)

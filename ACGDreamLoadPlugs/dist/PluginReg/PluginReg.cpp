@@ -16,12 +16,13 @@ PluginReg::~PluginReg()
 
 void PluginReg::unloadAllPlugins()
 {
-	foreach(PluginCalInterface * plugin, plugins)
+	pluginJsonList.clear();
+	for (auto plugin = plugins.begin(); plugin != plugins.end(); plugin++)
 	{
-		if (plugin)
+		if (plugin.value())
 		{
-			plugin->deleteLater();
-			plugin = nullptr;
+			plugin.value()->deleteLater();
+			plugin.value() = nullptr;
 		}
 	}
 	plugins.clear();
@@ -30,6 +31,9 @@ void PluginReg::unloadAllPlugins()
 bool PluginReg::loadPlugin(const QString& filePath)
 {
 	QPluginLoader pluginLoader(filePath);
+	QString name(pluginLoader.fileName());
+	name = name.mid(name.lastIndexOf("/") + QString("/").size(), name.indexOf(".dll") - name.lastIndexOf("/") - QString("/").size());
+	emit this->loading(name);
 	PluginCalInterface* plugin = qobject_cast<PluginCalInterface*>(pluginLoader.instance());
 	PluginReg::connect(plugin, &PluginCalInterface::addGui, this, &PluginReg::addGuiSignal, Qt::QueuedConnection);
 	if (!pluginLoader.isLoaded())
@@ -37,11 +41,12 @@ bool PluginReg::loadPlugin(const QString& filePath)
 		qDebug() << filePath << __FUNCTION__ << pluginLoader.errorString();
 		return false;
 	}else if (plugin) {
-		if (plugins.indexOf(plugin) == -1)
+		if (plugins.count(name) <= 0)
 		{
 			plugin->setParent(nullptr);
 			plugin->moveToThread(thread.get());
-			plugins.push_back(plugin);
+			plugins[name] = plugin;
+			pluginJsonList[plugin] = pluginLoader.metaData();
 			emit plugin->pRun();
 		}
 		else

@@ -18,7 +18,9 @@
 #include <QCoreApplication>
 #include <QDir>
 #include <QVector>
+#include <List>
 #include <QStringList>
+#include <QFileDialog>
 
 #include "ui_SWTGUI.h"
 #include "Components/ListWidgetItemWidget/ListWidgetItemWidget.h"
@@ -32,6 +34,7 @@ class SWTGUI : public QWidget
 private:
 	Ui::SteamWorkshopTool ui;
 	QVector<QWidget*> list;
+	QList<WebCrawler*> webList;
 	QStringList datalist;
 
 public:
@@ -39,8 +42,12 @@ public:
 	~SWTGUI();
 
 signals:
-	void pushButtonResponse_WebAddress(const QStringList& list);
-	void pushButtonResponse_Subscription(bool isSubscription, const QString& id);
+	void webAddress(const QStringList& list);
+	void subscription(bool isSubscription, const QString& id);
+	void importData(const QString& address);
+	void exportData(const QString& address);
+	void clearCache();
+	void updateMod();
 
 public slots:
 	void printInfo(const QString& data) { ui.textBrowser->insertPlainText(QString(data + "\n")); }

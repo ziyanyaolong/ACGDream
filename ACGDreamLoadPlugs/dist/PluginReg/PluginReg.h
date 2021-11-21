@@ -20,16 +20,19 @@ class PluginReg : public QObject
 
 private:
 	friend class ACGDream;
-	QVector<PluginCalInterface*> plugins;
+	QMap<QString, PluginCalInterface*> plugins;
+	QMap<PluginCalInterface*, QJsonObject> pluginJsonList;
 	QSharedPointer<QThread> thread;
+	QString name;
 
 public:
 	explicit PluginReg(QObject *parent = Q_NULLPTR);
 	~PluginReg();
-	const QVector<PluginCalInterface*>& readPluginList() { return plugins; }
+	const QMap<QString, PluginCalInterface*>& readPluginList() { return plugins; }
 
 signals:
 	void addGuiSignal(QWidget* gui);
+	void loading(QString name);
 
 public slots:
 	bool loadAllPlugins(const QString & dirPath);

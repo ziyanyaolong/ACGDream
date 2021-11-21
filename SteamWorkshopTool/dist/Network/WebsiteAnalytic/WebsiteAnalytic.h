@@ -11,7 +11,6 @@
 #include "../../ModDataTable/ModDataTable.h"
 #include "../../JsonOperation/JsonOperation.h"
 
-//"https://steamcommunity.com/app/294100/workshop/"
 class WebsiteAnalytic : public QObject
 {
 	Q_OBJECT
@@ -21,12 +20,13 @@ public:
 private:
 	QString* webData;
 	QVector<ModDataTable*> finishData;
+	QString unicodeToUtf8(const QString& str);
 
 public:
 	WebsiteAnalytic(QObject *parent = Q_NULLPTR);
 	~WebsiteAnalytic();
 
-	QString unicodeToUtf8(const QString& str);
+	QVector<ModDataTable*>& getModDataTabelList() { return finishData; }
 
 signals:
 	void finish();
@@ -42,5 +42,4 @@ public slots:
 		qDeleteAll(finishData.begin(), finishData.end());
 		finishData.clear();
 	}
-
 };

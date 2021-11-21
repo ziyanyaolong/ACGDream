@@ -4,6 +4,8 @@
 #include <QListWidgetItem>
 #include <QPixmap>
 #include <QSize>
+#include <QDebug>
+
 #include "ui_ListWidgetItemWidget.h"
 
 class ListWidgetItemWidget : public QWidget

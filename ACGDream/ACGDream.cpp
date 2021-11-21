@@ -4,11 +4,20 @@ ACGDream::ACGDream(QMainWindow* parent)
 	: ACGDreamFrame(parent)
 {
 	pluginReg = new PluginReg(this);
+	QDir dir(QCoreApplication::applicationDirPath() + "/Temp");
+	if (!dir.exists())
+		dir.mkdir(QCoreApplication::applicationDirPath() + "/Temp");
 
 	connect(pluginReg, &PluginReg::addGuiSignal, this, [&](QWidget* gui) {
 		this->addWidght(gui);
 		gui->hide();
 		},Qt::QueuedConnection);
+
+	connect(pluginReg, &PluginReg::loading, this, [&](QString name) {
+		QDir dir(QCoreApplication::applicationDirPath() + "/Temp/" + name);
+		if (!dir.exists())
+			dir.mkdir(QCoreApplication::applicationDirPath() + "/Temp/" + name);
+		});
 
 	connect(ui.actions, &QAction::triggered, this, [&]() {
 		this->clearAllWidget();

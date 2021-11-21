@@ -18,7 +18,7 @@ ModAnalytic::~ModAnalytic()
 
 inline void ModAnalytic::clearModList()
 {
-	qDeleteAll(modList);
+	qDeleteAll(modList.begin(), modList.end());
 	modList.clear();
 }
 

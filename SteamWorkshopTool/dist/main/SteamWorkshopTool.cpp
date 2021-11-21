@@ -13,21 +13,28 @@ SteamWorkshopTool::SteamWorkshopTool()
 	gui = new SWTGUI();
 	modAnalytic = new ModAnalytic(this);
 	database = new DataBase(this);
+
 	QFile file(":/SteamWorkshopTool/assets/Config/AnalyticTable.json");
+	//QDir dir(QCoreApplication::applicationDirPath() + "/Temp/SteamWorkshopTool/Caches/");
 	if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
 	{
 		qDebug() << "errorOpen!";
 		return;
 	}
 	JsonOperation json(file.readAll(), this);
+	SteamGet::instance()->setParent(this);
 	SteamGet::instance()->addData(json.analyticAll());
+
+	connect(gui, &SWTGUI::clearCache, this, [&]() {
+
+		}, Qt::QueuedConnection);
 	
-	connect(gui, &SWTGUI::pushButtonResponse_WebAddress, this, [&](const QStringList& list) {
+	connect(gui, &SWTGUI::webAddress, this, [&](const QStringList& list) {
 		SteamGet* getTemp = SteamGet::instance();
 		emit modAnalytic->analyticMods(getTemp->findData("SteamWorkShop.BaseHttp") + list[0] + getTemp->findData("SteamWorkShop.Search") + list[1] + getTemp->findData("SteamWorkShop.Page") + list[2]);
 		}, Qt::QueuedConnection); 
 
-	connect(gui, &SWTGUI::pushButtonResponse_Subscription, this, [&](bool isSubscription, const QString& id) {
+	connect(gui, &SWTGUI::subscription, this, [&](bool isSubscription, const QString& id) {
 		ModDataTable* temp = modAnalytic->findMod(id);
 
 		if (temp == nullptr)
@@ -49,8 +56,6 @@ SteamWorkshopTool::SteamWorkshopTool()
 			emit this->signalDataBass_delete(id);
 		}
 		}, Qt::QueuedConnection);
-
-	connect(modAnalytic, &ModAnalytic::finish, gui, &SWTGUI::clearModList, Qt::QueuedConnection);
 	
 	connect(modAnalytic, &ModAnalytic::finished, this, [&](const QVector<ModDataTable*>& mods) {
 		foreach(ModDataTable * i, mods)
@@ -78,7 +83,8 @@ SteamWorkshopTool::~SteamWorkshopTool()
 	if (database)
 		database->deleteLater();
 
-	
+	modAnalytic = nullptr;
+	database = nullptr;
 }
 
 void SteamWorkshopTool::pRun()
