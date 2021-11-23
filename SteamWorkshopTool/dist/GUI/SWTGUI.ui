@@ -218,7 +218,7 @@
  }</string>
         </property>
         <property name="currentIndex">
-         <number>1</number>
+         <number>0</number>
         </property>
         <widget class="QWidget" name="tab">
          <attribute name="title">
@@ -259,14 +259,14 @@
                     <widget class="QLabel" name="label_4">
                      <property name="minimumSize">
                       <size>
-                       <width>36</width>
-                       <height>32</height>
+                       <width>60</width>
+                       <height>20</height>
                       </size>
                      </property>
                      <property name="maximumSize">
                       <size>
-                       <width>16777215</width>
-                       <height>16777215</height>
+                       <width>60</width>
+                       <height>20</height>
                       </size>
                      </property>
                      <property name="text">
@@ -432,7 +432,7 @@
                     <widget class="QComboBox" name="comboBox_number">
                      <item>
                       <property name="text">
-                       <string>9</string>
+                       <string>30</string>
                       </property>
                      </item>
                      <item>
@@ -442,7 +442,7 @@
                      </item>
                      <item>
                       <property name="text">
-                       <string>30</string>
+                       <string>9</string>
                       </property>
                      </item>
                     </widget>
@@ -461,6 +461,9 @@
                    </property>
                    <item>
                     <widget class="QPushButton" name="pushButton_Previous">
+                     <property name="enabled">
+                      <bool>false</bool>
+                     </property>
                      <property name="minimumSize">
                       <size>
                        <width>0</width>
@@ -566,111 +569,139 @@
                  <number>5</number>
                 </property>
                 <item>
-                 <widget class="QWidget" name="widget_13" native="true">
-                  <layout class="QHBoxLayout" name="horizontalLayout_7">
-                   <item>
-                    <widget class="QLabel" name="label_5">
-                     <property name="minimumSize">
-                      <size>
-                       <width>36</width>
-                       <height>32</height>
-                      </size>
-                     </property>
-                     <property name="maximumSize">
-                      <size>
-                       <width>16777215</width>
-                       <height>16777215</height>
-                      </size>
-                     </property>
-                     <property name="text">
-                      <string>搜索：</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item>
-                    <widget class="QLineEdit" name="lineEdit_Search_2">
-                     <property name="minimumSize">
-                      <size>
-                       <width>200</width>
-                       <height>20</height>
-                      </size>
-                     </property>
-                    </widget>
-                   </item>
-                   <item>
-                    <widget class="QPushButton" name="pushButton_Search_2">
-                     <property name="minimumSize">
-                      <size>
-                       <width>32</width>
-                       <height>32</height>
-                      </size>
-                     </property>
-                     <property name="maximumSize">
-                      <size>
-                       <width>32</width>
-                       <height>32</height>
-                      </size>
-                     </property>
-                     <property name="text">
-                      <string/>
-                     </property>
-                     <property name="icon">
-                      <iconset resource="../../SteamWorkshopTool.qrc">
-                       <normaloff>:/SteamWorkshopTool/assets/Images/Search.png</normaloff>:/SteamWorkshopTool/assets/Images/Search.png</iconset>
-                     </property>
-                     <property name="iconSize">
-                      <size>
-                       <width>32</width>
-                       <height>32</height>
-                      </size>
-                     </property>
-                     <property name="flat">
-                      <bool>true</bool>
-                     </property>
-                    </widget>
-                   </item>
-                  </layout>
+                 <widget class="QLabel" name="label_6">
+                  <property name="text">
+                   <string>筛选条件：</string>
+                  </property>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QWidget" name="widget_14" native="true">
-                  <layout class="QHBoxLayout" name="horizontalLayout_8">
+                 <widget class="QWidget" name="widget_18" native="true">
+                  <layout class="QVBoxLayout" name="verticalLayout_12">
+                   <property name="spacing">
+                    <number>9</number>
+                   </property>
+                   <property name="leftMargin">
+                    <number>9</number>
+                   </property>
+                   <property name="topMargin">
+                    <number>0</number>
+                   </property>
+                   <property name="rightMargin">
+                    <number>9</number>
+                   </property>
+                   <property name="bottomMargin">
+                    <number>0</number>
+                   </property>
                    <item>
-                    <widget class="QLabel" name="label_3">
-                     <property name="minimumSize">
-                      <size>
-                       <width>60</width>
-                       <height>20</height>
-                      </size>
-                     </property>
-                     <property name="maximumSize">
-                      <size>
-                       <width>60</width>
-                       <height>20</height>
-                      </size>
-                     </property>
-                     <property name="text">
-                      <string>游戏编号：</string>
-                     </property>
+                    <widget class="QWidget" name="widget_14" native="true">
+                     <layout class="QHBoxLayout" name="horizontalLayout_8">
+                      <item>
+                       <widget class="QLabel" name="label_3">
+                        <property name="minimumSize">
+                         <size>
+                          <width>60</width>
+                          <height>20</height>
+                         </size>
+                        </property>
+                        <property name="maximumSize">
+                         <size>
+                          <width>60</width>
+                          <height>20</height>
+                         </size>
+                        </property>
+                        <property name="text">
+                         <string>游戏编号：</string>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="QLineEdit" name="lineEdit_2">
+                        <property name="minimumSize">
+                         <size>
+                          <width>0</width>
+                          <height>20</height>
+                         </size>
+                        </property>
+                        <property name="maximumSize">
+                         <size>
+                          <width>16777215</width>
+                          <height>20</height>
+                         </size>
+                        </property>
+                        <property name="text">
+                         <string/>
+                        </property>
+                       </widget>
+                      </item>
+                     </layout>
                     </widget>
                    </item>
                    <item>
-                    <widget class="QLineEdit" name="lineEdit_2">
-                     <property name="minimumSize">
-                      <size>
-                       <width>0</width>
-                       <height>20</height>
-                      </size>
-                     </property>
-                     <property name="maximumSize">
-                      <size>
-                       <width>16777215</width>
-                       <height>20</height>
-                      </size>
-                     </property>
-                     <property name="text">
-                      <string>294100</string>
-                     </property>
+                    <widget class="QWidget" name="widget_13" native="true">
+                     <layout class="QHBoxLayout" name="horizontalLayout_7">
+                      <item>
+                       <widget class="QLabel" name="label_5">
+                        <property name="minimumSize">
+                         <size>
+                          <width>60</width>
+                          <height>20</height>
+                         </size>
+                        </property>
+                        <property name="maximumSize">
+                         <size>
+                          <width>60</width>
+                          <height>20</height>
+                         </size>
+                        </property>
+                        <property name="text">
+                         <string>搜索：</string>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="QLineEdit" name="lineEdit_Search_2">
+                        <property name="minimumSize">
+                         <size>
+                          <width>200</width>
+                          <height>20</height>
+                         </size>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="QPushButton" name="pushButton_Search_2">
+                        <property name="minimumSize">
+                         <size>
+                          <width>32</width>
+                          <height>32</height>
+                         </size>
+                        </property>
+                        <property name="maximumSize">
+                         <size>
+                          <width>32</width>
+                          <height>32</height>
+                         </size>
+                        </property>
+                        <property name="text">
+                         <string/>
+                        </property>
+                        <property name="icon">
+                         <iconset resource="../../SteamWorkshopTool.qrc">
+                          <normaloff>:/SteamWorkshopTool/assets/Images/Search.png</normaloff>:/SteamWorkshopTool/assets/Images/Search.png</iconset>
+                        </property>
+                        <property name="iconSize">
+                         <size>
+                          <width>32</width>
+                          <height>32</height>
+                         </size>
+                        </property>
+                        <property name="flat">
+                         <bool>true</bool>
+                        </property>
+                       </widget>
+                      </item>
+                     </layout>
                     </widget>
                    </item>
                   </layout>
@@ -745,7 +776,7 @@
                     <widget class="QComboBox" name="comboBox_number_2">
                      <item>
                       <property name="text">
-                       <string>9</string>
+                       <string>30</string>
                       </property>
                      </item>
                      <item>
@@ -755,7 +786,7 @@
                      </item>
                      <item>
                       <property name="text">
-                       <string>30</string>
+                       <string>9</string>
                       </property>
                      </item>
                     </widget>
@@ -774,6 +805,9 @@
                    </property>
                    <item>
                     <widget class="QPushButton" name="pushButton_Previous_2">
+                     <property name="enabled">
+                      <bool>false</bool>
+                     </property>
                      <property name="minimumSize">
                       <size>
                        <width>0</width>

@@ -30,6 +30,7 @@ public:
 
 	bool findModDataTable(const QString& key);
 	bool deleteModDataTable(const QString& key);
+	QStringList readModDataTableAll();
 
 public slots:
 	bool addModDataTable(const ModDataTable* data, DataBase::Way way = DataBase::Way::Normal);

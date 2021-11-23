@@ -1,30 +1,22 @@
 #include "ListWidgetItemWidget.h"
 
-QIcon ListWidgetItemWidget::YSIcon;
-QIcon ListWidgetItemWidget::NSIcon;
-
-ListWidgetItemWidget::ListWidgetItemWidget(QWidget *parent, QListWidgetItem* listWidgetItem)
-	: QWidget(parent), _listWidgetItem(listWidgetItem)
+ListWidgetItemWidget::ListWidgetItemWidget(QListWidget* parent)
+	: QObject(parent)
 {
-	ui.setupUi(this);
-	QPixmap tImage = QPixmap(":/SteamWorkshopTool/assets/Images/NSubscription.png");
-	tImage = tImage.scaled(QSize(ui.pushButton->width(), ui.pushButton->height()));
-	NSIcon = QIcon(tImage);
-
-	tImage = QPixmap(":/SteamWorkshopTool/assets/Images/YSubscription.png");
-	tImage = tImage.scaled(QSize(ui.pushButton->width(), ui.pushButton->height()));
-	YSIcon = QIcon(tImage);
-	ui.pushButton->setIcon(NSIcon);
-	
-	connect(ui.pushButton, &QPushButton::clicked, this, [&]() {
-		if (_isSubscription)
+	listWidgetItem = new QListWidgetItem;
+	widget = new Widget1(parent);
+	listWidgetItem->setSizeHint(QSize(widget->width(), widget->height()));
+	parent->addItem(listWidgetItem);
+	parent->setItemWidget(listWidgetItem, widget);
+	connect(widget->ui.pushButton, &QPushButton::clicked, this, [&]() {
+		if (widget->_isSubscription)
 		{
-			setSubscription(false);
+			widget->setSubscription(false);
 		}
 		else
-			setSubscription(true);
+			widget->setSubscription(true);
 
-		pushButtonResponse_Subscription(_isSubscription);
+		emit this->pushButtonResponse_Subscription(widget->_isSubscription);
 		});
 }
 
@@ -32,16 +24,3 @@ ListWidgetItemWidget::~ListWidgetItemWidget()
 {
 }
 
-void ListWidgetItemWidget::setSubscription(bool subscription)
-{
-	if (subscription)
-	{
-		ui.pushButton->setIcon(YSIcon);
-		_isSubscription = true;
-	}
-	else
-	{
-		ui.pushButton->setIcon(NSIcon);
-		_isSubscription = false;
-	}
-}

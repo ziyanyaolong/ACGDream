@@ -119,6 +119,7 @@
     <ClCompile Include="dist\Network\ModAnalytic\ModAnalytic.cpp" />
     <ClCompile Include="dist\StaticData\SteamGet\SteamGet.cpp" />
     <ClCompile Include="dist\JsonOperation\JsonOperation.cpp" />
+    <ClCompile Include="dist\GUI\Components\ListWidgetItemWidget\Widget\Widget1.cpp" />
     <QtRcc Include="SteamWorkshopTool.qrc" />
     <QtMoc Include="dist\main\SteamWorkshopTool.h" />
     <ClCompile Include="dist\main\SteamWorkshopTool.cpp" />
@@ -129,7 +130,7 @@
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="dist\GUI\SWTGUI.ui" />
-    <QtUic Include="dist\GUI\Components\ListWidgetItemWidget\ListWidgetItemWidget.ui" />
+    <QtUic Include="dist\GUI\Components\ListWidgetItemWidget\Widget\Widget1.ui" />
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="dist\Network\WebCrawler\WebCrawler.h" />
@@ -145,6 +146,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="dist\ModDataTable\ModDataTable.h" />
+    <ClInclude Include="dist\GUI\ModSaveData\ModSaveData.h" />
+    <QtMoc Include="dist\GUI\Components\ListWidgetItemWidget\Widget\Widget1.h" />
     <QtMoc Include="dist\JsonOperation\JsonOperation.h" />
     <QtMoc Include="dist\StaticData\SteamGet\SteamGet.h" />
     <QtMoc Include="dist\Network\ModAnalytic\ModAnalytic.h" />

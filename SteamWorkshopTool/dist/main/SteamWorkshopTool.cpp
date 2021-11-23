@@ -3,19 +3,13 @@
 SteamWorkshopTool::SteamWorkshopTool()
 	:	PluginCalInterface()
 {
-	//QString itemHead = QString("<div class=\"workshopItem\">");
-	//QString itemTail = QString("</script>");
-	//QString itemJsHead = QString("SharedFileBindMouseHover(");
-	//QString itemJsTail = QString(");");
-	//QString itemImageHead1 = QString("<img class=\"");
-	//QString itemImageHead2 = QString("src=\"");
-	//QString itemImageTail = QString("\">");
 	gui = new SWTGUI();
 	modAnalytic = new ModAnalytic(this);
 	database = new DataBase(this);
 
+	//检测网页加载配置
 	QFile file(":/SteamWorkshopTool/assets/Config/AnalyticTable.json");
-	//QDir dir(QCoreApplication::applicationDirPath() + "/Temp/SteamWorkshopTool/Caches/");
+
 	if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
 	{
 		qDebug() << "errorOpen!";
@@ -26,12 +20,48 @@ SteamWorkshopTool::SteamWorkshopTool()
 	SteamGet::instance()->addData(json.analyticAll());
 
 	connect(gui, &SWTGUI::clearCache, this, [&]() {
+		QDir dir(QCoreApplication::applicationDirPath() + "/Temp/SteamWorkshopTool/Caches");
+		if (!dir.exists() || dir.isEmpty())
+			return;
 
+		QDirIterator dirIterator(QCoreApplication::applicationDirPath() + "/Temp/SteamWorkshopTool/Caches", QDir::Files | QDir::AllDirs | QDir::NoDotAndDotDot);
+		while (dirIterator.hasNext())
+		{
+			if (!dir.remove(dirIterator.next()))
+			{
+				if (dirIterator.filePath().isEmpty())
+					continue;
+				if (!QDir(dirIterator.filePath()).removeRecursively())
+					QMetaObject::invokeMethod(gui,
+						"messageBox",
+						Qt::QueuedConnection,
+						Q_ARG(SWTGUI::Form, SWTGUI::Form::Warning),
+						Q_ARG(QString, "警告"),
+						Q_ARG(QString, "文件或文件夹无法删除，请查看是否被占用"));
+			}
+		}
 		}, Qt::QueuedConnection);
 	
-	connect(gui, &SWTGUI::webAddress, this, [&](const QStringList& list) {
+	connect(gui, &SWTGUI::updateMod, this, [&]() {
+		qDebug() << database->readModDataTableAll();
+		}, Qt::QueuedConnection);
+
+	connect(gui, &SWTGUI::loadList, this, [&](const QStringList& list, SWTGUI::ListWay way) {
 		SteamGet* getTemp = SteamGet::instance();
-		emit modAnalytic->analyticMods(getTemp->findData("SteamWorkShop.BaseHttp") + list[0] + getTemp->findData("SteamWorkShop.Search") + list[1] + getTemp->findData("SteamWorkShop.Page") + list[2]);
+		switch (way)
+		{
+		case SWTGUI::ListWay::Website:
+			emit modAnalytic->analyticMods(getTemp->findData("SteamWorkShop.BaseHttp") + list[0] + getTemp->findData("SteamWorkShop.Search") + list[1] + getTemp->findData("SteamWorkShop.Page") + list[2]);
+			break;
+
+		case SWTGUI::ListWay::Local:
+
+			break;
+
+		default:
+			break;
+		}
+		
 		}, Qt::QueuedConnection); 
 
 	connect(gui, &SWTGUI::subscription, this, [&](bool isSubscription, const QString& id) {
@@ -47,16 +77,16 @@ SteamWorkshopTool::SteamWorkshopTool()
 		{
 			auto temp = modAnalytic->findMod(id);
 			temp->isSubscribe = true;
-			emit this->signalDataBass_save(temp, DataBase::Way::Overlay);
+			emit database->addModDataTable(temp, DataBase::Way::Overlay);
 		}
 		else
 		{
 			auto temp = modAnalytic->findMod(id);
 			temp->isSubscribe = false;
-			emit this->signalDataBass_delete(id);
+			emit database->deleteModDataTable(id);
 		}
 		}, Qt::QueuedConnection);
-	
+
 	connect(modAnalytic, &ModAnalytic::finished, this, [&](const QVector<ModDataTable*>& mods) {
 		foreach(ModDataTable * i, mods)
 		{
@@ -64,13 +94,23 @@ SteamWorkshopTool::SteamWorkshopTool()
 			{
 				i->isSubscribe = true;
 			}
-			emit this->signalGui_addMod(*i);
+			QMetaObject::invokeMethod(gui,
+				"addMod",
+				Qt::QueuedConnection,
+				Q_ARG(const ModDataTable&, *i),
+				Q_ARG(SWTGUI::ListWay, SWTGUI::ListWay::Website)
+				);
 		}
 		});
 
-	connect(this, &SteamWorkshopTool::signalGui_addMod, gui, &SWTGUI::addMod, Qt::QueuedConnection);
-	connect(this, &SteamWorkshopTool::signalDataBass_delete, database, &DataBase::deleteModDataTable, Qt::QueuedConnection);
-	connect(this, &SteamWorkshopTool::signalDataBass_save, database, &DataBase::addModDataTable, Qt::QueuedConnection);
+	connect(modAnalytic, &ModAnalytic::error, this, [&](QNetworkReply::NetworkError errorData) {
+		QMetaObject::invokeMethod(gui, 
+			"messageBox", 
+			Qt::QueuedConnection, 
+			Q_ARG(SWTGUI::Form, SWTGUI::Form::Critical), 
+			Q_ARG(QString, "错误"),
+			Q_ARG(QString, "网址无法访问，请查看网络是否可用"));
+		});
 
 }
 

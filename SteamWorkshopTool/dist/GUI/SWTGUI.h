@@ -18,14 +18,14 @@
 #include <QCoreApplication>
 #include <QDir>
 #include <QVector>
-#include <List>
+#include <QList>
+#include <QTimer>
 #include <QStringList>
 #include <QFileDialog>
+#include <QMessageBox>
 
 #include "ui_SWTGUI.h"
-#include "Components/ListWidgetItemWidget/ListWidgetItemWidget.h"
-#include "../ModDataTable/ModDataTable.h"
-#include "../Network/WebCrawler/WebCrawler.h"
+#include "ModSaveData/ModSaveData.h"
 
 class SWTGUI : public QWidget
 {
@@ -33,24 +33,43 @@ class SWTGUI : public QWidget
 
 private:
 	Ui::SteamWorkshopTool ui;
-	QVector<QWidget*> list;
-	QList<WebCrawler*> webList;
-	QStringList datalist;
+	ModSaveData localModSaveData;
+	ModSaveData webModSaveData;
+	QTimer* delayPushW = nullptr;
+	QTimer* delayPushL = nullptr;
 
 public:
 	SWTGUI(QWidget *parent = Q_NULLPTR);
 	~SWTGUI();
+	enum class Form {
+		Information,
+		Warning,
+		Critical,
+		Question,
+		About
+	};
+
+	enum class ListWay
+	{
+		Website,
+		Local,
+		All
+	};
 
 signals:
-	void webAddress(const QStringList& list);
-	void subscription(bool isSubscription, const QString& id);
-	void importData(const QString& address);
-	void exportData(const QString& address);
+	void loadList(const QStringList&, SWTGUI::ListWay);
+	void subscription(bool, const QString&);
+	void importData(const QString&);
+	void exportData(const QString&);
 	void clearCache();
 	void updateMod();
+	void haveNewItemWidget();
 
 public slots:
 	void printInfo(const QString& data) { ui.textBrowser->insertPlainText(QString(data + "\n")); }
-	void addMod(const ModDataTable& mod);
-	void clearModList();
+	void addMod(const ModDataTable& mod, SWTGUI::ListWay into);
+	void newItemWidget(const ModDataTable& mod);
+	void clearModList(SWTGUI::ListWay way);
+	void messageBox(SWTGUI::Form form, const QString& title, const QString& text, QMessageBox::StandardButton button0 = QMessageBox::StandardButton::Ok, QMessageBox::StandardButton button1 = QMessageBox::StandardButton::NoButton);
+
 };

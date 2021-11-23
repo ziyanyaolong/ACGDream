@@ -3,6 +3,8 @@
 #include <QObject>
 #include <QString>
 #include <QVector>
+#include <QMessageBox>
+
 #include "../WebCrawler/WebCrawler.h"
 #include "../WebsiteAnalytic/WebsiteAnalytic.h"
 
@@ -29,6 +31,7 @@ public:
 signals:
 	void finish();
 	void finished(const QVector<ModDataTable*>&);
+	void error(QNetworkReply::NetworkError);
 
 public slots:
 	void analyticMods(const QString& http);

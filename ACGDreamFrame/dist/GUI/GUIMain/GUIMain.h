@@ -11,6 +11,7 @@
 #include <QGraphicsBlurEffect>
 #include <QPropertyAnimation>
 #include <QSharedPointer>
+#include <QMessageBox>
 
 #include "../UIBuild/uic/ui_GUIMain.h"
 #include "../Components/Components.h"
@@ -35,7 +36,6 @@ protected:
 	Ui_MainWindow ui;
 
 private:
-	
 	bool beginEndValue = false;
 
 	QSharedPointer<QImage> background;

@@ -31,7 +31,8 @@ signals:
 	void finish();
 	void finished(const QByteArray& data);
 	void websiteLink(const QString& address);
-	
+	void error(QNetworkReply::NetworkError);
+
 private slots:
 	void setWebsiteData(QNetworkReply* reply);
 	void startWebsiteLink(const QString& address);

@@ -29,6 +29,13 @@ void WebCrawler::startWebsiteLink(const QString& address)
 
 void WebCrawler::setWebsiteData(QNetworkReply* reply)
 {
+	auto errorTemp = reply->error();
+	if (errorTemp != QNetworkReply::NetworkError::NoError)
+	{
+		reply->deleteLater();
+		emit this->error(errorTemp);
+		return;
+	}
 	*webData = reply->readAll();
 	reply->deleteLater();
 	emit this->finish();

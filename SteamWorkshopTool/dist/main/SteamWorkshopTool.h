@@ -26,10 +26,7 @@ public:
 	virtual void pRun() override;
 
 signals:
-	void signalGui_addMod(const ModDataTable&);
-	void signalDataBass_save(const ModDataTable*, DataBase::Way);
-	void signalDataBass_delete(const QString& key);
 
 public slots:
-
+	
 };

@@ -32,6 +32,21 @@ DataBase::~DataBase()
 //temp.title = query.value(3).toString();
 //temp.image = query.value(4).toString();
 
+QStringList DataBase::readModDataTableAll()
+{
+    QStringList list;
+    if (!database.open())
+        return list;
+    QSqlQuery query(database);
+    query.exec(QString("select * from student"));
+    while (query.next())
+    {
+        list.push_back(query.value(0).toString());
+    }
+    database.close();
+    return list;
+}
+
 bool DataBase::findModDataTable(const QString& key)
 {
     if (!database.open())
@@ -40,8 +55,10 @@ bool DataBase::findModDataTable(const QString& key)
     query.exec(QString("select * from student where mkey = " + key));
     if (query.next())
     {
+        database.close();
         return true;
     }
+    database.close();
     return false;
 }
 

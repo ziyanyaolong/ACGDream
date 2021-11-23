@@ -62,12 +62,15 @@
     <QtMoc Include="dist\JsonOperation\JsonOperation.h">
       <Filter>Header Files</Filter>
     </QtMoc>
+    <QtMoc Include="dist\GUI\Components\ListWidgetItemWidget\Widget\Widget1.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="dist\GUI\SWTGUI.ui">
       <Filter>Form Files</Filter>
     </QtUic>
-    <QtUic Include="dist\GUI\Components\ListWidgetItemWidget\ListWidgetItemWidget.ui">
+    <QtUic Include="dist\GUI\Components\ListWidgetItemWidget\Widget\Widget1.ui">
       <Filter>Form Files</Filter>
     </QtUic>
   </ItemGroup>
@@ -96,9 +99,15 @@
     <ClCompile Include="dist\JsonOperation\JsonOperation.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="dist\GUI\Components\ListWidgetItemWidget\Widget\Widget1.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="dist\ModDataTable\ModDataTable.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="dist\GUI\ModSaveData\ModSaveData.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
