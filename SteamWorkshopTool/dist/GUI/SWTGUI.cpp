@@ -4,6 +4,7 @@ SWTGUI::SWTGUI(QWidget *parent)
 	: QWidget(parent)
 {
 	ui.setupUi(this);
+	setWindowOpacity(0.7);
 	ui.textBrowser->insertPlainText(QString::fromUtf8("创意工坊工具启动完成\n"));
 	delayPushW = new QTimer(this);
 	delayPushL = new QTimer(this);
@@ -253,16 +254,20 @@ void SWTGUI::addMod(const ModDataTable& mod, SWTGUI::ListWay into)
 	
 	connect(listWidgetItemWidget, &ListWidgetItemWidget::pushButtonResponse_Subscription, this, [&](bool isSubscription) {
 		ListWidgetItemWidget* temp = static_cast<ListWidgetItemWidget*>(sender());
-		emit this->subscription(isSubscription, temp->readWidget()->readId());
+		if (temp->parent() == ui.listWidget)
+		{
+			emit this->subscription(isSubscription, temp->readWidget()->readId(), SWTGUI::ListWay::Website);
+		}
+		else
+		{
+			emit this->subscription(isSubscription, temp->readWidget()->readId(), SWTGUI::ListWay::Local);
+		}
 		}); 
 	
 	listWidgetItemWidget->readWidget()->setTitle(mod.title);
 	listWidgetItemWidget->readWidget()->setId(QString(mod.appid + mod.id));
 	listWidgetItemWidget->readWidget()->setSubscription(mod.isSubscribe);
-	if (mod.isSubscribe)
-	{
-		listWidgetItemWidget->readWidget()->setSubscription(true);
-	}
+
 	if (mod.image != "")
 	{
 		QPixmap pixmap0;
@@ -334,4 +339,26 @@ void SWTGUI::addMod(const ModDataTable& mod, SWTGUI::ListWay into)
 void SWTGUI::newItemWidget(const ModDataTable& mod)
 {
 
+}
+
+void SWTGUI::refresh(SWTGUI::ListWay way)
+{
+	switch (way)
+	{
+	case SWTGUI::ListWay::Website:
+		ui.pushButton->clicked();
+		break;
+
+	case SWTGUI::ListWay::Local:
+		ui.pushButton_2->clicked();
+		break;
+
+	case SWTGUI::ListWay::All:
+		ui.pushButton->clicked();
+		ui.pushButton_2->clicked();
+		break;
+
+	default:
+		break;
+	}
 }

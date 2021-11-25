@@ -27,9 +27,7 @@ ACGDream::ACGDream(QMainWindow* parent)
 		});
 
 	QTextCodec::setCodecForLocale(QTextCodec::codecForName("UTF-8"));
-	if (!pluginReg->loadAllPlugins(QDir::currentPath() + "/lib")) {
-		QMessageBox::warning(this, "Error", "Could not load the plugin");
-	}
+	emit this->ui.actions->triggered();
 
 	show();
 }

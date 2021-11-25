@@ -6,6 +6,7 @@ SteamWorkshopTool::SteamWorkshopTool()
 	gui = new SWTGUI();
 	modAnalytic = new ModAnalytic(this);
 	database = new DataBase(this);
+	qRegisterMetaType<ModDataTable>("ModDataTable");
 
 	//ºÏ≤‚Õ¯“≥º”‘ÿ≈‰÷√
 	QFile file(":/SteamWorkshopTool/assets/Config/AnalyticTable.json");
@@ -43,11 +44,15 @@ SteamWorkshopTool::SteamWorkshopTool()
 		}, Qt::QueuedConnection);
 	
 	connect(gui, &SWTGUI::updateMod, this, [&]() {
-		qDebug() << database->readModDataTableAll();
+		database->open();
+		qDebug() << database->readModDataTableKeyAll();
+		database->close();
 		}, Qt::QueuedConnection);
 
 	connect(gui, &SWTGUI::loadList, this, [&](const QStringList& list, SWTGUI::ListWay way) {
 		SteamGet* getTemp = SteamGet::instance();
+		QList<ModDataTable> modList;
+		database->open();
 		switch (way)
 		{
 		case SWTGUI::ListWay::Website:
@@ -55,39 +60,81 @@ SteamWorkshopTool::SteamWorkshopTool()
 			break;
 
 		case SWTGUI::ListWay::Local:
-
+			database->updata(DataBase::Events::All);
+			QMetaObject::invokeMethod(gui,
+				"clearModList",
+				Qt::QueuedConnection,
+				Q_ARG(SWTGUI::ListWay, SWTGUI::ListWay::Local)
+			);
+			modList = database->readModDataTableAll();
+			foreach (auto i, modList)
+			{
+				QMetaObject::invokeMethod(gui,
+					"addMod",
+					Qt::QueuedConnection,
+					Q_ARG(const ModDataTable&, i),
+					Q_ARG(SWTGUI::ListWay, SWTGUI::ListWay::Local)
+				);
+			}
 			break;
 
 		default:
 			break;
 		}
-		
+		database->close();
 		}, Qt::QueuedConnection); 
 
-	connect(gui, &SWTGUI::subscription, this, [&](bool isSubscription, const QString& id) {
-		ModDataTable* temp = modAnalytic->findMod(id);
+	connect(gui, &SWTGUI::subscription, this, [&](bool isSubscription, const QString& id, SWTGUI::ListWay way) {
+		ModDataTable* temp = nullptr;
+		ModDataTable mod;
+		database->open();
+		switch (way)
+		{
+		case SWTGUI::ListWay::Website:
+			temp = modAnalytic->findMod(id);
 
-		if (temp == nullptr)
-		{
-			qDebug() << id;
-			return;
+			if (temp == nullptr)
+				return;
+
+			if (isSubscription)
+			{
+				temp->isSubscribe = true;
+				database->addModDataTable(temp, DataBase::WriteWay::Overlay);
+			}
+			else
+			{
+				database->deleteModDataTable(id);
+			}
+			break;
+		case SWTGUI::ListWay::Local:
+			mod = database->readModDataTable(id);
+
+			if (mod.id == "")
+				return;
+
+			if (isSubscription)
+			{
+				mod.isSubscribe = true;
+				database->removeListEventData(id, DataBase::Events::All);
+				database->addDataEvent(&mod, DataBase::WriteWay::Overlay);
+			}
+			else
+			{
+				database->removeListEventData(id, DataBase::Events::All);
+				database->deleteDataEvent(id);
+			}
+			break;
+		case SWTGUI::ListWay::All:
+			break;
+		default:
+			break;
 		}
 
-		if (isSubscription)
-		{
-			auto temp = modAnalytic->findMod(id);
-			temp->isSubscribe = true;
-			emit database->addModDataTable(temp, DataBase::Way::Overlay);
-		}
-		else
-		{
-			auto temp = modAnalytic->findMod(id);
-			temp->isSubscribe = false;
-			emit database->deleteModDataTable(id);
-		}
+		database->close();
 		}, Qt::QueuedConnection);
 
 	connect(modAnalytic, &ModAnalytic::finished, this, [&](const QVector<ModDataTable*>& mods) {
+		database->open();
 		foreach(ModDataTable * i, mods)
 		{
 			if (database->findModDataTable(i->appid + i->id))
@@ -101,6 +148,7 @@ SteamWorkshopTool::SteamWorkshopTool()
 				Q_ARG(SWTGUI::ListWay, SWTGUI::ListWay::Website)
 				);
 		}
+		database->close();
 		});
 
 	connect(modAnalytic, &ModAnalytic::error, this, [&](QNetworkReply::NetworkError errorData) {

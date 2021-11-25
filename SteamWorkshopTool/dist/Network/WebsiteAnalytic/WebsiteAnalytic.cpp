@@ -4,7 +4,6 @@ WebsiteAnalytic::WebsiteAnalytic(QObject *parent)
 	: QObject(parent)
 {
 	webData = new QString("");
-	qRegisterMetaType<ModDataTable>("ModDataTable");
 }
 
 WebsiteAnalytic::~WebsiteAnalytic()

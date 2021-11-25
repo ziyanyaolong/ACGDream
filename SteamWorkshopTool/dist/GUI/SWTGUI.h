@@ -23,6 +23,8 @@
 #include <QStringList>
 #include <QFileDialog>
 #include <QMessageBox>
+#include <QPainter>
+#include <QRect>
 
 #include "ui_SWTGUI.h"
 #include "ModSaveData/ModSaveData.h"
@@ -58,7 +60,7 @@ public:
 
 signals:
 	void loadList(const QStringList&, SWTGUI::ListWay);
-	void subscription(bool, const QString&);
+	void subscription(bool, const QString&, SWTGUI::ListWay way);
 	void importData(const QString&);
 	void exportData(const QString&);
 	void clearCache();
@@ -71,5 +73,6 @@ public slots:
 	void newItemWidget(const ModDataTable& mod);
 	void clearModList(SWTGUI::ListWay way);
 	void messageBox(SWTGUI::Form form, const QString& title, const QString& text, QMessageBox::StandardButton button0 = QMessageBox::StandardButton::Ok, QMessageBox::StandardButton button1 = QMessageBox::StandardButton::NoButton);
+	void refresh(SWTGUI::ListWay way);
 
 };
