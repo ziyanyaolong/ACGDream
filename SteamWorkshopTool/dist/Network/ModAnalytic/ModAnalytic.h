@@ -16,7 +16,7 @@ private:
 	WebCrawler* webCrawler = nullptr;
 	WebsiteAnalytic* websiteAnalytic = nullptr;
 	QVector<ModDataTable*> modList;
-	void (WebsiteAnalytic::* analyticWebsiteData)(const QByteArray& data) = &WebsiteAnalytic::analyticWebsiteData;
+	static void (WebsiteAnalytic::* analyticWebsiteData)(const QByteArray& data);
 
 private:
 	void closeWebModule();

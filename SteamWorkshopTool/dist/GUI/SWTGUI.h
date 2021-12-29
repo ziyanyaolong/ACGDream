@@ -28,6 +28,7 @@
 
 #include "ui_SWTGUI.h"
 #include "ModSaveData/ModSaveData.h"
+#include "../StaticData/StaticData.h"
 
 class SWTGUI : public QWidget
 {
@@ -35,8 +36,6 @@ class SWTGUI : public QWidget
 
 private:
 	Ui::SteamWorkshopTool ui;
-	ModSaveData localModSaveData;
-	ModSaveData webModSaveData;
 	QTimer* delayPushW = nullptr;
 	QTimer* delayPushL = nullptr;
 
@@ -58,6 +57,11 @@ public:
 		All
 	};
 
+	void addEventFilterAllWidget();
+
+protected:
+	virtual bool eventFilter(QObject* target, QEvent* event) override;
+
 signals:
 	void loadList(const QStringList&, SWTGUI::ListWay);
 	void subscription(bool, const QString&, SWTGUI::ListWay way);
@@ -66,6 +70,9 @@ signals:
 	void clearCache();
 	void updateMod();
 	void haveNewItemWidget();
+	void addModReturn(ListWidgetItemWidget*, const ModDataTable&, SWTGUI::ListWay);
+	void clearLocalList();
+	void clearWebsiteList();
 
 public slots:
 	void printInfo(const QString& data) { ui.textBrowser->insertPlainText(QString(data + "\n")); }

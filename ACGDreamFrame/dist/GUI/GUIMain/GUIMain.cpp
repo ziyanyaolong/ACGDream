@@ -4,7 +4,7 @@ GUIMain::GUIMain(QMainWindow*parent)
 	: QMainWindow(parent)
 {
 	ui.setupUi(this);
-	background = QSharedPointer<QImage>(new QImage("F:/1.jpg"));
+	background = QSharedPointer<QImage>(new QImage());
 }
 
 GUIMain::~GUIMain()
@@ -35,6 +35,11 @@ void GUIMain::clearAllWidget()
 		}
 	}
 	pushButtonMap.clear();
+}
+
+void GUIMain::setBackground(const QImage& image)
+{
+	*background = image;
 }
 
 void GUIMain::paintEvent(QPaintEvent* event)

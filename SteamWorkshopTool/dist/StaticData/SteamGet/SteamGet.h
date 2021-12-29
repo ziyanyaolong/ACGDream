@@ -78,15 +78,15 @@ public slots:
 		return false;
 	}
 
-	QString findData(const QString& key)
+	QString getData(const QString& key)
 	{
 		auto temp = _map.find(key);
 		if (temp != _map.end())
 		{
 			emit findDataKey(key);
-			emit findDataValue(*temp);
+			emit findDataValue(temp.value());
 			emit operationalEvent(SteamGet::Event::Find, SteamGet::Info::Normal);
-			return *temp;
+			return temp.value();
 		}
 		emit operationalEvent(SteamGet::Event::Find, SteamGet::Info::Error);
 		return "";

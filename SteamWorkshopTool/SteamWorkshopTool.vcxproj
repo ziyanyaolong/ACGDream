@@ -120,6 +120,7 @@
     <ClCompile Include="dist\StaticData\SteamGet\SteamGet.cpp" />
     <ClCompile Include="dist\JsonOperation\JsonOperation.cpp" />
     <ClCompile Include="dist\GUI\Components\ListWidgetItemWidget\Widget\Widget1.cpp" />
+    <ClCompile Include="dist\LoadRes\LoadRes.cpp" />
     <QtRcc Include="SteamWorkshopTool.qrc" />
     <QtMoc Include="dist\main\SteamWorkshopTool.h" />
     <ClCompile Include="dist\main\SteamWorkshopTool.cpp" />
@@ -147,6 +148,8 @@
   <ItemGroup>
     <ClInclude Include="dist\ModDataTable\ModDataTable.h" />
     <ClInclude Include="dist\GUI\ModSaveData\ModSaveData.h" />
+    <ClInclude Include="dist\StaticData\StaticData.h" />
+    <QtMoc Include="dist\LoadRes\LoadRes.h" />
     <QtMoc Include="dist\GUI\Components\ListWidgetItemWidget\Widget\Widget1.h" />
     <QtMoc Include="dist\JsonOperation\JsonOperation.h" />
     <QtMoc Include="dist\StaticData\SteamGet\SteamGet.h" />

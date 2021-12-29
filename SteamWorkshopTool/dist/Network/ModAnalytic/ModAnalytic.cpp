@@ -1,5 +1,7 @@
 #include "ModAnalytic.h"
 
+void (WebsiteAnalytic::* ModAnalytic::analyticWebsiteData)(const QByteArray& data) = &WebsiteAnalytic::analyticWebsiteData;
+
 ModAnalytic::ModAnalytic(QObject *parent)
 	: QObject(parent)
 {

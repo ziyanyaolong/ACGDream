@@ -16,6 +16,16 @@ private:
 	friend class ListWidgetItemWidget;
 
 public:
+	enum class Star
+	{
+		Zero,
+		One,
+		Two,
+		Three,
+		Four,
+		Five
+	};
+
 	explicit Widget1(QWidget* parent = Q_NULLPTR);
 	virtual ~Widget1();
 
@@ -27,6 +37,7 @@ public:
 	void setSubscription(bool subscription);
 	void setImage(const QPixmap& image);
 	void setImage(const QString& image);
+	void setStar(Star star);
 
 private:
 	bool _isSubscription = false;

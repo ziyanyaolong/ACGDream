@@ -11,6 +11,9 @@ SteamGet::SteamGet(QObject *parent)
 
 SteamGet::~SteamGet()
 {
-	_me_->deleteLater();
-	_me_ = nullptr;
+	if (_me_)
+	{
+		_me_->deleteLater();
+		_me_ = nullptr;
+	}
 }

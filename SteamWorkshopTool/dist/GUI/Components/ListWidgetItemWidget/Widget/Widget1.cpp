@@ -58,3 +58,25 @@ void Widget1::setImage(const QString& image)
 	_image = _image.scaled(QSize(ui.label->width(), ui.label->height()));
 	ui.label->setPixmap(_image);
 }
+
+void Widget1::setStar(Star star)
+{
+	switch (star)
+	{
+	case Widget1::Star::Zero:
+
+		break;
+	case Widget1::Star::One:
+		break;
+	case Widget1::Star::Two:
+		break;
+	case Widget1::Star::Three:
+		break;
+	case Widget1::Star::Four:
+		break;
+	case Widget1::Star::Five:
+		break;
+	default:
+		break;
+	}
+}

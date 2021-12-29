@@ -65,6 +65,9 @@
     <QtMoc Include="dist\GUI\Components\ListWidgetItemWidget\Widget\Widget1.h">
       <Filter>Header Files</Filter>
     </QtMoc>
+    <QtMoc Include="dist\LoadRes\LoadRes.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="dist\GUI\SWTGUI.ui">
@@ -102,12 +105,18 @@
     <ClCompile Include="dist\GUI\Components\ListWidgetItemWidget\Widget\Widget1.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="dist\LoadRes\LoadRes.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="dist\ModDataTable\ModDataTable.h">
+    <ClInclude Include="dist\GUI\ModSaveData\ModSaveData.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="dist\GUI\ModSaveData\ModSaveData.h">
+    <ClInclude Include="dist\StaticData\StaticData.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="dist\ModDataTable\ModDataTable.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

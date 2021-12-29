@@ -1,5 +1,4 @@
 #pragma once
-#include <QString>
 
 struct ModDataTable
 {
@@ -7,5 +6,6 @@ struct ModDataTable
 	QString id = "";
 	QString appid = "";
 	QString title = "";
+	QString star = "";
 	bool isSubscribe = false;
 };

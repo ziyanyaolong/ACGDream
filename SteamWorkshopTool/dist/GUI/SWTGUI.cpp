@@ -8,7 +8,7 @@ SWTGUI::SWTGUI(QWidget *parent)
 	ui.textBrowser->insertPlainText(QString::fromUtf8("创意工坊工具启动完成\n"));
 	delayPushW = new QTimer(this);
 	delayPushL = new QTimer(this);
-
+	
 	qRegisterMetaType<QMessageBox::StandardButton>("QMessageBox::StandardButton");
 	qRegisterMetaType<SWTGUI::Form>("SWTGUI::Form");
 	qRegisterMetaType<SWTGUI::ListWay>("SWTGUI::ListWay");
@@ -16,21 +16,23 @@ SWTGUI::SWTGUI(QWidget *parent)
 	connect(delayPushW, &QTimer::timeout, this, [&]() {
 		delayPushW->stop();
 		clearModList(SWTGUI::ListWay::Website);
-		webModSaveData.datalist.clear();
-		webModSaveData.datalist.push_back(ui.lineEdit->text());
-		webModSaveData.datalist.push_back(ui.lineEdit_Search->text());
-		webModSaveData.datalist.push_back(ui.label_page->text());
-		emit this->loadList(webModSaveData.datalist, SWTGUI::ListWay::Website);
+		QStringList datalist;
+		datalist.clear();
+		datalist.push_back(ui.lineEdit->text());
+		datalist.push_back(ui.lineEdit_Search->text());
+		datalist.push_back(ui.label_page->text());
+		emit this->loadList(datalist, SWTGUI::ListWay::Website);
 		});
 
 	connect(delayPushL, &QTimer::timeout, this, [&]() {
 		delayPushL->stop();
 		clearModList(SWTGUI::ListWay::Local);
-		localModSaveData.datalist.clear();
-		localModSaveData.datalist.push_back(ui.lineEdit_2->text());
-		localModSaveData.datalist.push_back(ui.lineEdit_Search_2->text());
-		localModSaveData.datalist.push_back(ui.label_page_2->text());
-		emit this->loadList(localModSaveData.datalist, SWTGUI::ListWay::Local);
+		QStringList datalist;
+		datalist.clear();
+		datalist.push_back(ui.lineEdit_2->text());
+		datalist.push_back(ui.lineEdit_Search_2->text());
+		datalist.push_back(ui.label_page_2->text());
+		emit this->loadList(datalist, SWTGUI::ListWay::Local);
 		});
 
 	connect(ui.pushButton, &QPushButton::clicked, this, [&]() {
@@ -90,6 +92,8 @@ SWTGUI::SWTGUI(QWidget *parent)
 	connect(ui.commandLinkButton_ClearCache, &QCommandLinkButton::clicked, this, &SWTGUI::clearCache);
 
 	connect(ui.commandLinkButton_Update, &QCommandLinkButton::clicked, this, &SWTGUI::updateMod);
+
+	addEventFilterAllWidget();
 }
 
 SWTGUI::~SWTGUI()
@@ -143,87 +147,19 @@ void SWTGUI::clearModList(SWTGUI::ListWay way)
 	switch (way)
 	{
 	case SWTGUI::ListWay::Website:
+		emit this->clearWebsiteList();
 		ui.listWidget->clear();
-		foreach(auto i, webModSaveData.webList)
-		{
-			if (i != nullptr)
-			{
-				disconnect(i, 0, 0, 0);
-				i->deleteLater();
-			}
-		}
-		foreach(auto i, webModSaveData.list)
-		{
-			if (i != nullptr)
-			{
-				disconnect(i, 0, 0, 0);
-				i->deleteLater();
-			}
-		}
-		webModSaveData.list.clear();
-		webModSaveData.webList.clear();
 		break;
 	case SWTGUI::ListWay::Local:
+		emit this->clearLocalList();
 		ui.listWidget_2->clear();
-		foreach(auto i, localModSaveData.webList)
-		{
-			if (i != nullptr)
-			{
-				disconnect(i, 0, 0, 0);
-				i->deleteLater();
-			}
-		}
-		foreach(auto i, localModSaveData.list)
-		{
-			if (i != nullptr)
-			{
-				disconnect(i, 0, 0, 0);
-				i->deleteLater();
-			}
-		}
-		localModSaveData.list.clear();
-		localModSaveData.webList.clear();
 		break;
 
 	case SWTGUI::ListWay::All:
-		ui.listWidget_2->clear();
+		emit this->clearLocalList();
+		emit this->clearWebsiteList();
 		ui.listWidget->clear();
-		foreach(auto i, webModSaveData.webList)
-		{
-			if (i != nullptr)
-			{
-				disconnect(i, 0, 0, 0);
-				i->deleteLater();
-			}
-		}
-		foreach(auto i, webModSaveData.list)
-		{
-			if (i != nullptr)
-			{
-				disconnect(i, 0, 0, 0);
-				i->deleteLater();
-			}
-		}
-		foreach(auto i, localModSaveData.webList)
-		{
-			if (i != nullptr)
-			{
-				disconnect(i, 0, 0, 0);
-				i->deleteLater();
-			}
-		}
-		foreach(auto i, localModSaveData.list)
-		{
-			if (i != nullptr)
-			{
-				disconnect(i, 0, 0, 0);
-				i->deleteLater();
-			}
-		}
-		localModSaveData.list.clear();
-		localModSaveData.webList.clear();
-		webModSaveData.list.clear();
-		webModSaveData.webList.clear();
+		ui.listWidget_2->clear();
 		break;
 
 	default:
@@ -238,12 +174,10 @@ void SWTGUI::addMod(const ModDataTable& mod, SWTGUI::ListWay into)
 	switch (into)
 	{
 	case SWTGUI::ListWay::Website:
-		webModSaveData.list.push_back(listWidgetItemWidget);
 		listWidgetItemWidget = new ListWidgetItemWidget(ui.listWidget);
 		break;
 
 	case SWTGUI::ListWay::Local:
-		localModSaveData.list.push_back(listWidgetItemWidget);
 		listWidgetItemWidget = new ListWidgetItemWidget(ui.listWidget_2);
 		break;
 
@@ -251,7 +185,7 @@ void SWTGUI::addMod(const ModDataTable& mod, SWTGUI::ListWay into)
 		return;
 		break;
 	}
-	
+
 	connect(listWidgetItemWidget, &ListWidgetItemWidget::pushButtonResponse_Subscription, this, [&](bool isSubscription) {
 		ListWidgetItemWidget* temp = static_cast<ListWidgetItemWidget*>(sender());
 		if (temp->parent() == ui.listWidget)
@@ -262,83 +196,18 @@ void SWTGUI::addMod(const ModDataTable& mod, SWTGUI::ListWay into)
 		{
 			emit this->subscription(isSubscription, temp->readWidget()->readId(), SWTGUI::ListWay::Local);
 		}
-		}); 
-	
-	listWidgetItemWidget->readWidget()->setTitle(mod.title);
-	listWidgetItemWidget->readWidget()->setId(QString(mod.appid + mod.id));
-	listWidgetItemWidget->readWidget()->setSubscription(mod.isSubscribe);
+		});
 
-	if (mod.image != "")
-	{
-		QPixmap pixmap0;
-		if (pixmap0.load(QString(QCoreApplication::applicationDirPath() + "/Temp/SteamWorkshopTool/Caches/" + mod.appid + "_" + mod.id + ".png")))
-		{
-			listWidgetItemWidget->readWidget()->setImage(pixmap0);
-		}
-		else
-		{
-			QDir dir(QCoreApplication::applicationDirPath() + "/Temp/SteamWorkshopTool/Caches");
-			if (!dir.exists())
-				dir.mkdir(QCoreApplication::applicationDirPath() + "/Temp/SteamWorkshopTool/Caches");
-			WebCrawler* webCrawler = new WebCrawler(this);
-			switch (into)
-			{
-			case SWTGUI::ListWay::Website:
-				webModSaveData.webList.push_back(webCrawler);
-				connect(webCrawler, &WebCrawler::finished, this, [&](const QByteArray& data) {
-					const ModDataTable* tMod = static_cast<const ModDataTable*>((static_cast<WebCrawler*>(sender()))->otherData[0]);
-					WebCrawler* web = static_cast<WebCrawler*>(sender());
-					QPixmap temp;
-					if (!temp.loadFromData(data))
-						qDebug() << "error loadFromData!";
-					if (!temp.save(QCoreApplication::applicationDirPath() + "/Temp/SteamWorkshopTool/Caches/" + tMod->appid + "_" + tMod->id + ".png"))
-						qDebug() << "error save Pixmap!" << QCoreApplication::applicationDirPath() + QString("/Temp/SteamWorkshopTool/Caches/" + tMod->appid + "_" + tMod->id + ".png");
-					ListWidgetItemWidget* tListWidgetItemWidget = static_cast<ListWidgetItemWidget*>(web->otherData[1]);
-					if ((tMod == nullptr) || (tListWidgetItemWidget == nullptr))
-						return;
-					tListWidgetItemWidget->readWidget()->setImage(temp);
-					if (!webModSaveData.webList.removeOne(web))
-						qDebug() << "删除错误";
-					delete tMod;
-					web->deleteLater();
-					});
-				break;
-
-			case SWTGUI::ListWay::Local:
-				localModSaveData.webList.push_back(webCrawler);
-				connect(webCrawler, &WebCrawler::finished, this, [&](const QByteArray& data) {
-					const ModDataTable* tMod = static_cast<const ModDataTable*>((static_cast<WebCrawler*>(sender()))->otherData[0]);
-					WebCrawler* web = static_cast<WebCrawler*>(sender());
-					QPixmap temp;
-					if (!temp.loadFromData(data))
-						qDebug() << "error loadFromData!";
-					if (!temp.save(QCoreApplication::applicationDirPath() + "/Temp/SteamWorkshopTool/Caches/" + tMod->appid + "_" + tMod->id + ".png"))
-						qDebug() << "error save Pixmap!" << QCoreApplication::applicationDirPath() + QString("/Temp/SteamWorkshopTool/Caches/" + tMod->appid + "_" + tMod->id + ".png");
-					ListWidgetItemWidget* tListWidgetItemWidget = static_cast<ListWidgetItemWidget*>(web->otherData[1]);
-					if ((tMod == nullptr) || (tListWidgetItemWidget == nullptr))
-						return;
-					tListWidgetItemWidget->readWidget()->setImage(temp);
-					if (!localModSaveData.webList.removeOne(web))
-						qDebug() << "删除错误";
-					delete tMod;
-					web->deleteLater();
-					});
-				break;
-
-			default:
-				break;
-			}
-			webCrawler->otherData.push_back(new ModDataTable(mod));
-			webCrawler->otherData.push_back(listWidgetItemWidget);
-			webCrawler->websiteLink(mod.image);
-		}
-	}
-
+	emit this->addModReturn(listWidgetItemWidget, mod, into);
 }
 
 void SWTGUI::newItemWidget(const ModDataTable& mod)
 {
-
+	auto list = findChildren<QObject*>();
+	foreach(QObject * i, list)
+	{
+		i->installEventFilter(this);
+	}
 }
 
 void SWTGUI::refresh(SWTGUI::ListWay way)
@@ -361,4 +230,15 @@ void SWTGUI::refresh(SWTGUI::ListWay way)
 	default:
 		break;
 	}
+}
+
+//获取子控件的所有消息
+bool SWTGUI::eventFilter(QObject* target, QEvent* event)
+{
+	if (event->type() == QEvent::MouseButtonPress)
+	{
+	}
+
+	//其他消息返回给基类消息监控器处理
+	return QWidget::eventFilter(target, event);
 }

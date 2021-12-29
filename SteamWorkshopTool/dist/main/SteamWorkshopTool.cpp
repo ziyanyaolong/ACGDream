@@ -6,26 +6,18 @@ SteamWorkshopTool::SteamWorkshopTool()
 	gui = new SWTGUI();
 	modAnalytic = new ModAnalytic(this);
 	database = new DataBase(this);
+
 	qRegisterMetaType<ModDataTable>("ModDataTable");
 
-	//ºÏ≤‚Õ¯“≥º”‘ÿ≈‰÷√
-	QFile file(":/SteamWorkshopTool/assets/Config/AnalyticTable.json");
-
-	if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
-	{
-		qDebug() << "errorOpen!";
-		return;
-	}
-	JsonOperation json(file.readAll(), this);
-	SteamGet::instance()->setParent(this);
-	SteamGet::instance()->addData(json.analyticAll());
+	loadRes.allInit();
 
 	connect(gui, &SWTGUI::clearCache, this, [&]() {
-		QDir dir(QCoreApplication::applicationDirPath() + "/Temp/SteamWorkshopTool/Caches");
+		auto steamGet = SteamGet::instance();
+		QDir dir(steamGet->getData("Dirs.Caches"));
 		if (!dir.exists() || dir.isEmpty())
 			return;
 
-		QDirIterator dirIterator(QCoreApplication::applicationDirPath() + "/Temp/SteamWorkshopTool/Caches", QDir::Files | QDir::AllDirs | QDir::NoDotAndDotDot);
+		QDirIterator dirIterator(steamGet->getData("Dirs.Caches"), QDir::Files | QDir::AllDirs | QDir::NoDotAndDotDot);
 		while (dirIterator.hasNext())
 		{
 			if (!dir.remove(dirIterator.next()))
@@ -43,6 +35,79 @@ SteamWorkshopTool::SteamWorkshopTool()
 		}
 		}, Qt::QueuedConnection);
 	
+	connect(gui, &SWTGUI::addModReturn, this, [=](ListWidgetItemWidget* item, const ModDataTable& mod, SWTGUI::ListWay way) {
+		
+		item->readWidget()->setTitle(mod.title);
+		item->readWidget()->setId(QString(mod.appid + mod.id));
+		item->readWidget()->setSubscription(mod.isSubscribe);
+		auto steamGet = SteamGet::instance();
+		if (mod.image != "")
+		{
+			QPixmap pixmap0;
+			if (pixmap0.load(QString(steamGet->getData("Dirs.Images") + "/" + mod.appid + "_" + mod.id + ".png")))
+			{
+				item->readWidget()->setImage(pixmap0);
+			}
+			else
+			{
+				QDir dir(steamGet->getData("Dirs.Images"));
+				if (!dir.exists())
+					throw "No 'Dirs.Images' dir.";
+
+				WebCrawler* webCrawler = new WebCrawler(this);
+				WebCrawler* webCrawlerImage = new WebCrawler(this);
+				switch (way)
+				{
+				case SWTGUI::ListWay::Website:
+					connect(gui, &SWTGUI::clearWebsiteList, webCrawler, &WebCrawler::deleteLater, Qt::QueuedConnection);
+					connect(webCrawler, &WebCrawler::finished, this, [&](const QByteArray& data) {
+						auto tSteamGet = SteamGet::instance();
+						const ModDataTable* tMod = static_cast<const ModDataTable*>((static_cast<WebCrawler*>(sender()))->otherData[0]);
+						WebCrawler* web = static_cast<WebCrawler*>(sender());
+						QPixmap temp;
+						if (!temp.loadFromData(data))
+							qDebug() << "error loadFromData!";
+						if (!temp.save(tSteamGet->getData("Dirs.Images") + "/" + tMod->appid + "_" + tMod->id + ".png"))
+							qDebug() << "error save Pixmap!" << (tSteamGet->getData("Dirs.Images") + "/" + tMod->appid + "_" + tMod->id + ".png");
+						auto* tItem = static_cast<ListWidgetItemWidget*>(web->otherData[1]);
+						if ((tMod == nullptr) || (tItem == nullptr))
+							return;
+						tItem->readWidget()->setImage(temp);
+						delete tMod;
+						web->deleteLater();
+						});
+					break;
+
+				case SWTGUI::ListWay::Local:
+					connect(gui, &SWTGUI::clearLocalList, webCrawler, &WebCrawler::deleteLater, Qt::QueuedConnection);
+					connect(webCrawler, &WebCrawler::finished, this, [&](const QByteArray& data) {
+						auto tSteamGet = SteamGet::instance();
+						const ModDataTable* tMod = static_cast<const ModDataTable*>((static_cast<WebCrawler*>(sender()))->otherData[0]);
+						WebCrawler* web = static_cast<WebCrawler*>(sender());
+						QPixmap temp;
+						if (!temp.loadFromData(data))
+							qDebug() << "error loadFromData!";
+						if (!temp.save(tSteamGet->getData("Dirs.Images") + "/" + tMod->appid + "_" + tMod->id + ".png"))
+							qDebug() << "error save Pixmap!" << (tSteamGet->getData("Dirs.Images") + "/" + tMod->appid + "_" + tMod->id + ".png");
+						auto* tItem = static_cast<ListWidgetItemWidget*>(web->otherData[1]);
+						if ((tMod == nullptr) || (tItem == nullptr))
+							return;
+						tItem->readWidget()->setImage(temp);
+						delete tMod;
+						web->deleteLater();
+						});
+					break;
+
+				default:
+					break;
+				}
+				webCrawler->otherData.push_back(new ModDataTable(mod));
+				webCrawler->otherData.push_back(item);
+				webCrawler->websiteLink(mod.image);
+			}
+		}
+		}, Qt::QueuedConnection);
+
 	connect(gui, &SWTGUI::updateMod, this, [&]() {
 		database->open();
 		qDebug() << database->readModDataTableKeyAll();
@@ -56,7 +121,7 @@ SteamWorkshopTool::SteamWorkshopTool()
 		switch (way)
 		{
 		case SWTGUI::ListWay::Website:
-			emit modAnalytic->analyticMods(getTemp->findData("SteamWorkShop.BaseHttp") + list[0] + getTemp->findData("SteamWorkShop.Search") + list[1] + getTemp->findData("SteamWorkShop.Page") + list[2]);
+			emit modAnalytic->analyticMods(getTemp->getData("SteamWorkShop.BaseHttp") + list[0] + getTemp->getData("SteamWorkShop.Search") + list[1] + getTemp->getData("SteamWorkShop.Page") + list[2]);
 			break;
 
 		case SWTGUI::ListWay::Local:

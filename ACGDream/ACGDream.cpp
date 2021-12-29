@@ -8,6 +8,9 @@ ACGDream::ACGDream(QMainWindow* parent)
 	if (!dir.exists())
 		dir.mkdir(QCoreApplication::applicationDirPath() + "/Temp");
 
+	setBackground(QImage(QCoreApplication::applicationDirPath() + "/BG.png"));
+	
+
 	connect(pluginReg, &PluginReg::addGuiSignal, this, [&](QWidget* gui) {
 		this->addWidght(gui);
 		gui->hide();

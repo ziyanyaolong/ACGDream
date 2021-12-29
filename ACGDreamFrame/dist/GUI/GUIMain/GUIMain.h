@@ -30,6 +30,7 @@ public:
 	virtual ~GUIMain();
 	QPushButton* addWidght(QWidget* widget);
 	void clearAllWidget();
+	void setBackground(const QImage& image);
 	Ui_MainWindow* readUI() { return &ui; }
 
 protected:
