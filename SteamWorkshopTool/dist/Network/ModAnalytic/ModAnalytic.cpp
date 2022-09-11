@@ -56,7 +56,6 @@ inline void ModAnalytic::startWebModule()
 void ModAnalytic::analyticMods(const QString& http)
 {
 	startWebModule();
-
 	connect(webCrawler, &WebCrawler::error, this, [&](QNetworkReply::NetworkError errorData){
 		closeWebModule();
 		this->clearModList();

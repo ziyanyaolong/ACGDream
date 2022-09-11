@@ -9,8 +9,7 @@
 
 #include "../GUI/GUI.h"
 
-#include "../../../../ACGDreamLoadPlugs/include/ACGDreamLoadPlugs.h"
-#pragma comment(lib,"../.build/vs/ACGDreamLoadPlugs/lib/ACGDreamLoadPlugs.lib")
+#include <ACGDreamLoadPlugs.h>
 
 class _declspec(dllexport) QtRegularExpressionValidation : public PluginCalInterface
 {

@@ -2,9 +2,7 @@
 
 #ifdef WIN32
 #pragma execution_character_set("utf-8")
-#endif
-
-#if _MSC_VER >= 1600
+#elif _MSC_VER >= 1600
 #pragma execution_character_set("utf-8")
 #endif
 
@@ -39,6 +37,8 @@ private:
 	QTimer* delayPushW = nullptr;
 	QTimer* delayPushL = nullptr;
 
+	void metaTypeRegister();
+
 public:
 	SWTGUI(QWidget *parent = Q_NULLPTR);
 	~SWTGUI();
@@ -57,6 +57,14 @@ public:
 		All
 	};
 
+	struct QMessageBoxButtonData
+	{
+		QString str = "";
+		QMessageBox::ButtonRole buttonRole = QMessageBox::ButtonRole::InvalidRole;
+		bool isEmitSignal = false;
+		const QObject* receiver = nullptr;
+	};
+
 	void addEventFilterAllWidget();
 
 protected:
@@ -73,13 +81,13 @@ signals:
 	void addModReturn(ListWidgetItemWidget*, const ModDataTable&, SWTGUI::ListWay);
 	void clearLocalList();
 	void clearWebsiteList();
+	void messageBoxButtonConnect(const QObject* receiver, qint64 id, QPushButton* pushButton);
+	void startSteamCMD();
 
 public slots:
 	void printInfo(const QString& data) { ui.textBrowser->insertPlainText(QString(data + "\n")); }
 	void addMod(const ModDataTable& mod, SWTGUI::ListWay into);
-	void newItemWidget(const ModDataTable& mod);
 	void clearModList(SWTGUI::ListWay way);
-	void messageBox(SWTGUI::Form form, const QString& title, const QString& text, QMessageBox::StandardButton button0 = QMessageBox::StandardButton::Ok, QMessageBox::StandardButton button1 = QMessageBox::StandardButton::NoButton);
+	void messageBox(const QString& title, const QString& text, QMessageBox::Icon icon, const QVector<SWTGUI::QMessageBoxButtonData>& pushButtonList = QVector<SWTGUI::QMessageBoxButtonData>());
 	void refresh(SWTGUI::ListWay way);
-
 };

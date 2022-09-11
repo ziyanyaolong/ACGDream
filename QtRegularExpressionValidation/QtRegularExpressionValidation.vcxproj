@@ -32,7 +32,7 @@
   </ImportGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="QtSettings">
     <QtInstall>5.15.2_msvc2019_64</QtInstall>
-    <QtModules>core;opengl;network;gui;axserver;axcontainer;svg;help;multimedia;uitools;widgets;location;qml;multimediawidgets;</QtModules>
+    <QtModules>core;xml;sql;opengl;network;gui;axserver;axcontainer;svg;multimedia;uitools;widgets;winextras;multimediawidgets;3dcore;3danimation;3dextras;3dinput;3dlogic;3drender;openglextensions;serialbus;networkauth;virtualkeyboard;</QtModules>
     <QtBuildConfig>debug</QtBuildConfig>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'" Label="QtSettings">
@@ -55,7 +55,7 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
-    <OutDir>$(SolutionDir)ACGDream\lib\</OutDir>
+    <OutDir>$(SolutionDir)bin\Extra\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
     <OutDir>$(SolutionDir)ACGDream\lib\</OutDir>
@@ -70,7 +70,16 @@
     <ClCompile />
     <ClCompile>
       <LanguageStandard>stdcpp20</LanguageStandard>
+      <BrowseInformation>true</BrowseInformation>
+      <AdditionalIncludeDirectories>$(SolutionDir)ACGDreamLoadPlugs/include/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
+    <Bscmake>
+      <PreserveSbr>true</PreserveSbr>
+    </Bscmake>
+    <Link>
+      <AdditionalLibraryDirectories>$(SolutionDir)bin\Extra\</AdditionalLibraryDirectories>
+      <AdditionalDependencies>ACGDreamLoadPlugs.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile />

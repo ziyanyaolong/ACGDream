@@ -15,8 +15,8 @@ void PushButtonStyle1::paintEvent(QPaintEvent* event)
 	QPainter painter;
 	painter.begin(this);
 	painter.setPen(Qt::NoPen);
-	painter.setBrush(QColor(0x00, 0x00, 0x00, 50)); // ×îºóÒ»ÏîÎªÍ¸Ã÷¶È  
+	painter.setBrush(QColor(144, 144, 144, 180)); // æœ€åä¸€é¡¹ä¸ºé€æ˜åº¦  
 	painter.setOpacity(0.6);
-	painter.drawRoundRect(0 + cohesionSize, 0 + cohesionSize, width() - cohesionSize, height() - cohesionSize, 10, 10);// »­Ô²½Ç¾ØĞÎ  
+	painter.drawRoundRect(0 + cohesionSize, 0 + cohesionSize, width() - cohesionSize, height() - cohesionSize, 10, 10);// ç”»åœ†è§’çŸ©å½¢  
 	painter.end();
 }

@@ -3,9 +3,41 @@
 LoadRes::LoadRes(QObject *parent)
 	: QObject(parent)
 {
-	paths << (QCoreApplication::applicationDirPath() + "/Temp/SteamWorkshopTool/Caches")
+	dirPaths << (QCoreApplication::applicationDirPath() + "/Temp/SteamWorkshopTool/Caches")
 		<< (QCoreApplication::applicationDirPath() + "/Temp/SteamWorkshopTool/Caches/Stars")
 		<< (QCoreApplication::applicationDirPath() + "/Temp/SteamWorkshopTool/Caches/Images");
+
+	jsonPaths << QString(":/SteamWorkshopTool/assets/Config/AnalyticTable.json");
+
+	QFile file(QCoreApplication::applicationDirPath() + "/Config/SteamWorkshopTool/AnalyticTable.json");
+	QFileInfo fileInfo(file);
+
+	if (fileInfo.isFile())
+	{
+		return;
+	}
+
+	file.setFileName(jsonPaths[0]);
+
+	if (!file.open(QIODevice::ReadOnly))
+	{
+		return;
+	}
+
+	QByteArray line = file.readAll();
+
+	file.close();
+
+	file.setFileName(QCoreApplication::applicationDirPath() + "/Config/SteamWorkshopTool/AnalyticTable.json");
+
+	if (!file.open(QIODevice::WriteOnly))
+	{
+		return;
+	}
+
+	file.write(line);
+
+	file.close();
 }
 
 LoadRes::~LoadRes()
@@ -40,7 +72,7 @@ QList<LoadRes::Errors> LoadRes::allInit()
 		}
 	}
 
-	if (!loadJson())
+	if (loadJson())
 	{
 		if (!initJson())
 		{
@@ -55,12 +87,17 @@ bool LoadRes::initDirs()
 {
 	QDir dir;
 
-	foreach (auto &&i, paths)
+	foreach (auto &&i, dirPaths)
 	{
-		if (!dir.mkdir(i))
+		if (dir.exists())
 		{
-			return false;
+			continue;
 		}
+		else if (!dir.mkdir(i))
+		{
+			continue;
+		}
+		SteamGet::instance()->addData(("Dirs." + dir.dirName()), i);
 	}
 
 	return true;
@@ -79,6 +116,23 @@ bool LoadRes::initText()
 
 bool LoadRes::initJson()
 {
+	QFile file;
+
+	foreach (auto &&i, jsonPaths)
+	{
+		if (file.exists())
+			continue;
+
+		file.setFileName(i);
+		if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+		{
+			continue;
+		}
+
+		JsonOperation json(file.readAll(), this);
+
+		SteamGet::instance()->addData(json.analyticAll());
+	}
 	return true;
 }
 
@@ -86,14 +140,13 @@ bool LoadRes::loadDirs()
 {
 	QDir dir;
 
-	foreach(auto && i, paths)
+	foreach(auto && i, dirPaths)
 	{
 		dir.setPath(i);
 		if (!dir.exists())
 		{
 			return false;
 		}
-		SteamGet::instance()->addData(("Dirs." + dir.dirName()), dir.path());
 	}
 
 	return true;
@@ -111,17 +164,14 @@ bool LoadRes::loadText()
 
 bool LoadRes::loadJson()
 {
-	QFile file(":/SteamWorkshopTool/assets/Config/AnalyticTable.json");
+	QFile file;
 
-	if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+	foreach(auto && i, jsonPaths)
 	{
-		return false;
+		file.setFileName(i);
+		if (!file.exists())
+			return false;
 	}
-
-	JsonOperation json(file.readAll(), this);
-
-	SteamGet::instance()->setParent(this);
-	SteamGet::instance()->addData(json.analyticAll());
 
 	return true;
 }

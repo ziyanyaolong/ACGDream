@@ -15,7 +15,8 @@ class LoadRes : public QObject
 	Q_OBJECT
 
 private:
-	QStringList paths;
+	QStringList dirPaths;
+	QStringList jsonPaths;
 
 public:
 	enum class Errors

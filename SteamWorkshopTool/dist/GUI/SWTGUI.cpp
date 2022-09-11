@@ -1,17 +1,27 @@
 #include "SWTGUI.h"
-
+	//border-top:0px solid #e8f3f9;background: 
+	// transparent;
 SWTGUI::SWTGUI(QWidget *parent)
 	: QWidget(parent)
 {
+	this->metaTypeRegister();
+
 	ui.setupUi(this);
-	setWindowOpacity(0.7);
-	ui.textBrowser->insertPlainText(QString::fromUtf8("´´Òâ¹¤·»¹¤¾ßÆô¶¯Íê³É\n"));
+
+	this->setWindowFlags(windowFlags() | Qt::FramelessWindowHint);//æ— è¾¹æ¡†
+	this->setAttribute(Qt::WA_TranslucentBackground, true);//çª—ä½“èƒŒæ™¯å…¨é€æ˜
+	//ui.tab->setAutoFillBackground(true);
+	//QPalette palette = ui.tab->palette();
+	//palette.setColor(QPalette::Background, QColor(100, 100, 100, 0));
+	//ui.tab->setPalette(palette);
+
+	ui.listWidget->setResizeMode(QListView::Adjust);
+
+	ui.listWidget_2->setResizeMode(QListView::Adjust);
+
+	ui.textBrowser->insertPlainText(QString::fromUtf8("åˆ›æ„å·¥åŠå·¥å…·å¯åŠ¨å®Œæˆ\n"));
 	delayPushW = new QTimer(this);
 	delayPushL = new QTimer(this);
-	
-	qRegisterMetaType<QMessageBox::StandardButton>("QMessageBox::StandardButton");
-	qRegisterMetaType<SWTGUI::Form>("SWTGUI::Form");
-	qRegisterMetaType<SWTGUI::ListWay>("SWTGUI::ListWay");
 
 	connect(delayPushW, &QTimer::timeout, this, [&]() {
 		delayPushW->stop();
@@ -93,6 +103,8 @@ SWTGUI::SWTGUI(QWidget *parent)
 
 	connect(ui.commandLinkButton_Update, &QCommandLinkButton::clicked, this, &SWTGUI::updateMod);
 
+	connect(ui.commandLinkButton_StartSteamCMD, &QPushButton::clicked, this, &SWTGUI::startSteamCMD);
+
 	addEventFilterAllWidget();
 }
 
@@ -113,33 +125,34 @@ SWTGUI::~SWTGUI()
 	clearModList(SWTGUI::ListWay::All);
 }
 
-void SWTGUI::messageBox(SWTGUI::Form form, const QString& title, const QString& text, QMessageBox::StandardButton button0, QMessageBox::StandardButton button1)
+void SWTGUI::messageBox(const QString& title, const QString& text, QMessageBox::Icon icon, const QVector<QMessageBoxButtonData>& pushButtonList)
 {
-	switch (form)
+	QMessageBox box(icon, title, text);
+
+	box.setParent(this);
+	box.setWindowFlags(Qt::Dialog | Qt::MSWindowsFixedSizeDialogHint);
+
+	QPushButton* pushButtonPointer = nullptr;
+	qint64 id = 0;
+	foreach(auto && i, pushButtonList)
 	{
-	case SWTGUI::Form::Critical:
-		QMessageBox::critical(this, title, text, button0, button1);
-		break;
-
-	case SWTGUI::Form::Information:
-		QMessageBox::information(this, title, text, button0, button1);
-		break;
-
-	case SWTGUI::Form::Question:
-		QMessageBox::question(this, title, text, button0, button1);
-		break;
-
-	case SWTGUI::Form::Warning:
-		QMessageBox::warning(this, title, text, button0, button1);
-		break;
-
-	case SWTGUI::Form::About:
-		QMessageBox::about(this, title, text);
-		break;
-
-	default:
-		break;
+		pushButtonPointer = box.addButton(i.str, i.buttonRole);
+		if (i.isEmitSignal)
+		{
+			if (i.receiver == nullptr)
+			{
+				emit this->messageBoxButtonConnect(sender(), id, pushButtonPointer);
+			}
+			else
+			{
+				emit this->messageBoxButtonConnect(i.receiver, id, pushButtonPointer);
+			}
+		}
+		id++;
 	}
+
+	box.show();
+	box.exec();
 }
 
 void SWTGUI::clearModList(SWTGUI::ListWay way)
@@ -201,15 +214,6 @@ void SWTGUI::addMod(const ModDataTable& mod, SWTGUI::ListWay into)
 	emit this->addModReturn(listWidgetItemWidget, mod, into);
 }
 
-void SWTGUI::newItemWidget(const ModDataTable& mod)
-{
-	auto list = findChildren<QObject*>();
-	foreach(QObject * i, list)
-	{
-		i->installEventFilter(this);
-	}
-}
-
 void SWTGUI::refresh(SWTGUI::ListWay way)
 {
 	switch (way)
@@ -232,13 +236,48 @@ void SWTGUI::refresh(SWTGUI::ListWay way)
 	}
 }
 
-//»ñÈ¡×Ó¿Ø¼şµÄËùÓĞÏûÏ¢
+void SWTGUI::addEventFilterAllWidget()
+{
+	auto list = findChildren<QObject*>();
+	foreach(QObject * i, list)
+	{
+		i->installEventFilter(this);
+	}
+}
+
+//è·å–å­æ§ä»¶çš„æ‰€æœ‰æ¶ˆæ¯
 bool SWTGUI::eventFilter(QObject* target, QEvent* event)
 {
-	if (event->type() == QEvent::MouseButtonPress)
+	if (event->type() == QEvent::KeyPress)
 	{
+		QKeyEvent* keyEvent = dynamic_cast<QKeyEvent*>(event);
+		if (keyEvent)
+		{
+			if (keyEvent->key() == QEvent::Enter)
+			{
+				if (target == ui.lineEdit_Search)
+				{
+					emit ui.pushButton_Search->clicked();
+				}
+				else if (target == ui.lineEdit_Search_2)
+				{
+					emit ui.pushButton_Search_2->clicked();
+				}
+			}
+		}
 	}
 
-	//ÆäËûÏûÏ¢·µ»Ø¸ø»ùÀàÏûÏ¢¼à¿ØÆ÷´¦Àí
+	//å…¶ä»–æ¶ˆæ¯è¿”å›ç»™åŸºç±»æ¶ˆæ¯ç›‘æ§å™¨å¤„ç†
 	return QWidget::eventFilter(target, event);
+}
+
+void SWTGUI::metaTypeRegister()
+{
+	qRegisterMetaType<SWTGUI::QMessageBoxButtonData>("SWTGUI::QMessageBoxButtonData");
+	qRegisterMetaType<QVector<SWTGUI::QMessageBoxButtonData>>("QVector<SWTGUI::QMessageBoxButtonData>");
+	qRegisterMetaType<QVector<SWTGUI::QMessageBoxButtonData>>("QVector<SWTGUI::QMessageBoxButtonData>&");
+	qRegisterMetaType<QMessageBox::Icon>("QMessageBox::Icon");
+	qRegisterMetaType<QMessageBox::StandardButton>("QMessageBox::StandardButton");
+	qRegisterMetaType<SWTGUI::Form>("SWTGUI::Form");
+	qRegisterMetaType<SWTGUI::ListWay>("SWTGUI::ListWay");
 }

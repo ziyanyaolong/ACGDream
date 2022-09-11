@@ -6,235 +6,52 @@ SteamWorkshopTool::SteamWorkshopTool()
 	gui = new SWTGUI();
 	modAnalytic = new ModAnalytic(this);
 	database = new DataBase(this);
+	downloader = new Downloader(this);
 
 	qRegisterMetaType<ModDataTable>("ModDataTable");
 
 	loadRes.allInit();
 
-	connect(gui, &SWTGUI::clearCache, this, [&]() {
-		auto steamGet = SteamGet::instance();
-		QDir dir(steamGet->getData("Dirs.Caches"));
-		if (!dir.exists() || dir.isEmpty())
-			return;
+	SteamGet::instance()->setParent(this);
 
-		QDirIterator dirIterator(steamGet->getData("Dirs.Caches"), QDir::Files | QDir::AllDirs | QDir::NoDotAndDotDot);
-		while (dirIterator.hasNext())
-		{
-			if (!dir.remove(dirIterator.next()))
-			{
-				if (dirIterator.filePath().isEmpty())
-					continue;
-				if (!QDir(dirIterator.filePath()).removeRecursively())
-					QMetaObject::invokeMethod(gui,
-						"messageBox",
-						Qt::QueuedConnection,
-						Q_ARG(SWTGUI::Form, SWTGUI::Form::Warning),
-						Q_ARG(QString, "æØ∏Ê"),
-						Q_ARG(QString, "Œƒº˛ªÚŒƒº˛º–Œﬁ∑®…æ≥˝£¨«Î≤Èø¥ «∑Ò±ª’º”√"));
-			}
-		}
-		}, Qt::QueuedConnection);
+	connect(gui, &SWTGUI::messageBoxButtonConnect, this, &SteamWorkshopTool::messageBoxButtonProcess);
+
+
+	connect(this->gui, &SWTGUI::clearCache, this, &SteamWorkshopTool::clearCacheChoice);
 	
-	connect(gui, &SWTGUI::addModReturn, this, [=](ListWidgetItemWidget* item, const ModDataTable& mod, SWTGUI::ListWay way) {
-		
-		item->readWidget()->setTitle(mod.title);
-		item->readWidget()->setId(QString(mod.appid + mod.id));
-		item->readWidget()->setSubscription(mod.isSubscribe);
-		auto steamGet = SteamGet::instance();
-		if (mod.image != "")
-		{
-			QPixmap pixmap0;
-			if (pixmap0.load(QString(steamGet->getData("Dirs.Images") + "/" + mod.appid + "_" + mod.id + ".png")))
-			{
-				item->readWidget()->setImage(pixmap0);
-			}
-			else
-			{
-				QDir dir(steamGet->getData("Dirs.Images"));
-				if (!dir.exists())
-					throw "No 'Dirs.Images' dir.";
+	connect(gui, &SWTGUI::addModReturn, this, &SteamWorkshopTool::addModProcess);
 
-				WebCrawler* webCrawler = new WebCrawler(this);
-				WebCrawler* webCrawlerImage = new WebCrawler(this);
-				switch (way)
-				{
-				case SWTGUI::ListWay::Website:
-					connect(gui, &SWTGUI::clearWebsiteList, webCrawler, &WebCrawler::deleteLater, Qt::QueuedConnection);
-					connect(webCrawler, &WebCrawler::finished, this, [&](const QByteArray& data) {
-						auto tSteamGet = SteamGet::instance();
-						const ModDataTable* tMod = static_cast<const ModDataTable*>((static_cast<WebCrawler*>(sender()))->otherData[0]);
-						WebCrawler* web = static_cast<WebCrawler*>(sender());
-						QPixmap temp;
-						if (!temp.loadFromData(data))
-							qDebug() << "error loadFromData!";
-						if (!temp.save(tSteamGet->getData("Dirs.Images") + "/" + tMod->appid + "_" + tMod->id + ".png"))
-							qDebug() << "error save Pixmap!" << (tSteamGet->getData("Dirs.Images") + "/" + tMod->appid + "_" + tMod->id + ".png");
-						auto* tItem = static_cast<ListWidgetItemWidget*>(web->otherData[1]);
-						if ((tMod == nullptr) || (tItem == nullptr))
-							return;
-						tItem->readWidget()->setImage(temp);
-						delete tMod;
-						web->deleteLater();
-						});
-					break;
+	connect(gui, &SWTGUI::updateMod, this, &SteamWorkshopTool::updateModProcess);
 
-				case SWTGUI::ListWay::Local:
-					connect(gui, &SWTGUI::clearLocalList, webCrawler, &WebCrawler::deleteLater, Qt::QueuedConnection);
-					connect(webCrawler, &WebCrawler::finished, this, [&](const QByteArray& data) {
-						auto tSteamGet = SteamGet::instance();
-						const ModDataTable* tMod = static_cast<const ModDataTable*>((static_cast<WebCrawler*>(sender()))->otherData[0]);
-						WebCrawler* web = static_cast<WebCrawler*>(sender());
-						QPixmap temp;
-						if (!temp.loadFromData(data))
-							qDebug() << "error loadFromData!";
-						if (!temp.save(tSteamGet->getData("Dirs.Images") + "/" + tMod->appid + "_" + tMod->id + ".png"))
-							qDebug() << "error save Pixmap!" << (tSteamGet->getData("Dirs.Images") + "/" + tMod->appid + "_" + tMod->id + ".png");
-						auto* tItem = static_cast<ListWidgetItemWidget*>(web->otherData[1]);
-						if ((tMod == nullptr) || (tItem == nullptr))
-							return;
-						tItem->readWidget()->setImage(temp);
-						delete tMod;
-						web->deleteLater();
-						});
-					break;
+	connect(gui, &SWTGUI::loadList, this, &SteamWorkshopTool::loadListProcess); 
 
-				default:
-					break;
-				}
-				webCrawler->otherData.push_back(new ModDataTable(mod));
-				webCrawler->otherData.push_back(item);
-				webCrawler->websiteLink(mod.image);
-			}
-		}
-		}, Qt::QueuedConnection);
+	connect(gui, &SWTGUI::subscription, this, &SteamWorkshopTool::subscriptionProcess);
 
-	connect(gui, &SWTGUI::updateMod, this, [&]() {
-		database->open();
-		qDebug() << database->readModDataTableKeyAll();
-		database->close();
-		}, Qt::QueuedConnection);
+	connect(modAnalytic, &ModAnalytic::finished, this, &SteamWorkshopTool::modAnalyticFinishedProcess);
 
-	connect(gui, &SWTGUI::loadList, this, [&](const QStringList& list, SWTGUI::ListWay way) {
-		SteamGet* getTemp = SteamGet::instance();
-		QList<ModDataTable> modList;
-		database->open();
-		switch (way)
-		{
-		case SWTGUI::ListWay::Website:
-			emit modAnalytic->analyticMods(getTemp->getData("SteamWorkShop.BaseHttp") + list[0] + getTemp->getData("SteamWorkShop.Search") + list[1] + getTemp->getData("SteamWorkShop.Page") + list[2]);
-			break;
+	connect(modAnalytic, &ModAnalytic::error, this, &SteamWorkshopTool::modAnalyticErrorProcess);
 
-		case SWTGUI::ListWay::Local:
-			database->updata(DataBase::Events::All);
-			QMetaObject::invokeMethod(gui,
-				"clearModList",
-				Qt::QueuedConnection,
-				Q_ARG(SWTGUI::ListWay, SWTGUI::ListWay::Local)
-			);
-			modList = database->readModDataTableAll();
-			foreach (auto i, modList)
-			{
-				QMetaObject::invokeMethod(gui,
-					"addMod",
-					Qt::QueuedConnection,
-					Q_ARG(const ModDataTable&, i),
-					Q_ARG(SWTGUI::ListWay, SWTGUI::ListWay::Local)
-				);
-			}
-			break;
-
-		default:
-			break;
-		}
-		database->close();
-		}, Qt::QueuedConnection); 
-
-	connect(gui, &SWTGUI::subscription, this, [&](bool isSubscription, const QString& id, SWTGUI::ListWay way) {
-		ModDataTable* temp = nullptr;
-		ModDataTable mod;
-		database->open();
-		switch (way)
-		{
-		case SWTGUI::ListWay::Website:
-			temp = modAnalytic->findMod(id);
-
-			if (temp == nullptr)
-				return;
-
-			if (isSubscription)
-			{
-				temp->isSubscribe = true;
-				database->addModDataTable(temp, DataBase::WriteWay::Overlay);
-			}
-			else
-			{
-				database->deleteModDataTable(id);
-			}
-			break;
-		case SWTGUI::ListWay::Local:
-			mod = database->readModDataTable(id);
-
-			if (mod.id == "")
-				return;
-
-			if (isSubscription)
-			{
-				mod.isSubscribe = true;
-				database->removeListEventData(id, DataBase::Events::All);
-				database->addDataEvent(&mod, DataBase::WriteWay::Overlay);
-			}
-			else
-			{
-				database->removeListEventData(id, DataBase::Events::All);
-				database->deleteDataEvent(id);
-			}
-			break;
-		case SWTGUI::ListWay::All:
-			break;
-		default:
-			break;
-		}
-
-		database->close();
-		}, Qt::QueuedConnection);
-
-	connect(modAnalytic, &ModAnalytic::finished, this, [&](const QVector<ModDataTable*>& mods) {
-		database->open();
-		foreach(ModDataTable * i, mods)
-		{
-			if (database->findModDataTable(i->appid + i->id))
-			{
-				i->isSubscribe = true;
-			}
-			QMetaObject::invokeMethod(gui,
-				"addMod",
-				Qt::QueuedConnection,
-				Q_ARG(const ModDataTable&, *i),
-				Q_ARG(SWTGUI::ListWay, SWTGUI::ListWay::Website)
-				);
-		}
-		database->close();
+	connect(gui, &SWTGUI::startSteamCMD, this, [&]() {
+		downloader->init();
 		});
-
-	connect(modAnalytic, &ModAnalytic::error, this, [&](QNetworkReply::NetworkError errorData) {
-		QMetaObject::invokeMethod(gui, 
-			"messageBox", 
-			Qt::QueuedConnection, 
-			Q_ARG(SWTGUI::Form, SWTGUI::Form::Critical), 
-			Q_ARG(QString, "¥ÌŒÛ"),
-			Q_ARG(QString, "Õ¯÷∑Œﬁ∑®∑√Œ £¨«Î≤Èø¥Õ¯¬Á «∑Òø…”√"));
-		});
-
 }
 
 SteamWorkshopTool::~SteamWorkshopTool()
 {
+	if (downloader)
+	{
+		downloader->deleteLater();
+	}
 
 	if (modAnalytic)
+	{
 		modAnalytic->deleteLater();
+	}
 
 	if (database)
+	{
 		database->deleteLater();
+	}
 
 	modAnalytic = nullptr;
 	database = nullptr;
@@ -243,4 +60,271 @@ SteamWorkshopTool::~SteamWorkshopTool()
 void SteamWorkshopTool::pRun()
 {
 	emit this->addGui(gui);
+}
+
+void SteamWorkshopTool::clearCacheProcess()
+{
+	QDir dir(QCoreApplication::applicationDirPath() + "/Temp/SteamWorkshopTool/Caches");
+	if (!dir.exists() || dir.isEmpty())
+		return;
+
+	QDirIterator dirIterator(QCoreApplication::applicationDirPath() + "/Temp/SteamWorkshopTool/Caches", QDir::Files | QDir::AllDirs | QDir::NoDotAndDotDot);
+	while (dirIterator.hasNext())
+	{
+		if (!dir.remove(dirIterator.next()))
+		{
+			if (dirIterator.filePath().isEmpty())
+				continue;
+			if (!QDir(dirIterator.filePath()).removeRecursively())
+			{
+				QMetaObject::invokeMethod(gui,
+					"messageBox",
+					Qt::QueuedConnection,
+					Q_ARG(SWTGUI::Form, SWTGUI::Form::Warning),
+					Q_ARG(QString, "Ë≠¶Âëä"),
+					Q_ARG(QString, "Êñá‰ª∂ÊàñÊñá‰ª∂Â§πÊó†Ê≥ïÂà†Èô§ÔºåËØ∑Êü•ÁúãÊòØÂê¶Ë¢´Âç†Áî®"));
+			}
+		}
+	}
+	QMetaObject::invokeMethod(gui,
+		"messageBox",
+		Qt::QueuedConnection,
+		Q_ARG(QString, QString::fromLocal8Bit("‰ø°ÊÅØ")),
+		Q_ARG(QString, QString(QString::fromLocal8Bit("ÊàêÂäüÂà†Èô§ÊâÄÊúâÁºìÂ≠òÊñá‰ª∂!"))),
+		Q_ARG(QMessageBox::Icon, QMessageBox::Icon::Information));
+}
+
+void SteamWorkshopTool::messageBoxButtonProcess(const QObject* receiver, qint64 id, QPushButton* pushButton)
+{
+	if ((qint64)(receiver) == (qint64)(this))
+	{
+		switch (id)
+		{
+		case 0:
+			connect(pushButton, &QPushButton::clicked, this, &SteamWorkshopTool::clearCacheProcess);
+			break;
+		case 1:
+			//ÂèñÊ∂àÊåâÈîÆÂ§ÑÁêÜÔºåÁïô‰ΩçÔºå‰∏çÂ§ÑÁêÜ
+			break;
+
+		default:
+			break;
+		}
+	}
+}
+
+void SteamWorkshopTool::clearCacheChoice()
+{
+	auto steamGet = SteamGet::instance();
+	QVector<SWTGUI::QMessageBoxButtonData> list;
+	list.push_back(SWTGUI::QMessageBoxButtonData("Á°ÆÂÆö", QMessageBox::ButtonRole::AcceptRole, true, this));
+	list.push_back(SWTGUI::QMessageBoxButtonData("ÂèñÊ∂à", QMessageBox::ButtonRole::RejectRole, false, this));
+	QMetaObject::invokeMethod(this->gui,
+		"messageBox",
+		Qt::QueuedConnection,
+		Q_ARG(const QString&, QString::fromLocal8Bit("Ë≠¶Âëä")),
+		Q_ARG(const QString&, QString(QString::fromLocal8Bit("ÊòØÂê¶Âà†Èô§:") + QString(QCoreApplication::applicationDirPath() + "/Temp/SteamWorkshopTool/Caches") + QString::fromLocal8Bit(" ‰∏ãÁöÑÊâÄÊúâÊñá‰ª∂Ôºü"))),
+		Q_ARG(QMessageBox::Icon, QMessageBox::Icon::Warning),
+		Q_ARG(QVector<SWTGUI::QMessageBoxButtonData>, list));
+}
+
+void SteamWorkshopTool::addModProcess(ListWidgetItemWidget* item, const ModDataTable& mod, SWTGUI::ListWay way)
+{
+	//item->readItem()->setSizeHint(QSize(256, 256));
+	item->readWidget()->setTitle(mod.title);
+	item->readWidget()->setId(QString(mod.appid + mod.id));
+	item->readWidget()->setSubscription(mod.isSubscribe);
+
+	if (mod.image != "")
+	{
+		QPixmap pixmap0;
+		if (pixmap0.load(QString((QCoreApplication::applicationDirPath() + "/Temp/SteamWorkshopTool/Caches") + "/" + mod.appid + "_" + mod.id + ".png")))
+		{
+			item->readWidget()->setImage(pixmap0);
+		}
+		else
+		{
+			QDir dir(QCoreApplication::applicationDirPath() + "/Temp/SteamWorkshopTool/Caches");
+			if (!dir.exists())
+			{
+				if (!dir.mkdir(QCoreApplication::applicationDirPath() + "/Temp/SteamWorkshopTool/Caches"))
+				{
+					throw "Dir error!";
+				}
+			}
+
+			WebCrawler* webCrawler = new WebCrawler(this);
+			WebCrawler* webCrawlerImage = new WebCrawler(this);
+			switch (way)
+			{
+			case SWTGUI::ListWay::Website:
+				connect(gui, &SWTGUI::clearWebsiteList, webCrawler, &WebCrawler::deleteLater, Qt::QueuedConnection);
+				connect(webCrawler, &WebCrawler::finished, this, [&](const QByteArray& data) {
+					auto tSteamGet = SteamGet::instance();
+					const ModDataTable* tMod = static_cast<const ModDataTable*>((static_cast<WebCrawler*>(sender()))->otherData[0]);
+					WebCrawler* web = static_cast<WebCrawler*>(sender());
+					QPixmap temp;
+					if (!temp.loadFromData(data))
+						qDebug() << "error loadFromData!";
+					if (!temp.save((QCoreApplication::applicationDirPath() + "/Temp/SteamWorkshopTool/Caches") + "/" + tMod->appid + "_" + tMod->id + ".png"))
+						qDebug() << "error save Pixmap!" << ((QCoreApplication::applicationDirPath() + "/Temp/SteamWorkshopTool/Caches") + "/" + tMod->appid + "_" + tMod->id + ".png");
+					auto* tItem = static_cast<ListWidgetItemWidget*>(web->otherData[1]);
+					if ((tMod == nullptr) || (tItem == nullptr))
+						return;
+					tItem->readWidget()->setImage(temp);
+					delete tMod;
+					web->deleteLater();
+					});
+				break;
+
+			case SWTGUI::ListWay::Local:
+				connect(gui, &SWTGUI::clearLocalList, webCrawler, &WebCrawler::deleteLater, Qt::QueuedConnection);
+				connect(webCrawler, &WebCrawler::finished, this, [&](const QByteArray& data) {
+					auto tSteamGet = SteamGet::instance();
+					const ModDataTable* tMod = static_cast<const ModDataTable*>((static_cast<WebCrawler*>(sender()))->otherData[0]);
+					WebCrawler* web = static_cast<WebCrawler*>(sender());
+					QPixmap temp;
+					if (!temp.loadFromData(data))
+						qDebug() << "error loadFromData!";
+					if (!temp.save((QCoreApplication::applicationDirPath() + "/Temp/SteamWorkshopTool/Caches") + "/" + tMod->appid + "_" + tMod->id + ".png"))
+						qDebug() << "error save Pixmap!" << ((QCoreApplication::applicationDirPath() + "/Temp/SteamWorkshopTool/Caches") + "/" + tMod->appid + "_" + tMod->id + ".png");
+					auto* tItem = static_cast<ListWidgetItemWidget*>(web->otherData[1]);
+					if ((tMod == nullptr) || (tItem == nullptr))
+						return;
+					tItem->readWidget()->setImage(temp);
+					delete tMod;
+					web->deleteLater();
+					});
+				break;
+
+			default:
+				break;
+			}
+			webCrawler->otherData.push_back(new ModDataTable(mod));
+			webCrawler->otherData.push_back(item);
+			webCrawler->websiteLink(mod.image);
+		}
+	}
+}
+
+void SteamWorkshopTool::updateModProcess()
+{
+	database->open();
+	qDebug() << database->readModDataTableKeyAll();
+	database->close();
+}
+
+void SteamWorkshopTool::loadListProcess(const QStringList& list, SWTGUI::ListWay way)
+{
+	SteamGet* getTemp = SteamGet::instance();
+	QList<ModDataTable> modList;
+	database->open();
+	switch (way)
+	{
+	case SWTGUI::ListWay::Website:
+		emit modAnalytic->analyticMods(getTemp->getData("SteamWorkShop.BaseHttp") + list[0] + getTemp->getData("SteamWorkShop.Search") + list[1] + getTemp->getData("SteamWorkShop.Page") + list[2]);
+		break;
+
+	case SWTGUI::ListWay::Local:
+		database->updata(DataBase::Events::All);
+		QMetaObject::invokeMethod(gui,
+			"clearModList",
+			Qt::QueuedConnection,
+			Q_ARG(SWTGUI::ListWay, SWTGUI::ListWay::Local)
+		);
+		modList = database->readModDataTableAll();
+		foreach(auto i, modList)
+		{
+			QMetaObject::invokeMethod(gui,
+				"addMod",
+				Qt::QueuedConnection,
+				Q_ARG(const ModDataTable&, i),
+				Q_ARG(SWTGUI::ListWay, SWTGUI::ListWay::Local)
+			);
+		}
+		break;
+
+	default:
+		break;
+	}
+	database->close();
+}
+
+void SteamWorkshopTool::subscriptionProcess(bool isSubscription, const QString& id, SWTGUI::ListWay way)
+{
+	ModDataTable* temp = nullptr;
+	ModDataTable mod;
+	database->open();
+	switch (way)
+	{
+	case SWTGUI::ListWay::Website:
+		temp = modAnalytic->findMod(id);
+
+		if (temp == nullptr)
+			return;
+
+		if (isSubscription)
+		{
+			temp->isSubscribe = true;
+			database->addModDataTable(temp, DataBase::WriteWay::Overlay);
+		}
+		else
+		{
+			database->deleteModDataTable(id);
+		}
+		break;
+	case SWTGUI::ListWay::Local:
+		mod = database->readModDataTable(id);
+
+		if (mod.id == "")
+			return;
+
+		if (isSubscription)
+		{
+			mod.isSubscribe = true;
+			database->removeListEventData(id, DataBase::Events::All);
+			database->addDataEvent(&mod, DataBase::WriteWay::Overlay);
+		}
+		else
+		{
+			database->removeListEventData(id, DataBase::Events::All);
+			database->deleteDataEvent(id);
+		}
+		break;
+	case SWTGUI::ListWay::All:
+		break;
+	default:
+		break;
+	}
+
+	database->close();
+}
+
+void SteamWorkshopTool::modAnalyticFinishedProcess(const QVector<ModDataTable*>& mods)
+{
+	database->open();
+	foreach(ModDataTable * i, mods)
+	{
+		if (database->findModDataTable(i->appid + i->id))
+		{
+			i->isSubscribe = true;
+		}
+		QMetaObject::invokeMethod(gui,
+			"addMod",
+			Qt::QueuedConnection,
+			Q_ARG(const ModDataTable&, *i),
+			Q_ARG(SWTGUI::ListWay, SWTGUI::ListWay::Website)
+		);
+	}
+	database->close();
+}
+
+void SteamWorkshopTool::modAnalyticErrorProcess(QNetworkReply::NetworkError errorData)
+{
+	QMetaObject::invokeMethod(gui,
+		"messageBox",
+		Qt::QueuedConnection,
+		Q_ARG(QString, "ÈîôËØØ"),
+		Q_ARG(QString, "ÁΩëÂùÄÊó†Ê≥ïËÆøÈóÆÔºåËØ∑Êü•ÁúãÁΩëÁªúÊòØÂê¶ÂèØÁî®"),
+		Q_ARG(QMessageBox::Icon, QMessageBox::Icon::Critical));
 }

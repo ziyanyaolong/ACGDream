@@ -8,8 +8,8 @@ class Settings : public QWidget
 	Q_OBJECT
 
 public:
-	Settings(QWidget *parent = Q_NULLPTR);
-	~Settings();
+	explicit Settings(QWidget *parent = Q_NULLPTR);
+	virtual ~Settings();
 
 private:
 	Ui::Settings ui;

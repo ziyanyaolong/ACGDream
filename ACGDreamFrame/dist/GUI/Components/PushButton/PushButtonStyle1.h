@@ -12,7 +12,7 @@ private:
 
 public:
 	explicit PushButtonStyle1(QWidget* parent = Q_NULLPTR);
-	~PushButtonStyle1();
+	virtual ~PushButtonStyle1();
 
 };
 

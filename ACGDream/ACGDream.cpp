@@ -3,13 +3,13 @@
 ACGDream::ACGDream(QMainWindow* parent)
 	: ACGDreamFrame(parent)
 {
+	QTextCodec::setCodecForLocale(QTextCodec::codecForName("UTF-8"));
+
+	this->initDirs();
+
 	pluginReg = new PluginReg(this);
-	QDir dir(QCoreApplication::applicationDirPath() + "/Temp");
-	if (!dir.exists())
-		dir.mkdir(QCoreApplication::applicationDirPath() + "/Temp");
 
 	setBackground(QImage(QCoreApplication::applicationDirPath() + "/BG.png"));
-	
 
 	connect(pluginReg, &PluginReg::addGuiSignal, this, [&](QWidget* gui) {
 		this->addWidght(gui);
@@ -17,19 +17,16 @@ ACGDream::ACGDream(QMainWindow* parent)
 		},Qt::QueuedConnection);
 
 	connect(pluginReg, &PluginReg::loading, this, [&](QString name) {
-		QDir dir(QCoreApplication::applicationDirPath() + "/Temp/" + name);
-		if (!dir.exists())
-			dir.mkdir(QCoreApplication::applicationDirPath() + "/Temp/" + name);
+		this->initDirs(name);
 		});
 
 	connect(ui.actions, &QAction::triggered, this, [&]() {
 		this->clearAllWidget();
-		if (!pluginReg->loadAllPlugins(QDir::currentPath() + "/lib")) {
+		if (!pluginReg->loadAllPlugins(QCoreApplication::applicationDirPath() + "/Extra")) {
 			QMessageBox::warning(this, "Error", "Could not load the plugin");
 		}
 		});
 
-	QTextCodec::setCodecForLocale(QTextCodec::codecForName("UTF-8"));
 	emit this->ui.actions->triggered();
 
 	show();
@@ -39,6 +36,34 @@ ACGDream::~ACGDream()
 {
 	/*if (pluginReg)
 		delete pluginReg;*/
+}
+
+void ACGDream::initDirs(QString name)
+{
+	QDir dir(QCoreApplication::applicationDirPath() + "/Temp");
+	if (!dir.exists())
+		dir.mkdir(QCoreApplication::applicationDirPath() + "/Temp");
+
+	dir.setPath(QCoreApplication::applicationDirPath() + "/Config");
+	if (!dir.exists())
+		dir.mkdir(QCoreApplication::applicationDirPath() + "/Config");
+
+	if (name == "")
+	{
+		return;
+	}
+
+	dir.setPath(QCoreApplication::applicationDirPath() + "/Temp/" + name);
+	if (!dir.exists())
+		dir.mkdir(QCoreApplication::applicationDirPath() + "/Temp/" + name);
+
+	dir.setPath(QCoreApplication::applicationDirPath() + "/Config/" + name);
+	if (!dir.exists())
+		dir.mkdir(QCoreApplication::applicationDirPath() + "/Config/" + name);
+
+	dir.setPath(QCoreApplication::applicationDirPath() + "/Extra");
+	if (!dir.exists())
+		dir.mkdir(QCoreApplication::applicationDirPath() + "/Extra");
 }
 
 void ACGDream::closeEvent(QCloseEvent* e)

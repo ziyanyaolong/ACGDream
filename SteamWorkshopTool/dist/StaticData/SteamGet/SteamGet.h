@@ -29,7 +29,7 @@ private:
 
 public:
 	SteamGet(QObject *parent = Q_NULLPTR);
-	~SteamGet();
+	virtual ~SteamGet();
 
 	static SteamGet* instance() { if (_me_ == nullptr) _me_ = new SteamGet; return _me_; }
 

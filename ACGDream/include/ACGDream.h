@@ -17,11 +17,8 @@
 #include <QTextCodec>
 #include <QDir>
 
-#include "../ACGDreamFrame/include/ACGDreamFrameH.h"
-#pragma comment (lib,"../.build/vs/ACGDreamFrame/lib/ACGDreamFrame.lib")
-
-#include "../ACGDreamLoadPlugs/include/ACGDreamLoadPlugs.h"
-#pragma comment (lib,"../.build/vs/ACGDreamLoadPlugs/lib/ACGDreamLoadPlugs.lib")
+#include <ACGDreamFrameH.h>
+#include <ACGDreamLoadPlugs.h>
 
 class ACGDream : public ACGDreamFrame
 {
@@ -36,5 +33,8 @@ protected:
 public:
 	ACGDream(QMainWindow* parent = Q_NULLPTR);
 	~ACGDream();
+
+public slots:
+	void initDirs(QString name = "");
 
 };

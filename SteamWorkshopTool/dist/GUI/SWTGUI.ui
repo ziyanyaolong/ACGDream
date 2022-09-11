@@ -14,35 +14,29 @@
    <string>SteamWorkshopTool</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">QTabWidget:pane
- {
-	border-top:0px solid #e8f3f9;background: 
-	 transparent;
- }
-QWidget
+   <string notr="true">QWidget
 {
-	
 	font: 9pt &quot;萝莉体&quot;;
 }</string>
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="1,3">
    <item>
-    <widget class="QWidget" name="widget_3" native="true">
-     <layout class="QVBoxLayout" name="verticalLayout_2" stretch="0">
+    <widget class="TrWidgetStyle1" name="widget_3" native="true">
+     <layout class="QVBoxLayout" name="verticalLayout_2">
       <property name="spacing">
-       <number>0</number>
+       <number>12</number>
       </property>
       <property name="leftMargin">
-       <number>0</number>
+       <number>12</number>
       </property>
       <property name="topMargin">
-       <number>0</number>
+       <number>12</number>
       </property>
       <property name="rightMargin">
-       <number>0</number>
+       <number>12</number>
       </property>
       <property name="bottomMargin">
-       <number>0</number>
+       <number>12</number>
       </property>
       <item>
        <widget class="QTabWidget" name="tabWidget">
@@ -155,6 +149,25 @@ QWidget
            </widget>
           </item>
           <item>
+           <widget class="QCommandLinkButton" name="commandLinkButton_StartSteamCMD">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>40</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>40</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>导出为SteamCMD命令</string>
+            </property>
+           </widget>
+          </item>
+          <item>
            <spacer name="verticalSpacer">
             <property name="orientation">
              <enum>Qt::Vertical</enum>
@@ -175,25 +188,32 @@ QWidget
     </widget>
    </item>
    <item>
-    <widget class="QWidget" name="widget_2" native="true">
+    <widget class="TrWidgetStyle1" name="widget_2" native="true">
      <layout class="QVBoxLayout" name="verticalLayout_3">
       <property name="spacing">
-       <number>0</number>
+       <number>10</number>
       </property>
       <property name="leftMargin">
-       <number>0</number>
+       <number>10</number>
       </property>
       <property name="topMargin">
-       <number>0</number>
+       <number>22</number>
       </property>
       <property name="rightMargin">
-       <number>0</number>
+       <number>10</number>
       </property>
       <property name="bottomMargin">
-       <number>0</number>
+       <number>12</number>
       </property>
       <item>
        <widget class="QTabWidget" name="tabWidget_2">
+        <property name="styleSheet">
+         <string notr="true">QTabWidget:pane
+ {
+	border-top:0px solid #e8f3f9;background: 
+	 transparent;
+ }</string>
+        </property>
         <property name="currentIndex">
          <number>0</number>
         </property>
@@ -670,7 +690,65 @@ QWidget
            </widget>
           </item>
           <item>
-           <widget class="QListWidget" name="listWidget"/>
+           <widget class="QListWidget" name="listWidget">
+            <property name="styleSheet">
+             <string notr="true">QListView 
+{
+      show-decoration-selected: 1; /* make the selection span the entire width of the view */
+}
+ 
+QListView::item:alternate 
+{
+      background: #EEEEEE;
+}
+ 
+QListView::item:selected 
+{
+      border: 1px solid #6a6ea9;
+}
+ 
+QListView::item:selected:!active 
+{
+      background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                  stop: 0 #ABAFE5, stop: 1 #8588B2);
+}
+ 
+QListView::item:selected:active
+{
+      background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                  stop: 0 #6a6ea9, stop: 1 #888dd9);
+}
+ 
+QListView::item:hover
+{
+      background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                  stop: 0 #FAFBFE, stop: 1 #DCDEF1);
+}
+//适用于开启交替颜色
+QListWidget#listWidget
+{
+    alternate-background-color:blue;background:yellow
+}</string>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>0</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="flow">
+             <enum>QListView::LeftToRight</enum>
+            </property>
+            <property name="layoutMode">
+             <enum>QListView::SinglePass</enum>
+            </property>
+            <property name="spacing">
+             <number>0</number>
+            </property>
+            <property name="viewMode">
+             <enum>QListView::IconMode</enum>
+            </property>
+           </widget>
           </item>
          </layout>
         </widget>
@@ -1025,7 +1103,57 @@ QWidget
            </widget>
           </item>
           <item>
-           <widget class="QListWidget" name="listWidget_2"/>
+           <widget class="QListWidget" name="listWidget_2">
+            <property name="styleSheet">
+             <string notr="true">
+QListView 
+{
+      show-decoration-selected: 1; /* make the selection span the entire width of the view */
+}
+ 
+QListView::item:alternate 
+{
+      background: #EEEEEE;
+}
+ 
+QListView::item:selected 
+{
+      border: 1px solid #6a6ea9;
+}
+ 
+QListView::item:selected:!active 
+{
+      background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                  stop: 0 #ABAFE5, stop: 1 #8588B2);
+}
+ 
+QListView::item:selected:active
+{
+      background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                  stop: 0 #6a6ea9, stop: 1 #888dd9);
+}
+ 
+QListView::item:hover
+{
+      background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                  stop: 0 #FAFBFE, stop: 1 #DCDEF1);
+}
+//适用于开启交替颜色
+QListWidget#listWidget
+{
+    alternate-background-color:blue;background:yellow
+}</string>
+            </property>
+            <property name="flow">
+             <enum>QListView::LeftToRight</enum>
+            </property>
+            <property name="viewMode">
+             <enum>QListView::IconMode</enum>
+            </property>
+            <property name="batchSize">
+             <number>100</number>
+            </property>
+           </widget>
           </item>
          </layout>
         </widget>
@@ -1037,6 +1165,14 @@ QWidget
   </layout>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>TrWidgetStyle1</class>
+   <extends>QWidget</extends>
+   <header>Components\TrWidgetStyle1\TrWidgetStyle1.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources>
   <include location="../../SteamWorkshopTool.qrc"/>
  </resources>

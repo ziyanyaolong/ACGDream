@@ -1,11 +1,18 @@
 {
-  "Version": "v0.0.1",
+  "Version": "v0.0.2",
 
   "SteamWorkShop": {
     "BaseHttp": "https://steamcommunity.com/workshop/browse/?appid=",
     "Page": "&actualsort=trend&p=",
     "Search": "&searchtext=",
     "Sieve": "&requiredtags%5B%5D=",
+    "Filter": {
+      "Name": "&requiredtags[]=",
+      "Head1": "name=\"requiredtags[]\"",
+      "Head2": "value=\"",
+      "Tail1": "",
+      "Tail2": "\" class=\"inputTagsFilter\" />"
+    },
 
     "Star": {
       "Head": "<img class=\"fileRating\" src=\"",
@@ -34,7 +41,7 @@
   },
 
   "ItemAnalytic": {
-    "Head": "<div class=\"workshopItem\">",
+    "Head": "<div data-panel=\"",
     "Tail": "</script>",
 
     "JsonAnalytic": {
@@ -43,7 +50,7 @@
       "Tail1": ");",
       "Tail2": "}",
       "Image": {
-        "Head1": "<img class=\"",
+        "Head1": "<img class=\"workshopItemPreviewImage  aspectratio_16x9\"",
         "Head2": "src=\"",
         "Tail": "\">"
       }

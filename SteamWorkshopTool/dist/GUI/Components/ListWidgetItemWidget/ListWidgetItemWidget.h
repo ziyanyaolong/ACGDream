@@ -8,7 +8,7 @@
 #include <QDebug>
 #include <QListWidgetItem>
 
-#include "Widget/Widget1.h"
+#include "WidgetStyle1/Widget1.h"
 
 class ListWidgetItemWidget : public QObject
 {

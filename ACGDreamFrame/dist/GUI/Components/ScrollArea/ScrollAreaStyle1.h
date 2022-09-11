@@ -28,7 +28,7 @@ private:
 
 public:
 	explicit ScrollAreaStyle1(QWidget* parent = Q_NULLPTR);
-	~ScrollAreaStyle1();
+	virtual ~ScrollAreaStyle1();
 
 public slots:
 	void closeScrollBar();

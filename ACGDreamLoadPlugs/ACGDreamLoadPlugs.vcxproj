@@ -32,7 +32,7 @@
   </ImportGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="QtSettings">
     <QtInstall>5.15.2_msvc2019_64</QtInstall>
-    <QtModules>core;opengl;gui;multimedia;uitools;widgets;openglextensions;</QtModules>
+    <QtModules>core;xml;sql;opengl;network;gui;axserver;axcontainer;svg;multimedia;uitools;widgets;winextras;multimediawidgets;3dcore;3danimation;3dextras;3dinput;3dlogic;3drender;openglextensions;serialbus;networkauth;virtualkeyboard;</QtModules>
     <QtBuildConfig>debug</QtBuildConfig>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'" Label="QtSettings">
@@ -55,7 +55,7 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
-    <OutDir>$(SolutionDir).build\vs\$(ProjectName)\lib\</OutDir>
+    <OutDir>$(SolutionDir)bin\Extra\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
     <OutDir>$(SolutionDir).build\vs\$(ProjectName)\lib\</OutDir>

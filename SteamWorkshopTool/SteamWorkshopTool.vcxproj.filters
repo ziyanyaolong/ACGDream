@@ -62,10 +62,19 @@
     <QtMoc Include="dist\JsonOperation\JsonOperation.h">
       <Filter>Header Files</Filter>
     </QtMoc>
-    <QtMoc Include="dist\GUI\Components\ListWidgetItemWidget\Widget\Widget1.h">
+    <QtMoc Include="dist\GUI\Components\ListWidgetItemWidget\WidgetStyle1\Widget1.h">
       <Filter>Header Files</Filter>
     </QtMoc>
     <QtMoc Include="dist\LoadRes\LoadRes.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="dist\Downloader\Downloader.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="dist\Downloader\SteamCMD\SteamCMD.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="dist\GUI\Components\TrWidgetStyle1\TrWidgetStyle1.h">
       <Filter>Header Files</Filter>
     </QtMoc>
   </ItemGroup>
@@ -73,7 +82,10 @@
     <QtUic Include="dist\GUI\SWTGUI.ui">
       <Filter>Form Files</Filter>
     </QtUic>
-    <QtUic Include="dist\GUI\Components\ListWidgetItemWidget\Widget\Widget1.ui">
+    <QtUic Include="dist\GUI\Components\ListWidgetItemWidget\WidgetStyle1\Widget1.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="dist\GUI\Components\TrWidgetStyle1\TrWidgetStyle1.ui">
       <Filter>Form Files</Filter>
     </QtUic>
   </ItemGroup>
@@ -102,10 +114,19 @@
     <ClCompile Include="dist\JsonOperation\JsonOperation.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="dist\GUI\Components\ListWidgetItemWidget\Widget\Widget1.cpp">
+    <ClCompile Include="dist\GUI\Components\ListWidgetItemWidget\WidgetStyle1\Widget1.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="dist\LoadRes\LoadRes.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="dist\Downloader\Downloader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="dist\Downloader\SteamCMD\SteamCMD.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="dist\GUI\Components\TrWidgetStyle1\TrWidgetStyle1.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
