@@ -3,12 +3,13 @@
 MultifunctionalModuleSorter::MultifunctionalModuleSorter()
     : PluginCalInterface()
 {
-    ui = new MainUI();
 }
 
 void MultifunctionalModuleSorter::pRun()
 {
-    emit this->regMainUI(ui);
+	emit this->regMainUI();
+
+	this->ui = static_cast<MainUI*>(this->getMainUI());
 }
 
 MultifunctionalModuleSorter::~MultifunctionalModuleSorter()

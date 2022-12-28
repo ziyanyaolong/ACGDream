@@ -75,6 +75,11 @@ void UIMain::resizeEvent(QResizeEvent* event)
 
 QPushButton* UIMain::addWidght(QWidget* widget)
 {
+	if (widget == nullptr)
+	{
+		return nullptr;
+	}
+
 	PushButtonStyle1* pushButton = new PushButtonStyle1(ui.splitter);
 	//QPropertyAnimation* pPosAnimation1 = new QPropertyAnimation(pushButton, "pos", ui.splitter);
 	pushButton->setMinimumHeight(50);

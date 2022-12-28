@@ -3,7 +3,6 @@
 SteamWorkshopTool::SteamWorkshopTool()
 	: PluginCalInterface()
 {
-	ui = new SWTUI();
 	modAnalytic = new ModAnalytic(this);
 	database = new DataBase(this);
 	downloader = new Downloader(this);
@@ -13,27 +12,6 @@ SteamWorkshopTool::SteamWorkshopTool()
 	loadRes.allInit();
 
 	SteamGet::instance()->setParent(this);
-
-	connect(ui, &SWTUI::messageBoxButtonConnect, this, &SteamWorkshopTool::messageBoxButtonProcess);
-
-
-	connect(this->ui, &SWTUI::clearCache, this, &SteamWorkshopTool::clearCacheChoice);
-	
-	connect(ui, &SWTUI::addModReturn, this, &SteamWorkshopTool::addModProcess);
-
-	connect(ui, &SWTUI::updateMod, this, &SteamWorkshopTool::updateModProcess);
-
-	connect(ui, &SWTUI::loadList, this, &SteamWorkshopTool::loadListProcess); 
-
-	connect(ui, &SWTUI::subscription, this, &SteamWorkshopTool::subscriptionProcess);
-
-	connect(modAnalytic, &ModAnalytic::finished, this, &SteamWorkshopTool::modAnalyticFinishedProcess);
-
-	connect(modAnalytic, &ModAnalytic::error, this, &SteamWorkshopTool::modAnalyticErrorProcess);
-
-	connect(ui, &SWTUI::startSteamCMD, this, [&]() {
-		downloader->init();
-		});
 }
 
 SteamWorkshopTool::~SteamWorkshopTool()
@@ -66,7 +44,30 @@ SteamWorkshopTool::~SteamWorkshopTool()
 
 void SteamWorkshopTool::pRun()
 {
-	emit this->regMainUI(ui);
+	emit this->regMainUI();
+
+	this->ui = static_cast<SWTUI*>(this->getMainUI());
+
+	connect(ui, &SWTUI::messageBoxButtonConnect, this, &SteamWorkshopTool::messageBoxButtonProcess);
+
+
+	connect(this->ui, &SWTUI::clearCache, this, &SteamWorkshopTool::clearCacheChoice);
+
+	connect(ui, &SWTUI::addModReturn, this, &SteamWorkshopTool::addModProcess);
+
+	connect(ui, &SWTUI::updateMod, this, &SteamWorkshopTool::updateModProcess);
+
+	connect(ui, &SWTUI::loadList, this, &SteamWorkshopTool::loadListProcess);
+
+	connect(ui, &SWTUI::subscription, this, &SteamWorkshopTool::subscriptionProcess);
+
+	connect(modAnalytic, &ModAnalytic::finished, this, &SteamWorkshopTool::modAnalyticFinishedProcess);
+
+	connect(modAnalytic, &ModAnalytic::error, this, &SteamWorkshopTool::modAnalyticErrorProcess);
+
+	connect(ui, &SWTUI::startSteamCMD, this, [&]() {
+		downloader->init();
+		});
 }
 
 void SteamWorkshopTool::clearCacheProcess()

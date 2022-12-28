@@ -37,17 +37,41 @@
     <None Include="src\Main\MultifunctionalModuleSorter.json" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\UI\MainUI.cpp">
+    <ClCompile Include="src\UI\UIMain\MainUI.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\UI\Components\DesignWidget\DesignWidget.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\UI\Components\DesignComponentObject\DesignComponentObject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\UI\Components\Blocks\RectangleBlock\RectangleBlock.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="src\UI\MainUI.h">
+    <QtMoc Include="src\UI\UIMain\MainUI.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="src\UI\Components\DesignWidget\DesignWidget.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="src\UI\Components\DesignComponentObject\DesignComponentObject.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="src\UI\Components\Blocks\RectangleBlock\RectangleBlock.h">
       <Filter>Header Files</Filter>
     </QtMoc>
   </ItemGroup>
   <ItemGroup>
-    <QtUic Include="src\UI\MainUI.ui">
+    <QtUic Include="src\UI\UIMain\MainUI.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="src\UI\Components\DesignWidget\DesignWidget.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="src\UI\Components\Blocks\RectangleBlock\RectangleBlock.ui">
       <Filter>Form Files</Filter>
     </QtUic>
   </ItemGroup>

@@ -3,10 +3,6 @@
 QtRegularExpressionValidation::QtRegularExpressionValidation()
 	: PluginCalInterface()
 {
-	ui = new MainUI();
-	connect(ui->ui.lineEdit, &QLineEdit::textChanged, this, &QtRegularExpressionValidation::management, Qt::QueuedConnection);
-	connect(ui->ui.textEdit, &QTextEdit::textChanged, this, &QtRegularExpressionValidation::management, Qt::QueuedConnection);
-	connect(this, &QtRegularExpressionValidation::sendInfo, ui, &MainUI::printText, Qt::QueuedConnection);
 }
 
 QtRegularExpressionValidation::~QtRegularExpressionValidation()
@@ -31,5 +27,11 @@ void QtRegularExpressionValidation::management()
 
 void QtRegularExpressionValidation::pRun()
 {
-	emit this->regMainUI(ui);
+	emit this->regMainUI();
+
+	this->ui = static_cast<MainUI*>(this->getMainUI());
+
+	connect(ui->ui.lineEdit, &QLineEdit::textChanged, this, &QtRegularExpressionValidation::management, Qt::QueuedConnection);
+	connect(ui->ui.textEdit, &QTextEdit::textChanged, this, &QtRegularExpressionValidation::management, Qt::QueuedConnection);
+	connect(this, &QtRegularExpressionValidation::sendInfo, ui, &MainUI::printText, Qt::QueuedConnection);
 }

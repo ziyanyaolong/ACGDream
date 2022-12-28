@@ -9,7 +9,7 @@ ACGDream::ACGDream(QMainWindow* parent)
 
 
 	pluginThread = new QThread(this);
-	pluginReg = new PluginReg(this);
+	pluginReg = new PluginReg(nullptr);
 	
 	pluginReg->moveToThread(pluginThread);
 	if (!pluginThread->isRunning())
@@ -36,6 +36,18 @@ ACGDream::ACGDream(QMainWindow* parent)
 		QMessageBox::critical(this, name, info);
 		});
 
+	connect(pluginReg, &PluginReg::regPluginMainUI, this, [&](PluginCalInterface* plugin) {
+		QWidget* pTempWidget = plugin->createMainUI();
+		if (this->addWidght(pTempWidget) == nullptr)
+		{
+			emit pluginReg->backPluginMainUI(nullptr);
+		}
+		else
+		{
+			emit pluginReg->backPluginMainUI(pTempWidget);
+		}
+		});
+
 	connect(ui.actions, &QAction::triggered, this, [&]() {
 		auto actionsSet = ((QAction*)(sender()));
 		if (!actionsSet->isEnabled())
@@ -44,9 +56,7 @@ ACGDream::ACGDream(QMainWindow* parent)
 		}
 		actionsSet->setEnabled(false);
 		this->clearAllWidget();
-		if (!pluginReg->loadAllPlugins(QCoreApplication::applicationDirPath() + "/Extra")) {
-			QMessageBox::warning(this, "Error", "Could not load the plugin");
-		}
+		emit pluginReg->loadAllPlugins(QCoreApplication::applicationDirPath() + "/Extra");
 		actionsSet->setEnabled(true);
 		});
 

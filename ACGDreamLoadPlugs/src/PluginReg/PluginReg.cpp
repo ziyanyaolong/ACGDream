@@ -3,14 +3,18 @@
 PluginReg::PluginReg(QObject *parent)
 	: QObject(parent)
 {
+	connect(this, &PluginReg::loadAllPlugins, this, &PluginReg::loadAllPluginsProcess);
+	connect(this, &PluginReg::unloadAllPlugins, this, &PluginReg::unloadAllPluginsProcess);
+	connect(this, &PluginReg::loadPlugin, this, &PluginReg::loadPluginProcess);
+	connect(this, &PluginReg::unloadPlugin, this, &PluginReg::unloadPluginProcess);
 }
 
 PluginReg::~PluginReg()
 {
-	unloadAllPlugins();
+	unloadAllPluginsProcess();
 }
 
-void PluginReg::unloadAllPlugins()
+void PluginReg::unloadAllPluginsProcess()
 {
 	for (auto plugin = plugins.begin(); plugin != plugins.end(); plugin++)
 	{
@@ -29,7 +33,7 @@ void PluginReg::unloadAllPlugins()
 	plugins.clear();
 }
 
-bool PluginReg::unloadPlugin(const QString& pluginName)
+bool PluginReg::unloadPluginProcess(const QString& pluginName)
 {
 	auto tempPlugin = plugins.find(pluginName);
 	if (tempPlugin != plugins.end())
@@ -51,14 +55,36 @@ bool PluginReg::unloadPlugin(const QString& pluginName)
 }
 
 
-bool PluginReg::loadPlugin(const QString& filePath)
+bool PluginReg::loadPluginProcess(const QString& filePath)
 {
-	QPluginLoader* pluginLoader = new QPluginLoader(filePath);
+	QPluginLoader* pluginLoader = new QPluginLoader(filePath, this);
 	QString name(pluginLoader->fileName());
 	name = name.mid(name.lastIndexOf("/") + QString("/").size(), name.indexOf(".dll") - name.lastIndexOf("/") - QString("/").size());
 	emit this->loading(name);
-	PluginCalInterface* plugin = qobject_cast<PluginCalInterface*>(pluginLoader->instance());
-	PluginReg::connect(plugin, &PluginCalInterface::regMainUI, this, &PluginReg::regMainUIProcess, Qt::QueuedConnection);
+
+	PluginCalInterface* plugin = nullptr;
+
+	QT_TRY
+	{
+		plugin = qobject_cast<PluginCalInterface*>(pluginLoader->instance());
+	}
+	QT_CATCH(QException e)
+	{
+		this->loadError(filePath, QString(e.what()));
+		return false;
+	}
+	QT_CATCH(...)
+	{
+		this->loadError(filePath, pluginLoader->errorString());
+		return false;
+	}
+
+	connect(plugin, &PluginCalInterface::regMainUIS, this, [&]() {
+		emit this->regPluginMainUI((PluginCalInterface*)(sender()));
+		});
+
+	connect(this, &PluginReg::backPluginMainUI, plugin, &PluginCalInterface::backPluginMainUI);
+
 	if (!pluginLoader->isLoaded())
 	{
 		this->loadError(filePath, pluginLoader->errorString());
@@ -66,22 +92,42 @@ bool PluginReg::loadPlugin(const QString& filePath)
 	}else if (plugin) {
 		if (plugins.count(name) <= 0)
 		{
-			plugin->setParent(this);
 			plugins[name] = pluginLoader;
-			plugin->pRun();
+
+			QT_TRY
+			{
+				plugin->pRun();
+			}
+				QT_CATCH(QException e)
+			{
+				this->loadError(filePath, QString(e.what()));
+				return false;
+			}
+			QT_CATCH(...)
+			{
+				this->loadError(filePath, pluginLoader->errorString());
+				return false;
+			}
 		}
 		else
 		{
 			return false;
 		}
 	}
+	else
+	{
+		this->loadError(filePath, QString("插件指针为空,请检查插件是否有问题!"));
+		return false;
+	}
+
+	
 
 	return true;
 }
 
-bool PluginReg::loadAllPlugins(const QString& dirPath)
+bool PluginReg::loadAllPluginsProcess(const QString& dirPath)
 {
-	unloadAllPlugins();
+	unloadAllPluginsProcess();
 	QDir pluginsDir(dirPath);
 
 	QStringList filters;
@@ -92,7 +138,7 @@ bool PluginReg::loadAllPlugins(const QString& dirPath)
 
 	foreach(QString fileName, pluginsDir.entryList(QDir::Files))
 	{
-		if (loadPlugin(dirPath + "/" + fileName))
+		if (loadPluginProcess(dirPath + "/" + fileName))
 		{
 			isLoad = true;
 		}
@@ -104,6 +150,7 @@ bool PluginReg::loadAllPlugins(const QString& dirPath)
 	}
 	else
 	{
+		this->loadError("Error", "Could not load the plugin");
 		return false;
 	}
 }
@@ -126,6 +173,4 @@ void PluginReg::regMainUIProcess(QWidget* mainWidget)
 		}
 		tempPluginWidget.value() = mainWidget;
 	}
-
-	emit this->addUISignal(mainWidget);
 }

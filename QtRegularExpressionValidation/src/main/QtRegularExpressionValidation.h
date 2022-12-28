@@ -17,12 +17,14 @@ class _declspec(dllexport) QtRegularExpressionValidation : public PluginCalInter
 		RegPlugin("QtRegularExpressionValidation.json")
 
 private:
-	MainUI* ui;
+	MainUI* ui = nullptr;
 
 public:
 	explicit QtRegularExpressionValidation();
 	~QtRegularExpressionValidation();
 	virtual void pRun();
+
+	virtual QWidget* createMainUI() override { return new MainUI(); }
 
 signals:
 	void sendInfo(const QString&);

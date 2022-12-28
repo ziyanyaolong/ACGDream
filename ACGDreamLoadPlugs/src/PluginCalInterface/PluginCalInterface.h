@@ -13,6 +13,7 @@ Q_PLUGIN_METADATA(IID PluginCalInterface_iid FILE fileName)	\
 #include <QObject>
 #include <QThread>
 #include <QWidget>
+#include <QEventLoop>
 
 class ACGDream;
 class PluginCalInterface : public QObject
@@ -23,23 +24,36 @@ private:
 	friend class PluginReg;
 	const ACGDream* _acgDream = nullptr;
 	bool separateThread = false;
+	QWidget* mainUI = nullptr;
 
 protected slots:
 	virtual void pRun() = 0;
 
 protected:
 	PluginCalInterface(QObject* parent = Q_NULLPTR) : QObject(parent) {}
-	bool setSeparateThread(bool choice) { separateThread = choice; }
+
+	inline bool setSeparateThread(bool choice) { separateThread = choice; }
+	inline QWidget* getMainUI() { return mainUI; }
+	inline void regMainUI() { QEventLoop e; emit this->regMainUIS(); connect(this, &PluginCalInterface::quitRegMainUILock, &e, &QEventLoop::quit); e.exec(); }
 
 public:
 	virtual ~PluginCalInterface()
 	{
 	}
 
-	const ACGDream* getACGDream() { return _acgDream; }
+	inline const ACGDream* getACGDream() { return _acgDream; }
+
+
+	virtual QWidget* createMainUI() { return nullptr; }
+
+	typedef QWidget* (*createMainUIPoniter)();
 
 signals:
-	void regMainUI(QWidget* gui);
+	void regMainUIS();
+	void quitRegMainUILock();
+
+public slots:
+	void backPluginMainUI(QWidget* widget) { mainUI = widget; emit quitRegMainUILock(); }
 
 };
 

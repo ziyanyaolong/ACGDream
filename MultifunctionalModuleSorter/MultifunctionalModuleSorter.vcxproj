@@ -74,6 +74,9 @@
       <AdditionalLibraryDirectories>$(SolutionDir)bin\Release\Extra\</AdditionalLibraryDirectories>
       <AdditionalDependencies>ACGDreamLoadPlugs.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <QtUic>
+      <QtUicDir>src\UI\UIBuild\uic\</QtUicDir>
+    </QtUic>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -89,6 +92,9 @@
       <AdditionalLibraryDirectories>$(SolutionDir)bin\Debug\Extra\</AdditionalLibraryDirectories>
       <AdditionalDependencies>ACGDreamLoadPlugs.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <QtUic>
+      <QtUicDir>src\UI\UIBuild\uic\</QtUicDir>
+    </QtUic>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="Configuration">
     <ClCompile>
@@ -119,17 +125,31 @@
   <ItemGroup>
     <QtRcc Include="MultifunctionalModuleSorter.qrc" />
     <QtMoc Include="src\Main\MultifunctionalModuleSorter.h" />
-    <ClCompile Include="src\UI\MainUI.cpp" />
+    <ClCompile Include="src\UI\Components\Blocks\RectangleBlock\RectangleBlock.cpp" />
+    <ClCompile Include="src\UI\Components\DesignComponentObject\DesignComponentObject.cpp" />
+    <ClCompile Include="src\UI\Components\DesignWidget\DesignWidget.cpp" />
+    <ClCompile Include="src\UI\UIMain\MainUI.cpp" />
     <ClCompile Include="src\Main\MultifunctionalModuleSorter.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="src\Main\MultifunctionalModuleSorter.json" />
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="src\UI\MainUI.h" />
+    <QtMoc Include="src\UI\UIMain\MainUI.h" />
   </ItemGroup>
   <ItemGroup>
-    <QtUic Include="src\UI\MainUI.ui" />
+    <QtUic Include="src\UI\Components\Blocks\RectangleBlock\RectangleBlock.ui" />
+    <QtUic Include="src\UI\Components\DesignWidget\DesignWidget.ui" />
+    <QtUic Include="src\UI\UIMain\MainUI.ui" />
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="src\UI\Components\DesignWidget\DesignWidget.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="src\UI\Components\DesignComponentObject\DesignComponentObject.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="src\UI\Components\Blocks\RectangleBlock\RectangleBlock.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">

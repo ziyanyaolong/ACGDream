@@ -12,20 +12,30 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ACGDream", "ACGDream\ACGDream.vcxproj", "{C0048CAF-4193-4577-97D1-0446EDD32750}"
 	ProjectSection(ProjectDependencies) = postProject
 		{FEF33D21-8F19-4A6B-9736-BE9222450269} = {FEF33D21-8F19-4A6B-9736-BE9222450269}
+		{B1FF0DAC-695B-4AC5-982D-AB303B6AA6C1} = {B1FF0DAC-695B-4AC5-982D-AB303B6AA6C1}
 		{EDEEAFBD-751B-4E5F-A498-1D083C0D44F0} = {EDEEAFBD-751B-4E5F-A498-1D083C0D44F0}
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "vs", "vs", "{8384B679-F6CB-466D-8EDF-3522EA3BD41C}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SteamWorkshopTool", "SteamWorkshopTool\SteamWorkshopTool.vcxproj", "{DF065D9C-B383-4D41-B10A-1FBFDA4F6791}"
+	ProjectSection(ProjectDependencies) = postProject
+		{EDEEAFBD-751B-4E5F-A498-1D083C0D44F0} = {EDEEAFBD-751B-4E5F-A498-1D083C0D44F0}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TestProject", "TestProject\TestProject.vcxproj", "{1D9E6460-A57F-4E59-843F-FC92102B2B04}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ACGDreamLoadPlugs", "ACGDreamLoadPlugs\ACGDreamLoadPlugs.vcxproj", "{EDEEAFBD-751B-4E5F-A498-1D083C0D44F0}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "QtRegularExpressionValidation", "QtRegularExpressionValidation\QtRegularExpressionValidation.vcxproj", "{42B2F653-0275-46D8-90AD-C7B2D3F43811}"
+	ProjectSection(ProjectDependencies) = postProject
+		{EDEEAFBD-751B-4E5F-A498-1D083C0D44F0} = {EDEEAFBD-751B-4E5F-A498-1D083C0D44F0}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MultifunctionalModuleSorter", "MultifunctionalModuleSorter\MultifunctionalModuleSorter.vcxproj", "{B1FF0DAC-695B-4AC5-982D-AB303B6AA6C1}"
+	ProjectSection(ProjectDependencies) = postProject
+		{EDEEAFBD-751B-4E5F-A498-1D083C0D44F0} = {EDEEAFBD-751B-4E5F-A498-1D083C0D44F0}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

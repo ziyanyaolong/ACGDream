@@ -2,7 +2,7 @@
 
 #include <QDebug>
 
-#include "../UI/MainUI.h"
+#include "../UI/UIMain/MainUI.h"
 
 #include <ACGDreamLoadPlugs.h>
 
@@ -14,6 +14,8 @@ class _declspec(dllexport) MultifunctionalModuleSorter : public PluginCalInterfa
 public:
     MultifunctionalModuleSorter();
     virtual ~MultifunctionalModuleSorter();
+
+    virtual QWidget* createMainUI() override { return new MainUI(); }
 
 private:
     virtual void pRun() override;

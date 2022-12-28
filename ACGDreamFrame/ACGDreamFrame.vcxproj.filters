@@ -100,9 +100,6 @@
     <ClInclude Include="common\GUI\UIBuild\uic\ui_testW.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\UI\UIBuild\uic\ui_UIMain.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="assets\StyleSheet\ScrollBar\ScrollBarStyle1.qss" />

@@ -11,6 +11,7 @@
 #include <QCoreApplication>
 #include <QTimer>
 #include <QSharedPointer>
+#include <QException>
 
 #include "../PluginCalInterface/PluginCalInterface.h"
 
@@ -34,11 +35,17 @@ signals:
 	void removeUISignal(QWidget* gui);
 	void loading(QString name);
 	void loadError(const QString& name, const QString& info = QString(""));
-
-public slots:
-	bool loadAllPlugins(const QString & dirPath);
+	bool loadAllPlugins(const QString& dirPath);
 	bool loadPlugin(const QString& filePath);
 	bool unloadPlugin(const QString& plugin);
 	void unloadAllPlugins();
+	void regPluginMainUI(PluginCalInterface* plugin);
+	void backPluginMainUI(QWidget* widget);
+
+protected slots :
+	bool loadAllPluginsProcess(const QString & dirPath);
+	bool loadPluginProcess(const QString& filePath);
+	bool unloadPluginProcess(const QString& plugin);
+	void unloadAllPluginsProcess();
 	void regMainUIProcess(QWidget* mainWidget);
 };

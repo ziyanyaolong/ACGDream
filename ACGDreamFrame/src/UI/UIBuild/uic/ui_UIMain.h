@@ -1,13 +1,13 @@
 /********************************************************************************
-** Form generated from reading UI file 'GUIMain.ui'
+** Form generated from reading UI file 'UIMain.ui'
 **
 ** Created by: Qt User Interface Compiler version 5.15.2
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
 
-#ifndef UI_GUIMAIN_H
-#define UI_GUIMAIN_H
+#ifndef UI_UIMAIN_H
+#define UI_UIMAIN_H
 
 #include <QtCore/QVariant>
 #include <QtWidgets/QAction>
@@ -195,4 +195,4 @@ namespace Ui {
 
 QT_END_NAMESPACE
 
-#endif // UI_GUIMAIN_H
+#endif // UI_UIMAIN_H

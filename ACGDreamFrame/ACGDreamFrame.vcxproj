@@ -72,7 +72,7 @@
     </ClCompile>
     <QtUic />
     <QtUic>
-      <QtUicDir>dist\UI\UIBuild\uic\</QtUicDir>
+      <QtUicDir>src\UI\UIBuild\uic\</QtUicDir>
     </QtUic>
     <Bscmake>
       <PreserveSbr>true</PreserveSbr>
@@ -141,7 +141,6 @@
     <ClInclude Include="buildLib\config\config.h" />
     <ClInclude Include="common\GUI\UIBuild\uic\ui_testW.h" />
     <ClInclude Include="include\ACGDreamFrameH.h" />
-    <ClInclude Include="src\UI\UIBuild\uic\ui_UIMain.h" />
     <QtMoc Include="src\UI\Settings\Settings.h" />
     <QtMoc Include="src\Animation\MoveAnimation\MoveAnimation.h" />
     <QtMoc Include="src\Animation\Animation.h" />
