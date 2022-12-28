@@ -1,0 +1,60 @@
+{
+  "Version": "v0.0.2",
+
+  "SteamWorkShop": {
+    "BaseHttp": "https://steamcommunity.com/workshop/browse/?appid=",
+    "Page": "&actualsort=trend&p=",
+    "Search": "&searchtext=",
+    "Sieve": "&requiredtags%5B%5D=",
+    "Filter": {
+      "Name": "&requiredtags[]=",
+      "Head1": "name=\"requiredtags[]\"",
+      "Head2": "value=\"",
+      "Tail1": "",
+      "Tail2": "\" class=\"inputTagsFilter\" />"
+    },
+
+    "Star": {
+      "Head": "<img class=\"fileRating\" src=\"",
+      "Tail": "\" />"
+    },
+
+    "Sort": {
+      "Actual Sort": "&actualsort=",
+      "Browse Sort": "&browsesort=",
+      "Way": {
+        "Trend": "trend",
+        "Mostrecent": "mostrecent",
+        "Lastupdated": "lastupdated",
+        "Totaluniquesubscribers": "totaluniquesubscribers"
+      },
+
+      "Time": {
+        "Today": "&days=1",
+        "One Week": "&days=7",
+        "Three Months": "&days=90",
+        "Half A Year": "&days=180",
+        "One Year": "&days=365",
+        "History": "&days=-1"
+      }
+    }
+  },
+
+  "ItemAnalytic": {
+    "Head": "<div data-panel=\"",
+    "Tail": "</script>",
+
+    "JsonAnalytic": {
+      "Head1": "SharedFileBindMouseHover(",
+      "Head2": "{",
+      "Tail1": ");",
+      "Tail2": "}",
+      "Image": {
+        "Head1": "<img class=\"workshopItemPreviewImage  aspectratio_16x9\"",
+        "Head2": "src=\"",
+        "Tail": "\">"
+      }
+    }
+
+  }
+}

@@ -26,118 +26,118 @@
     <QtRcc Include="SteamWorkshopTool.qrc">
       <Filter>Resource Files</Filter>
     </QtRcc>
-    <ClCompile Include="dist\main\SteamWorkshopTool.cpp">
+    <ClCompile Include="src\Main\SteamWorkshopTool.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="dist\main\SteamWorkshopTool.json" />
+    <None Include="src\Main\SteamWorkshopTool.json" />
     <None Include="assets\Config\AnalyticTable.json" />
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="dist\main\SteamWorkshopTool.h">
+    <QtMoc Include="src\Main\SteamWorkshopTool.h">
       <Filter>Header Files</Filter>
     </QtMoc>
-    <QtMoc Include="dist\Network\WebCrawler\WebCrawler.h">
+    <QtMoc Include="src\Network\WebCrawler\WebCrawler.h">
       <Filter>Header Files</Filter>
     </QtMoc>
-    <QtMoc Include="dist\Network\WebsiteAnalytic\WebsiteAnalytic.h">
+    <QtMoc Include="src\Network\WebsiteAnalytic\WebsiteAnalytic.h">
       <Filter>Header Files</Filter>
     </QtMoc>
-    <QtMoc Include="dist\GUI\SWTGUI.h">
+    <QtMoc Include="src\UI\SWTUI.h">
       <Filter>Header Files</Filter>
     </QtMoc>
-    <QtMoc Include="dist\DataBase\DataBase.h">
+    <QtMoc Include="src\DataBase\DataBase.h">
       <Filter>Header Files</Filter>
     </QtMoc>
-    <QtMoc Include="dist\GUI\Components\ListWidgetItemWidget\ListWidgetItemWidget.h">
+    <QtMoc Include="src\UI\Components\ListWidgetItemWidget\ListWidgetItemWidget.h">
       <Filter>Header Files</Filter>
     </QtMoc>
-    <QtMoc Include="dist\Network\ModAnalytic\ModAnalytic.h">
+    <QtMoc Include="src\Network\ModAnalytic\ModAnalytic.h">
       <Filter>Header Files</Filter>
     </QtMoc>
-    <QtMoc Include="dist\StaticData\SteamGet\SteamGet.h">
+    <QtMoc Include="src\StaticData\SteamGet\SteamGet.h">
       <Filter>Header Files</Filter>
     </QtMoc>
-    <QtMoc Include="dist\JsonOperation\JsonOperation.h">
+    <QtMoc Include="src\JsonOperation\JsonOperation.h">
       <Filter>Header Files</Filter>
     </QtMoc>
-    <QtMoc Include="dist\GUI\Components\ListWidgetItemWidget\WidgetStyle1\Widget1.h">
+    <QtMoc Include="src\UI\Components\ListWidgetItemWidget\WidgetStyle1\Widget1.h">
       <Filter>Header Files</Filter>
     </QtMoc>
-    <QtMoc Include="dist\LoadRes\LoadRes.h">
+    <QtMoc Include="src\LoadRes\LoadRes.h">
       <Filter>Header Files</Filter>
     </QtMoc>
-    <QtMoc Include="dist\Downloader\Downloader.h">
+    <QtMoc Include="src\Downloader\Downloader.h">
       <Filter>Header Files</Filter>
     </QtMoc>
-    <QtMoc Include="dist\Downloader\SteamCMD\SteamCMD.h">
+    <QtMoc Include="src\Downloader\SteamCMD\SteamCMD.h">
       <Filter>Header Files</Filter>
     </QtMoc>
-    <QtMoc Include="dist\GUI\Components\TrWidgetStyle1\TrWidgetStyle1.h">
+    <QtMoc Include="src\UI\Components\TrWidgetStyle1\TrWidgetStyle1.h">
       <Filter>Header Files</Filter>
     </QtMoc>
   </ItemGroup>
   <ItemGroup>
-    <QtUic Include="dist\GUI\SWTGUI.ui">
+    <QtUic Include="src\UI\SWTUI.ui">
       <Filter>Form Files</Filter>
     </QtUic>
-    <QtUic Include="dist\GUI\Components\ListWidgetItemWidget\WidgetStyle1\Widget1.ui">
+    <QtUic Include="src\UI\Components\ListWidgetItemWidget\WidgetStyle1\Widget1.ui">
       <Filter>Form Files</Filter>
     </QtUic>
-    <QtUic Include="dist\GUI\Components\TrWidgetStyle1\TrWidgetStyle1.ui">
+    <QtUic Include="src\UI\Components\TrWidgetStyle1\TrWidgetStyle1.ui">
       <Filter>Form Files</Filter>
     </QtUic>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="dist\Network\WebCrawler\WebCrawler.cpp">
+    <ClCompile Include="src\Network\WebCrawler\WebCrawler.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="dist\Network\WebsiteAnalytic\WebsiteAnalytic.cpp">
+    <ClCompile Include="src\Network\WebsiteAnalytic\WebsiteAnalytic.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="dist\GUI\SWTGUI.cpp">
+    <ClCompile Include="src\UI\SWTUI.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="dist\DataBase\DataBase.cpp">
+    <ClCompile Include="src\DataBase\DataBase.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="dist\GUI\Components\ListWidgetItemWidget\ListWidgetItemWidget.cpp">
+    <ClCompile Include="src\UI\Components\ListWidgetItemWidget\ListWidgetItemWidget.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="dist\Network\ModAnalytic\ModAnalytic.cpp">
+    <ClCompile Include="src\Network\ModAnalytic\ModAnalytic.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="dist\StaticData\SteamGet\SteamGet.cpp">
+    <ClCompile Include="src\StaticData\SteamGet\SteamGet.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="dist\JsonOperation\JsonOperation.cpp">
+    <ClCompile Include="src\JsonOperation\JsonOperation.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="dist\GUI\Components\ListWidgetItemWidget\WidgetStyle1\Widget1.cpp">
+    <ClCompile Include="src\UI\Components\ListWidgetItemWidget\WidgetStyle1\Widget1.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="dist\LoadRes\LoadRes.cpp">
+    <ClCompile Include="src\LoadRes\LoadRes.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="dist\Downloader\Downloader.cpp">
+    <ClCompile Include="src\Downloader\Downloader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="dist\Downloader\SteamCMD\SteamCMD.cpp">
+    <ClCompile Include="src\Downloader\SteamCMD\SteamCMD.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="dist\GUI\Components\TrWidgetStyle1\TrWidgetStyle1.cpp">
+    <ClCompile Include="src\UI\Components\TrWidgetStyle1\TrWidgetStyle1.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="dist\GUI\ModSaveData\ModSaveData.h">
+    <ClInclude Include="src\UI\ModSaveData\ModSaveData.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="dist\StaticData\StaticData.h">
+    <ClInclude Include="src\StaticData\StaticData.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="dist\ModDataTable\ModDataTable.h">
+    <ClInclude Include="src\ModDataTable\ModDataTable.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

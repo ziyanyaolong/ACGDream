@@ -55,24 +55,24 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
-    <OutDir>$(SolutionDir)bin\Extra\</OutDir>
+    <OutDir>$(SolutionDir)bin\Debug\Extra\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
-    <OutDir>$(SolutionDir).build\vs\$(ProjectName)\lib\</OutDir>
+    <OutDir>$(SolutionDir)bin\Release\Extra\</OutDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <LanguageStandard>stdcpp20</LanguageStandard>
+      <LanguageStandard>stdcpp14</LanguageStandard>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <LanguageStandard_C>stdc17</LanguageStandard_C>
+      <LanguageStandard_C>stdc11</LanguageStandard_C>
       <BrowseInformation>true</BrowseInformation>
     </ClCompile>
     <QtUic />
     <QtUic>
-      <QtUicDir>dist\GUI\UIBuild\uic\</QtUicDir>
+      <QtUicDir>dist\UI\UIBuild\uic\</QtUicDir>
     </QtUic>
     <Bscmake>
       <PreserveSbr>true</PreserveSbr>
@@ -80,12 +80,12 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <LanguageStandard>stdcpp20</LanguageStandard>
+      <LanguageStandard>stdcpp14</LanguageStandard>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <LanguageStandard_C>stdc17</LanguageStandard_C>
+      <LanguageStandard_C>stdc11</LanguageStandard_C>
     </ClCompile>
     <QtUic />
     <QtUic>
@@ -119,36 +119,36 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="dist\Animation\API\AnimationAPI.cpp" />
+    <ClCompile Include="src\Animation\API\AnimationAPI.cpp" />
     <ClCompile Include="main\ACGDreamFrame.cpp" />
-    <ClCompile Include="dist\Animation\Animation.cpp" />
-    <ClCompile Include="dist\GUI\Components\PushButton\PushButtonStyle1.cpp" />
-    <ClCompile Include="dist\GUI\Components\ScrollArea\ScrollAreaStyle1.cpp" />
-    <ClCompile Include="dist\Animation\MoveAnimation\MoveAnimation.cpp" />
-    <ClCompile Include="dist\GUI\Settings\Settings.cpp" />
+    <ClCompile Include="src\Animation\Animation.cpp" />
+    <ClCompile Include="src\UI\Components\PushButton\PushButtonStyle1.cpp" />
+    <ClCompile Include="src\UI\Components\ScrollArea\ScrollAreaStyle1.cpp" />
+    <ClCompile Include="src\Animation\MoveAnimation\MoveAnimation.cpp" />
+    <ClCompile Include="src\UI\Settings\Settings.cpp" />
     <QtRcc Include="ACGDreamFrame.qrc" />
-    <ClCompile Include="dist\GUI\Components\Components.h" />
-    <ClCompile Include="dist\GUI\GUIMain\GUIMain.cpp" />
+    <ClCompile Include="src\UI\Components\Components.h" />
+    <ClCompile Include="src\UI\UIMain\UIMain.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="dist\GUI\GUIMain\GUIMain.h" />
+    <QtMoc Include="src\UI\UIMain\UIMain.h" />
   </ItemGroup>
   <ItemGroup>
-    <QtUic Include="dist\GUI\GUIMain\GUIMain.ui" />
-    <QtUic Include="dist\GUI\Settings\Settings.ui" />
+    <QtUic Include="src\UI\UIMain\UIMain.ui" />
+    <QtUic Include="src\UI\Settings\Settings.ui" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="buildLib\config\config.h" />
-    <ClInclude Include="dist\GUI\UIBuild\uic\ui_GUIMain.h" />
     <ClInclude Include="common\GUI\UIBuild\uic\ui_testW.h" />
     <ClInclude Include="include\ACGDreamFrameH.h" />
-    <QtMoc Include="dist\GUI\Settings\Settings.h" />
-    <QtMoc Include="dist\Animation\MoveAnimation\MoveAnimation.h" />
-    <QtMoc Include="dist\Animation\Animation.h" />
+    <ClInclude Include="src\UI\UIBuild\uic\ui_UIMain.h" />
+    <QtMoc Include="src\UI\Settings\Settings.h" />
+    <QtMoc Include="src\Animation\MoveAnimation\MoveAnimation.h" />
+    <QtMoc Include="src\Animation\Animation.h" />
     <QtMoc Include="main\ACGDreamFrame.h" />
-    <ClInclude Include="dist\Animation\API\AnimationAPI.h" />
-    <ClInclude Include="dist\GUI\Components\PushButton\PushButtonStyle1.h" />
-    <QtMoc Include="dist\GUI\Components\ScrollArea\ScrollAreaStyle1.h" />
+    <ClInclude Include="src\Animation\API\AnimationAPI.h" />
+    <ClInclude Include="src\UI\Components\PushButton\PushButtonStyle1.h" />
+    <QtMoc Include="src\UI\Components\ScrollArea\ScrollAreaStyle1.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="assets\StyleSheet\ScrollBar\ScrollBarStyle1.qss" />

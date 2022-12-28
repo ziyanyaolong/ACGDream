@@ -55,21 +55,21 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
-    <OutDir>$(SolutionDir)bin\Extra\</OutDir>
+    <OutDir>$(SolutionDir)bin\Debug\Extra\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
-    <OutDir>$(SolutionDir)ACGDream\lib\</OutDir>
+    <OutDir>$(SolutionDir)bin\Release\Extra\</OutDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile />
     <ClCompile>
-      <LanguageStandard_C>stdc17</LanguageStandard_C>
+      <LanguageStandard_C>stdc11</LanguageStandard_C>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile />
     <ClCompile>
-      <LanguageStandard>stdcpp20</LanguageStandard>
+      <LanguageStandard>stdcpp14</LanguageStandard>
       <BrowseInformation>true</BrowseInformation>
       <AdditionalIncludeDirectories>$(SolutionDir)ACGDreamLoadPlugs/include/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
@@ -77,7 +77,7 @@
       <PreserveSbr>true</PreserveSbr>
     </Bscmake>
     <Link>
-      <AdditionalLibraryDirectories>$(SolutionDir)bin\Extra\</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)bin\Debug\Extra\</AdditionalLibraryDirectories>
       <AdditionalDependencies>ACGDreamLoadPlugs.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -91,7 +91,12 @@
     <ClCompile />
     <ClCompile>
       <LanguageStandard>stdcpp20</LanguageStandard>
+      <AdditionalIncludeDirectories>$(SolutionDir)ACGDreamLoadPlugs/include/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
+    <Link>
+      <AdditionalLibraryDirectories>$(SolutionDir)bin\Release\Extra\</AdditionalLibraryDirectories>
+      <AdditionalDependencies>ACGDreamLoadPlugs.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="Configuration">
     <ClCompile>
@@ -120,20 +125,20 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <QtMoc Include="src\dist\GUI\GUI.h" />
+    <QtMoc Include="src\UI\MainUI.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\dist\main\QtRegularExpressionValidation.cpp" />
-    <ClCompile Include="src\dist\GUI\GUI.cpp" />
+    <ClCompile Include="src\main\QtRegularExpressionValidation.cpp" />
+    <ClCompile Include="src\UI\MainUI.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <QtUic Include="src\dist\GUI\GUI.ui" />
+    <QtUic Include="src\UI\MainUI.ui" />
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="src\dist\main\QtRegularExpressionValidation.h" />
+    <QtMoc Include="src\main\QtRegularExpressionValidation.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="src\dist\main\QtRegularExpressionValidation.json" />
+    <None Include="src\main\QtRegularExpressionValidation.json" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">

@@ -28,67 +28,67 @@
     </QtRcc>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="dist\GUI\GUIMain\GUIMain.cpp">
+    <ClCompile Include="src\UI\UIMain\UIMain.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="dist\GUI\Components\Components.h">
+    <ClCompile Include="src\UI\Components\Components.h">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="dist\GUI\Components\PushButton\PushButtonStyle1.cpp">
+    <ClCompile Include="src\UI\Components\PushButton\PushButtonStyle1.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="dist\GUI\Components\ScrollArea\ScrollAreaStyle1.cpp">
+    <ClCompile Include="src\UI\Components\ScrollArea\ScrollAreaStyle1.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="dist\Animation\Animation.cpp">
+    <ClCompile Include="src\Animation\Animation.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="dist\Animation\MoveAnimation\MoveAnimation.cpp">
+    <ClCompile Include="src\Animation\MoveAnimation\MoveAnimation.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="main\ACGDreamFrame.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="dist\Animation\API\AnimationAPI.cpp">
+    <ClCompile Include="src\Animation\API\AnimationAPI.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="dist\GUI\Settings\Settings.cpp">
+    <ClCompile Include="src\UI\Settings\Settings.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="dist\GUI\GUIMain\GUIMain.h">
+    <QtMoc Include="src\UI\UIMain\UIMain.h">
       <Filter>Header Files</Filter>
     </QtMoc>
-    <QtMoc Include="dist\GUI\Components\ScrollArea\ScrollAreaStyle1.h">
+    <QtMoc Include="src\UI\Components\ScrollArea\ScrollAreaStyle1.h">
       <Filter>Header Files</Filter>
     </QtMoc>
-    <QtMoc Include="dist\Animation\Animation.h">
+    <QtMoc Include="src\Animation\Animation.h">
       <Filter>Header Files</Filter>
     </QtMoc>
-    <QtMoc Include="dist\Animation\MoveAnimation\MoveAnimation.h">
+    <QtMoc Include="src\Animation\MoveAnimation\MoveAnimation.h">
       <Filter>Header Files</Filter>
     </QtMoc>
     <QtMoc Include="main\ACGDreamFrame.h">
       <Filter>Header Files</Filter>
     </QtMoc>
-    <QtMoc Include="dist\GUI\Settings\Settings.h">
+    <QtMoc Include="src\UI\Settings\Settings.h">
       <Filter>Header Files</Filter>
     </QtMoc>
   </ItemGroup>
   <ItemGroup>
-    <QtUic Include="dist\GUI\GUIMain\GUIMain.ui">
+    <QtUic Include="src\UI\UIMain\UIMain.ui">
       <Filter>Form Files</Filter>
     </QtUic>
-    <QtUic Include="dist\GUI\Settings\Settings.ui">
+    <QtUic Include="src\UI\Settings\Settings.ui">
       <Filter>Form Files</Filter>
     </QtUic>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="dist\GUI\Components\PushButton\PushButtonStyle1.h">
+    <ClInclude Include="src\UI\Components\PushButton\PushButtonStyle1.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="dist\Animation\API\AnimationAPI.h">
+    <ClInclude Include="src\Animation\API\AnimationAPI.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\ACGDreamFrameH.h">
@@ -97,10 +97,10 @@
     <ClInclude Include="buildLib\config\config.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="dist\GUI\UIBuild\uic\ui_GUIMain.h">
+    <ClInclude Include="common\GUI\UIBuild\uic\ui_testW.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="common\GUI\UIBuild\uic\ui_testW.h">
+    <ClInclude Include="src\UI\UIBuild\uic\ui_UIMain.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

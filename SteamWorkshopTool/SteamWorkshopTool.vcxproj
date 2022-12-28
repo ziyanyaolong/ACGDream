@@ -21,7 +21,6 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <PlatformToolset>v142</PlatformToolset>
-    <CharacterSet>NotSet</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
@@ -33,12 +32,12 @@
   </ImportGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="QtSettings">
     <QtInstall>5.15.2_msvc2019_64</QtInstall>
-    <QtModules>core;xml;sql;opengl;network;gui;axserver;axcontainer;svg;multimedia;uitools;widgets;winextras;multimediawidgets;3dcore;3danimation;3dextras;3dinput;3dlogic;3drender;openglextensions;serialbus;networkauth;virtualkeyboard</QtModules>
+    <QtModules>core;xml;sql;opengl;network;gui;axserver;axcontainer;svg;multimedia;uitools;widgets;winextras;multimediawidgets;3dcore;3danimation;3dextras;3dinput;3dlogic;3drender;openglextensions;networkauth;virtualkeyboard</QtModules>
     <QtBuildConfig>debug</QtBuildConfig>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'" Label="QtSettings">
     <QtInstall>5.15.2_msvc2019_64</QtInstall>
-    <QtModules>core;xml;sql;opengl;network;gui;multimedia;widgets;webchannel;websockets;multimediawidgets;openglextensions;webengine;webenginewidgets;datavisualization;networkauth;webview</QtModules>
+    <QtModules>core;xml;sql;opengl;network;gui;axserver;axcontainer;svg;multimedia;uitools;widgets;winextras;multimediawidgets;3dcore;3danimation;3dextras;3dinput;3dlogic;3drender;openglextensions;networkauth;virtualkeyboard</QtModules>
     <QtBuildConfig>release</QtBuildConfig>
   </PropertyGroup>
   <Target Name="QtMsBuildNotFound" BeforeTargets="CustomBuild;ClCompile" Condition="!Exists('$(QtMsBuild)\qt.targets') or !Exists('$(QtMsBuild)\qt.props')">
@@ -56,19 +55,20 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
-    <OutDir>$(SolutionDir)bin\Extra\</OutDir>
+    <OutDir>$(SolutionDir)bin\Debug\Extra\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
-    <OutDir>$(SolutionDir)ACGDream\lib\</OutDir>
+    <OutDir>$(SolutionDir)bin\Release\Extra\</OutDir>
+    <TargetName>$(ProjectName)</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <LanguageStandard>stdcpp20</LanguageStandard>
+      <LanguageStandard>stdcpp14</LanguageStandard>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <LanguageStandard_C>stdc17</LanguageStandard_C>
+      <LanguageStandard_C>stdc11</LanguageStandard_C>
       <BrowseInformation>true</BrowseInformation>
       <AdditionalOptions>/utf-8</AdditionalOptions>
       <AdditionalIncludeDirectories>$(SolutionDir)ACGDreamLoadPlugs/include/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -77,19 +77,24 @@
       <PreserveSbr>true</PreserveSbr>
     </Bscmake>
     <Link>
-      <AdditionalLibraryDirectories>$(SolutionDir)bin\Extra\</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)bin\Debug\Extra\</AdditionalLibraryDirectories>
       <AdditionalDependencies>ACGDreamLoadPlugs.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <LanguageStandard>stdcpp20</LanguageStandard>
+      <LanguageStandard>stdcpp14</LanguageStandard>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <LanguageStandard_C>stdc17</LanguageStandard_C>
+      <LanguageStandard_C>stdc11</LanguageStandard_C>
+      <AdditionalIncludeDirectories>$(SolutionDir)ACGDreamLoadPlugs/include/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
+    <Link>
+      <AdditionalLibraryDirectories>$(SolutionDir)bin\Release\Extra\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>ACGDreamLoadPlugs.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="Configuration">
     <ClCompile>
@@ -118,57 +123,57 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="dist\DataBase\DataBase.cpp" />
-    <ClCompile Include="dist\Downloader\Downloader.cpp" />
-    <ClCompile Include="dist\Downloader\SteamCMD\SteamCMD.cpp" />
-    <ClCompile Include="dist\GUI\Components\TrWidgetStyle1\TrWidgetStyle1.cpp" />
-    <ClCompile Include="dist\Network\WebCrawler\WebCrawler.cpp" />
-    <ClCompile Include="dist\Network\WebsiteAnalytic\WebsiteAnalytic.cpp" />
-    <ClCompile Include="dist\GUI\SWTGUI.cpp" />
-    <ClCompile Include="dist\GUI\Components\ListWidgetItemWidget\ListWidgetItemWidget.cpp" />
-    <ClCompile Include="dist\Network\ModAnalytic\ModAnalytic.cpp" />
-    <ClCompile Include="dist\StaticData\SteamGet\SteamGet.cpp" />
-    <ClCompile Include="dist\JsonOperation\JsonOperation.cpp" />
-    <ClCompile Include="dist\GUI\Components\ListWidgetItemWidget\WidgetStyle1\Widget1.cpp" />
-    <ClCompile Include="dist\LoadRes\LoadRes.cpp" />
+    <ClCompile Include="src\DataBase\DataBase.cpp" />
+    <ClCompile Include="src\Downloader\Downloader.cpp" />
+    <ClCompile Include="src\Downloader\SteamCMD\SteamCMD.cpp" />
+    <ClCompile Include="src\UI\Components\TrWidgetStyle1\TrWidgetStyle1.cpp" />
+    <ClCompile Include="src\Network\WebCrawler\WebCrawler.cpp" />
+    <ClCompile Include="src\Network\WebsiteAnalytic\WebsiteAnalytic.cpp" />
+    <ClCompile Include="src\UI\SWTUI.cpp" />
+    <ClCompile Include="src\UI\Components\ListWidgetItemWidget\ListWidgetItemWidget.cpp" />
+    <ClCompile Include="src\Network\ModAnalytic\ModAnalytic.cpp" />
+    <ClCompile Include="src\StaticData\SteamGet\SteamGet.cpp" />
+    <ClCompile Include="src\JsonOperation\JsonOperation.cpp" />
+    <ClCompile Include="src\UI\Components\ListWidgetItemWidget\WidgetStyle1\Widget1.cpp" />
+    <ClCompile Include="src\LoadRes\LoadRes.cpp" />
     <QtRcc Include="SteamWorkshopTool.qrc" />
-    <QtMoc Include="dist\main\SteamWorkshopTool.h" />
-    <ClCompile Include="dist\main\SteamWorkshopTool.cpp" />
+    <QtMoc Include="src\Main\SteamWorkshopTool.h" />
+    <ClCompile Include="src\Main\SteamWorkshopTool.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="assets\Config\AnalyticTable.json" />
-    <None Include="dist\main\SteamWorkshopTool.json" />
+    <None Include="src\Main\SteamWorkshopTool.json" />
   </ItemGroup>
   <ItemGroup>
-    <QtUic Include="dist\GUI\Components\TrWidgetStyle1\TrWidgetStyle1.ui" />
-    <QtUic Include="dist\GUI\SWTGUI.ui" />
-    <QtUic Include="dist\GUI\Components\ListWidgetItemWidget\WidgetStyle1\Widget1.ui" />
+    <QtUic Include="src\UI\Components\TrWidgetStyle1\TrWidgetStyle1.ui" />
+    <QtUic Include="src\UI\SWTUI.ui" />
+    <QtUic Include="src\UI\Components\ListWidgetItemWidget\WidgetStyle1\Widget1.ui" />
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="dist\Network\WebCrawler\WebCrawler.h" />
+    <QtMoc Include="src\Network\WebCrawler\WebCrawler.h" />
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="dist\Network\WebsiteAnalytic\WebsiteAnalytic.h" />
+    <QtMoc Include="src\Network\WebsiteAnalytic\WebsiteAnalytic.h" />
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="dist\GUI\SWTGUI.h" />
+    <QtMoc Include="src\UI\SWTUI.h" />
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="dist\DataBase\DataBase.h" />
+    <QtMoc Include="src\DataBase\DataBase.h" />
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="dist\Downloader\Downloader.h" />
-    <QtMoc Include="dist\Downloader\SteamCMD\SteamCMD.h" />
-    <QtMoc Include="dist\GUI\Components\TrWidgetStyle1\TrWidgetStyle1.h" />
-    <ClInclude Include="dist\ModDataTable\ModDataTable.h" />
-    <ClInclude Include="dist\GUI\ModSaveData\ModSaveData.h" />
-    <ClInclude Include="dist\StaticData\StaticData.h" />
-    <QtMoc Include="dist\LoadRes\LoadRes.h" />
-    <QtMoc Include="dist\GUI\Components\ListWidgetItemWidget\WidgetStyle1\Widget1.h" />
-    <QtMoc Include="dist\JsonOperation\JsonOperation.h" />
-    <QtMoc Include="dist\StaticData\SteamGet\SteamGet.h" />
-    <QtMoc Include="dist\Network\ModAnalytic\ModAnalytic.h" />
-    <QtMoc Include="dist\GUI\Components\ListWidgetItemWidget\ListWidgetItemWidget.h" />
+    <QtMoc Include="src\Downloader\Downloader.h" />
+    <QtMoc Include="src\Downloader\SteamCMD\SteamCMD.h" />
+    <QtMoc Include="src\UI\Components\TrWidgetStyle1\TrWidgetStyle1.h" />
+    <ClInclude Include="src\ModDataTable\ModDataTable.h" />
+    <ClInclude Include="src\UI\ModSaveData\ModSaveData.h" />
+    <ClInclude Include="src\StaticData\StaticData.h" />
+    <QtMoc Include="src\LoadRes\LoadRes.h" />
+    <QtMoc Include="src\UI\Components\ListWidgetItemWidget\WidgetStyle1\Widget1.h" />
+    <QtMoc Include="src\JsonOperation\JsonOperation.h" />
+    <QtMoc Include="src\StaticData\SteamGet\SteamGet.h" />
+    <QtMoc Include="src\Network\ModAnalytic\ModAnalytic.h" />
+    <QtMoc Include="src\UI\Components\ListWidgetItemWidget\ListWidgetItemWidget.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="assets\Images\NSubscription.png" />

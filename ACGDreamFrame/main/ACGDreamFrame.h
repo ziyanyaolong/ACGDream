@@ -1,8 +1,8 @@
 #pragma once
 
 #include "../include/ACGDreamFrameH.h"
-#include "../dist/GUI/GUIMain/GUIMain.h"
-#include "../dist/Animation/Animation.h"
+#include "../src/UI/UIMain/UIMain.h"
+#include "../src/Animation/Animation.h"
 
 //__declspec(dllexport) class ACGDreamFrame : public QObject
 //{
@@ -16,7 +16,7 @@
 //	~ACGDreamFrame();
 //};
 
-class ACGDreamFrame : public GUIMain
+class ACGDreamFrame : public UIMain
 {
 	Q_OBJECT
 private:
@@ -26,6 +26,6 @@ public:
 	explicit ACGDreamFrame(QMainWindow* parent = Q_NULLPTR);
 	virtual ~ACGDreamFrame();
 
-	//GUIMain* readGUI() { return guiMain; }
+	//UIMain* readUI() { return guiMain; }
 
 };

@@ -23,27 +23,27 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="src\dist\GUI\GUI.h">
+    <QtMoc Include="src\UI\MainUI.h">
       <Filter>Header Files</Filter>
     </QtMoc>
-    <QtMoc Include="src\dist\main\QtRegularExpressionValidation.h">
+    <QtMoc Include="src\main\QtRegularExpressionValidation.h">
       <Filter>Header Files</Filter>
     </QtMoc>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\dist\GUI\GUI.cpp">
+    <ClCompile Include="src\UI\MainUI.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\dist\main\QtRegularExpressionValidation.cpp">
+    <ClCompile Include="src\main\QtRegularExpressionValidation.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <QtUic Include="src\dist\GUI\GUI.ui">
+    <QtUic Include="src\UI\MainUI.ui">
       <Filter>Form Files</Filter>
     </QtUic>
   </ItemGroup>
   <ItemGroup>
-    <None Include="src\dist\main\QtRegularExpressionValidation.json" />
+    <None Include="src\main\QtRegularExpressionValidation.json" />
   </ItemGroup>
 </Project>

@@ -1,7 +1,7 @@
 #include "ACGDreamFrame.h"
 
 ACGDreamFrame::ACGDreamFrame(QMainWindow*parent)
-	: GUIMain(parent)
+	: UIMain(parent)
 {
 	show();
 }

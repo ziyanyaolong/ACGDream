@@ -16,6 +16,7 @@
 #include <QEventLoop>
 #include <QTextCodec>
 #include <QDir>
+#include <QThread>
 
 #include <ACGDreamFrameH.h>
 #include <ACGDreamLoadPlugs.h>
@@ -26,13 +27,14 @@ class ACGDream : public ACGDreamFrame
 
 private:
 	PluginReg* pluginReg;
+	QThread* pluginThread;
 
 protected:
 	virtual void closeEvent(QCloseEvent* e);
 
 public:
-	ACGDream(QMainWindow* parent = Q_NULLPTR);
-	~ACGDream();
+	explicit ACGDream(QMainWindow* parent = Q_NULLPTR);
+	virtual ~ACGDream();
 
 public slots:
 	void initDirs(QString name = "");
