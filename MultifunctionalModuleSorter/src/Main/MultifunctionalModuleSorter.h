@@ -12,7 +12,7 @@ class _declspec(dllexport) MultifunctionalModuleSorter : public PluginCalInterfa
 		RegPlugin("MultifunctionalModuleSorter.json")
 
 public:
-    MultifunctionalModuleSorter();
+    explicit MultifunctionalModuleSorter();
     virtual ~MultifunctionalModuleSorter();
 
     virtual QWidget* createMainUI() override { return new MainUI(); }

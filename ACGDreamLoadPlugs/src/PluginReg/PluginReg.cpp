@@ -1,20 +1,16 @@
 #include "PluginReg.h"
 
-PluginReg::PluginReg(QObject *parent)
+PluginReg::PluginReg(QObject* parent)
 	: QObject(parent)
 {
-	connect(this, &PluginReg::loadAllPlugins, this, &PluginReg::loadAllPluginsProcess);
-	connect(this, &PluginReg::unloadAllPlugins, this, &PluginReg::unloadAllPluginsProcess);
-	connect(this, &PluginReg::loadPlugin, this, &PluginReg::loadPluginProcess);
-	connect(this, &PluginReg::unloadPlugin, this, &PluginReg::unloadPluginProcess);
 }
 
 PluginReg::~PluginReg()
 {
-	unloadAllPluginsProcess();
+	unloadAllPlugins();
 }
 
-void PluginReg::unloadAllPluginsProcess()
+void PluginReg::unloadAllPlugins()
 {
 	for (auto plugin = plugins.begin(); plugin != plugins.end(); plugin++)
 	{
@@ -33,18 +29,11 @@ void PluginReg::unloadAllPluginsProcess()
 	plugins.clear();
 }
 
-bool PluginReg::unloadPluginProcess(const QString& pluginName)
+bool PluginReg::unloadPlugin(const QString& pluginName)
 {
 	auto tempPlugin = plugins.find(pluginName);
 	if (tempPlugin != plugins.end())
 	{
-		auto tempPluginWidget = pluginWidgetList.find(tempPlugin.value());
-		if (tempPluginWidget != pluginWidgetList.end())
-		{
-			emit this->removeUISignal(tempPluginWidget.value());
-			pluginWidgetList.erase(tempPluginWidget);
-		}
-
 		tempPlugin.value()->unload();
 		tempPlugin.value()->deleteLater();
 		plugins.erase(tempPlugin);
@@ -55,11 +44,19 @@ bool PluginReg::unloadPluginProcess(const QString& pluginName)
 }
 
 
-bool PluginReg::loadPluginProcess(const QString& filePath)
+bool PluginReg::loadPlugin(const QString& filePath)
 {
 	QPluginLoader* pluginLoader = new QPluginLoader(filePath, this);
 	QString name(pluginLoader->fileName());
 	name = name.mid(name.lastIndexOf("/") + QString("/").size(), name.indexOf(".dll") - name.lastIndexOf("/") - QString("/").size());
+
+	if (plugins.find(name) != plugins.end())
+	{
+		this->loadError(filePath, QString("已加载此插件,请勿重复加载!"));
+		pluginLoader->deleteLater();
+		return false;
+	}
+
 	emit this->loading(name);
 
 	PluginCalInterface* plugin = nullptr;
@@ -79,38 +76,34 @@ bool PluginReg::loadPluginProcess(const QString& filePath)
 		return false;
 	}
 
-	connect(plugin, &PluginCalInterface::regMainUIS, this, [&]() {
-		emit this->regPluginMainUI((PluginCalInterface*)(sender()));
-		});
-
-	connect(this, &PluginReg::backPluginMainUI, plugin, &PluginCalInterface::backPluginMainUI);
-
 	if (!pluginLoader->isLoaded())
 	{
 		this->loadError(filePath, pluginLoader->errorString());
 		return false;
-	}else if (plugin) {
-		if (plugins.count(name) <= 0)
-		{
-			plugins[name] = pluginLoader;
+	}
+	else if (plugin) {
+		plugin->setPluginLoader(pluginLoader);
 
-			QT_TRY
-			{
-				plugin->pRun();
-			}
-				QT_CATCH(QException e)
-			{
-				this->loadError(filePath, QString(e.what()));
-				return false;
-			}
-			QT_CATCH(...)
-			{
-				this->loadError(filePath, pluginLoader->errorString());
-				return false;
-			}
-		}
-		else
+		connect(plugin, &PluginCalInterface::regMainUIS, this, [&]() {
+			emit this->regPluginMainUI((PluginCalInterface*)(sender()));
+			});
+
+		connect(plugin, &PluginCalInterface::deleteMainUI, this, &PluginReg::removeUISignal);
+
+		plugins[name] = pluginLoader;
+
+		QT_TRY
 		{
+			plugin->pRun();
+		}
+			QT_CATCH(QException e)
+		{
+			this->loadError(filePath, QString(e.what()));
+			return false;
+		}
+		QT_CATCH(...)
+		{
+			this->loadError(filePath, pluginLoader->errorString());
 			return false;
 		}
 	}
@@ -125,9 +118,9 @@ bool PluginReg::loadPluginProcess(const QString& filePath)
 	return true;
 }
 
-bool PluginReg::loadAllPluginsProcess(const QString& dirPath)
+bool PluginReg::loadAllPlugins(const QString& dirPath)
 {
-	unloadAllPluginsProcess();
+	unloadAllPlugins();
 	QDir pluginsDir(dirPath);
 
 	QStringList filters;
@@ -138,7 +131,7 @@ bool PluginReg::loadAllPluginsProcess(const QString& dirPath)
 
 	foreach(QString fileName, pluginsDir.entryList(QDir::Files))
 	{
-		if (loadPluginProcess(dirPath + "/" + fileName))
+		if (loadPlugin(dirPath + "/" + fileName))
 		{
 			isLoad = true;
 		}
@@ -155,22 +148,9 @@ bool PluginReg::loadAllPluginsProcess(const QString& dirPath)
 	}
 }
 
-void PluginReg::regMainUIProcess(QWidget* mainWidget)
+void PluginReg::backPluginMainUI(PluginCalInterface* plugin, QWidget* mainWidget)
 {
-	auto tempSender = (const QPluginLoader*)(sender());
+	auto tempPluginLoader = (plugin->getPluginLoader());
 
-	auto tempPluginWidget = pluginWidgetList.find(tempSender);
-
-	if (tempPluginWidget == pluginWidgetList.end())
-	{
-		pluginWidgetList[tempSender] = mainWidget;
-	}
-	else
-	{
-		if (tempPluginWidget.value() != nullptr)
-		{
-			tempPluginWidget.value() = mainWidget;
-		}
-		tempPluginWidget.value() = mainWidget;
-	}
+	emit plugin->backPluginMainUI(mainWidget);
 }

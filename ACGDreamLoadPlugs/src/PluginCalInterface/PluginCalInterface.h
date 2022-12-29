@@ -14,6 +14,7 @@ Q_PLUGIN_METADATA(IID PluginCalInterface_iid FILE fileName)	\
 #include <QThread>
 #include <QWidget>
 #include <QEventLoop>
+#include <QPluginLoader>
 
 class ACGDream;
 class PluginCalInterface : public QObject
@@ -22,9 +23,14 @@ class PluginCalInterface : public QObject
 
 private:
 	friend class PluginReg;
+
 	const ACGDream* _acgDream = nullptr;
 	bool separateThread = false;
 	QWidget* mainUI = nullptr;
+	QPluginLoader* pluginLoaderObject = nullptr;
+
+	inline void setPluginLoader(QPluginLoader* pluginLoader) { pluginLoaderObject = pluginLoader; }
+	inline QPluginLoader* getPluginLoader() { return pluginLoaderObject; }
 
 protected slots:
 	virtual void pRun() = 0;
@@ -34,11 +40,16 @@ protected:
 
 	inline bool setSeparateThread(bool choice) { separateThread = choice; }
 	inline QWidget* getMainUI() { return mainUI; }
-	inline void regMainUI() { QEventLoop e; emit this->regMainUIS(); connect(this, &PluginCalInterface::quitRegMainUILock, &e, &QEventLoop::quit); e.exec(); }
-
+	inline void regMainUI() { QEventLoop e(this); emit this->regMainUIS(); connect(this, &PluginCalInterface::quitRegMainUILock, &e, &QEventLoop::quit); e.exec(QEventLoop::WaitForMoreEvents); }
+	
 public:
 	virtual ~PluginCalInterface()
 	{
+		if (mainUI)
+		{
+			emit deleteMainUI(mainUI);
+			mainUI = nullptr;
+		}
 	}
 
 	inline const ACGDream* getACGDream() { return _acgDream; }
@@ -51,6 +62,7 @@ public:
 signals:
 	void regMainUIS();
 	void quitRegMainUILock();
+	void deleteMainUI(QWidget* widget);
 
 public slots:
 	void backPluginMainUI(QWidget* widget) { mainUI = widget; emit quitRegMainUILock(); }

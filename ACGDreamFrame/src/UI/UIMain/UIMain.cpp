@@ -19,7 +19,7 @@ void UIMain::clearAllWidget()
 	{
 		auto tempWidget = i.value();
 		auto tempPushButton = i.key();
-		if (tempPushButton && tempWidget)
+		if (tempPushButton || tempWidget)
 		{
 			if (tempWidget)
 			{
@@ -29,11 +29,15 @@ void UIMain::clearAllWidget()
 				tempWidget->deleteLater();
 				tempWidget = nullptr;
 			}
-			QObject::disconnect(tempPushButton);
-			tempPushButton->hide();
-			tempPushButton->close();
-			tempPushButton->deleteLater();
-			tempPushButton = nullptr;
+
+			if (tempPushButton)
+			{
+				QObject::disconnect(tempPushButton);
+				tempPushButton->hide();
+				tempPushButton->close();
+				tempPushButton->deleteLater();
+				tempPushButton = nullptr;
+			}
 		}
 	}
 	pushButtonMap.clear();
@@ -81,6 +85,12 @@ QPushButton* UIMain::addWidght(QWidget* widget)
 	}
 
 	PushButtonStyle1* pushButton = new PushButtonStyle1(ui.splitter);
+
+	if (pushButton == nullptr)
+	{
+		return nullptr;
+	}
+
 	//QPropertyAnimation* pPosAnimation1 = new QPropertyAnimation(pushButton, "pos", ui.splitter);
 	pushButton->setMinimumHeight(50);
 	pushButton->setMinimumWidth(80);
@@ -88,7 +98,7 @@ QPushButton* UIMain::addWidght(QWidget* widget)
 	pushButton->show();
 	widget->hide();
 	widget->setParent(ui.widget_3);
-	pushButtonMap[pushButton] = widget;
+	pushButtonMap.insert(pushButton, widget);
 	if (widgetList.count(widget) <= 0)
 	{
 		widgetList.push_back(widget);
@@ -161,6 +171,7 @@ bool UIMain::removeWidght(const QWidget* widget)
 			tempPushButton->close();
 			tempPushButton->deleteLater();
 			tempPushButton = nullptr;
+			pushButtonMap.erase(i);
 			return true;
 		}
 	}

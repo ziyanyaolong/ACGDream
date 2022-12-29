@@ -19,13 +19,8 @@ ACGDream::ACGDream(QMainWindow* parent)
 
 	setBackground(QImage(QCoreApplication::applicationDirPath() + "/BG.png"));
 
-	connect(pluginReg, &PluginReg::addUISignal, this, [&](QWidget* gui) {
-		this->addWidght(gui);
-		gui->hide();
-		},Qt::QueuedConnection);
-
-	connect(pluginReg, &PluginReg::removeUISignal, this, [&](QWidget* gui) {
-		this->removeWidght(gui);
+	connect(pluginReg, &PluginReg::removeUISignal, this, [&](QWidget* widget) {
+		this->removeWidght(widget);
 		}, Qt::QueuedConnection);
 
 	connect(pluginReg, &PluginReg::loading, this, [&](QString name) {
@@ -40,11 +35,19 @@ ACGDream::ACGDream(QMainWindow* parent)
 		QWidget* pTempWidget = plugin->createMainUI();
 		if (this->addWidght(pTempWidget) == nullptr)
 		{
-			emit pluginReg->backPluginMainUI(nullptr);
+			QMetaObject::invokeMethod(pluginReg,
+				"backPluginMainUI",
+				Qt::QueuedConnection,
+				Q_ARG(PluginCalInterface*, plugin),
+				Q_ARG(QWidget*, nullptr));
 		}
 		else
 		{
-			emit pluginReg->backPluginMainUI(pTempWidget);
+			QMetaObject::invokeMethod(pluginReg,
+				"backPluginMainUI",
+				Qt::QueuedConnection,
+				Q_ARG(PluginCalInterface*, plugin),
+				Q_ARG(QWidget*, pTempWidget));
 		}
 		});
 
@@ -54,9 +57,15 @@ ACGDream::ACGDream(QMainWindow* parent)
 		{
 			return;
 		}
+
 		actionsSet->setEnabled(false);
 		this->clearAllWidget();
-		emit pluginReg->loadAllPlugins(QCoreApplication::applicationDirPath() + "/Extra");
+
+		QMetaObject::invokeMethod(pluginReg,
+			"loadAllPlugins",
+			Qt::QueuedConnection,
+			Q_ARG(const QString&, QCoreApplication::applicationDirPath() + "/Extra"));
+
 		actionsSet->setEnabled(true);
 		});
 
