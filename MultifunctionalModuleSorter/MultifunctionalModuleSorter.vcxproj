@@ -125,7 +125,11 @@
   <ItemGroup>
     <QtRcc Include="MultifunctionalModuleSorter.qrc" />
     <QtMoc Include="src\Main\MultifunctionalModuleSorter.h" />
-    <ClCompile Include="src\UI\Components\Blocks\RectangleBlock\RectangleBlock.cpp" />
+    <ClCompile Include="src\UI\Components\BlockComponents\BlockManager\BlockManager.cpp" />
+    <ClCompile Include="src\UI\Components\BlockComponents\Blocks\BlockObject\BlockObject.cpp" />
+    <ClCompile Include="src\UI\Components\BlockComponents\Blocks\RectangleBlock\RectangleBlock.cpp" />
+    <ClCompile Include="src\UI\Components\BlockComponents\BlockWidgetBar\BlockItemWidget\Style\0\ItemWidgetStyle0.cpp" />
+    <ClCompile Include="src\UI\Components\BlockComponents\BlockWidgetBar\BlockWidgetBar.cpp" />
     <ClCompile Include="src\UI\Components\DesignComponentObject\DesignComponentObject.cpp" />
     <ClCompile Include="src\UI\Components\DesignWidget\DesignWidget.cpp" />
     <ClCompile Include="src\UI\UIMain\MainUI.cpp" />
@@ -138,7 +142,9 @@
     <QtMoc Include="src\UI\UIMain\MainUI.h" />
   </ItemGroup>
   <ItemGroup>
-    <QtUic Include="src\UI\Components\Blocks\RectangleBlock\RectangleBlock.ui" />
+    <QtUic Include="src\UI\Components\BlockComponents\Blocks\RectangleBlock\RectangleBlock.ui" />
+    <QtUic Include="src\UI\Components\BlockComponents\BlockWidgetBar\BlockItemWidget\Style\0\ItemWidgetStyle0.ui" />
+    <QtUic Include="src\UI\Components\BlockComponents\BlockWidgetBar\BlockWidgetBar.ui" />
     <QtUic Include="src\UI\Components\DesignWidget\DesignWidget.ui" />
     <QtUic Include="src\UI\UIMain\MainUI.ui" />
   </ItemGroup>
@@ -149,7 +155,19 @@
     <QtMoc Include="src\UI\Components\DesignComponentObject\DesignComponentObject.h" />
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="src\UI\Components\Blocks\RectangleBlock\RectangleBlock.h" />
+    <QtMoc Include="src\UI\Components\BlockComponents\Blocks\RectangleBlock\RectangleBlock.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="src\UI\Components\BlockComponents\BlockWidgetBar\BlockWidgetBar.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="src\UI\Components\BlockComponents\BlockManager\BlockManager.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="src\UI\Components\BlockComponents\Blocks\BlockObject\BlockObject.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="src\UI\Components\BlockComponents\BlockWidgetBar\BlockItemWidget\Style\0\ItemWidgetStyle0.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">

@@ -46,7 +46,7 @@
     <ClCompile Include="src\Animation\MoveAnimation\MoveAnimation.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="main\ACGDreamFrame.cpp">
+    <ClCompile Include="src\main\ACGDreamFrame.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Animation\API\AnimationAPI.cpp">
@@ -69,7 +69,7 @@
     <QtMoc Include="src\Animation\MoveAnimation\MoveAnimation.h">
       <Filter>Header Files</Filter>
     </QtMoc>
-    <QtMoc Include="main\ACGDreamFrame.h">
+    <QtMoc Include="src\main\ACGDreamFrame.h">
       <Filter>Header Files</Filter>
     </QtMoc>
     <QtMoc Include="src\UI\Settings\Settings.h">

@@ -46,7 +46,19 @@
     <ClCompile Include="src\UI\Components\DesignComponentObject\DesignComponentObject.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\UI\Components\Blocks\RectangleBlock\RectangleBlock.cpp">
+    <ClCompile Include="src\UI\Components\BlockComponents\Blocks\RectangleBlock\RectangleBlock.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\UI\Components\BlockComponents\BlockWidgetBar\BlockWidgetBar.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\UI\Components\BlockComponents\BlockManager\BlockManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\UI\Components\BlockComponents\Blocks\BlockObject\BlockObject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\UI\Components\BlockComponents\BlockWidgetBar\BlockItemWidget\Style\0\ItemWidgetStyle0.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -60,7 +72,19 @@
     <QtMoc Include="src\UI\Components\DesignComponentObject\DesignComponentObject.h">
       <Filter>Header Files</Filter>
     </QtMoc>
-    <QtMoc Include="src\UI\Components\Blocks\RectangleBlock\RectangleBlock.h">
+    <QtMoc Include="src\UI\Components\BlockComponents\Blocks\RectangleBlock\RectangleBlock.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="src\UI\Components\BlockComponents\BlockWidgetBar\BlockWidgetBar.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="src\UI\Components\BlockComponents\BlockManager\BlockManager.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="src\UI\Components\BlockComponents\Blocks\BlockObject\BlockObject.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="src\UI\Components\BlockComponents\BlockWidgetBar\BlockItemWidget\Style\0\ItemWidgetStyle0.h">
       <Filter>Header Files</Filter>
     </QtMoc>
   </ItemGroup>
@@ -71,7 +95,13 @@
     <QtUic Include="src\UI\Components\DesignWidget\DesignWidget.ui">
       <Filter>Form Files</Filter>
     </QtUic>
-    <QtUic Include="src\UI\Components\Blocks\RectangleBlock\RectangleBlock.ui">
+    <QtUic Include="src\UI\Components\BlockComponents\Blocks\RectangleBlock\RectangleBlock.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="src\UI\Components\BlockComponents\BlockWidgetBar\BlockWidgetBar.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="src\UI\Components\BlockComponents\BlockWidgetBar\BlockItemWidget\Style\0\ItemWidgetStyle0.ui">
       <Filter>Form Files</Filter>
     </QtUic>
   </ItemGroup>

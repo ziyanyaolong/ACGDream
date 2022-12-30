@@ -22,6 +22,135 @@ void DesignWidget::paintEvent(QPaintEvent* event)
 	QWidget::paintEvent(event);
 }
 
+bool DesignWidget::dragDropUIStart(QMouseEvent* event)
+{
+	QWidget* child = childAt(event->pos());
+
+	if (child == nullptr)
+	{
+		return false;
+	}
+
+	DragDropUIData ddd;
+	ddd.pWidget = child;
+	ddd.hotSpot = event->pos() - child->pos();
+	ddd.offset = ddd.hotSpot;
+	QByteArray itemData;
+	itemData.append(QString::number((qulonglong)(&ddd)));
+
+	QDrag* drag = new QDrag(this);
+	QMimeData* mimeData = new QMimeData();
+
+	mimeData->setData("dd/data", itemData);
+
+	//QPixmap pixmap(QPixmap::fromImage(child->grab().toImage()));
+
+	//drag->setPixmap(pixmap);
+	drag->setHotSpot(ddd.hotSpot);
+	drag->setMimeData(mimeData);
+	drag->exec();
+	drag->deleteLater();
+	mimeData->deleteLater();
+
+	return true;
+}
+
+bool DesignWidget::dragDropUIMove(QDragMoveEvent* event)
+{
+	if (event->mimeData()->hasFormat("dd/data"))
+	{
+		event->setDropAction(Qt::MoveAction);
+
+		DragDropUIData* ddd = (DragDropUIData*)(event->mimeData()->data("dd/data").toULongLong());
+		ddd->pWidget->move(event->pos() - ddd->offset);
+		ddd->offset = QPoint(event->pos() - ddd->pWidget->pos());
+
+		event->accept();
+		return true;
+	}
+	else
+	{
+		event->ignore();
+		return false;
+	}
+}
+
+bool DesignWidget::dragDropUIEnd(QDropEvent* event)
+{
+	if (event->mimeData()->hasFormat("dd/data"))
+	{
+		event->setDropAction(Qt::MoveAction); //c.移动操作
+		DragDropUIData* ddd = (DragDropUIData*)(event->mimeData()->data("dd/data").toULongLong());
+		ddd->pWidget->move(event->pos() - ddd->offset);
+		ddd->offset = QPoint(event->pos() - ddd->pWidget->pos());
+
+		event->accept();
+		return true;
+	}
+	else
+	{
+		event->ignore();
+		return false;
+	}
+}
+
+void DesignWidget::allWidgetMove(WidgetMoveData& wmd)
+{
+	auto list = this->children();
+	foreach (QObject* pObject, list)
+	{
+		QWidget* pWidget = static_cast<QWidget*>(pObject);
+		if (pWidget == nullptr)
+		{
+			continue;
+		}
+		pWidget->move(pWidget->pos() + (wmd.newPoint - wmd.oldPoint));
+	}
+}
+
+void DesignWidget::allWidgetZoom(WidgetZoomData& wzd)
+{
+	auto list = this->children();
+	foreach(QObject * pObject, list)
+	{
+		QWidget* pWidget = static_cast<QWidget*>(pObject);
+		if (pWidget == nullptr)
+		{
+			continue;
+		}
+
+		if (wzd.flag)
+		{
+			if (wzd.zoomCount < wzd.zoomCountMax)
+			{
+				pWidget->resize(pWidget->size() * wzd.zoomInMultiple);
+			}
+		}
+		else
+		{
+			if (wzd.zoomCount > (-wzd.zoomCountMax))
+			{
+				pWidget->resize(pWidget->size() * wzd.zoomOutMultiple);
+			}
+		}
+	}
+
+	if (wzd.flag)
+	{
+		if (wzd.zoomCount < wzd.zoomCountMax)
+		{
+			wzd.zoomCount++;
+		}
+	}
+	else
+	{
+		if (wzd.zoomCount > (-wzd.zoomCountMax))
+		{
+			wzd.zoomCount--;
+		}
+	}
+}
+
 void DesignWidget::addEventFilterAllWidget()
 {
 	auto list = findChildren<QObject*>();
@@ -38,39 +167,36 @@ bool DesignWidget::eventFilter(QObject* object, QEvent* event)
 
 void DesignWidget::mousePressEvent(QMouseEvent* event)
 {
-	if (event->buttons() & Qt::LeftButton)
+	switch (event->buttons())
 	{
-		QWidget* child = childAt(event->pos());
+	case Qt::LeftButton:
+		this->dragDropUIStart(event);
+		break;
 
-		if (child == nullptr)
-		{
-			return;
-		}
+	case Qt::MiddleButton:
+		wmd.flag = true;
+		wmd.oldPoint = event->pos();
+		break;
 
-		QString addr = QString::number((qulonglong)(child));
-		QByteArray itemData;
-		QDataStream dataStream(&itemData, QIODevice::WriteOnly);
-		dataStream << addr << QPoint(event->pos() - child->pos());
-
-		QDrag* drag = new QDrag(this);
-		QMimeData* mimeData = new QMimeData();
-
-		mimeData->setData("dd/data", itemData);
-
-		QPixmap pixmap(QPixmap::fromImage(child->grab().toImage()));
-
-		drag->setPixmap(pixmap);
-		drag->setHotSpot(QPoint(20, 30));
-		drag->setMimeData(mimeData);
-		drag->exec();
+	default:
+		break;
 	}
+
 	QWidget::mousePressEvent(event);
 }
 
 void DesignWidget::mouseReleaseEvent(QMouseEvent* event)
 {
-	if (event->buttons() & Qt::LeftButton)
+	//if (wmd.flag)
+	//{
+	//	wmd.flag = false;
+	//	wmd.newPoint = event->pos();
+	//	this->allWidgetMove(wmd.oldPoint, wmd.newPoint);
+	//}
+
+	if (wmd.flag)
 	{
+		wmd.flag = false;
 	}
 
 	QWidget::mouseReleaseEvent(event);
@@ -83,52 +209,66 @@ void DesignWidget::mouseDoubleClickEvent(QMouseEvent* event)
 
 void DesignWidget::mouseMoveEvent(QMouseEvent* event)
 {
-	if (event->buttons() & Qt::LeftButton)
+	switch (event->buttons())
 	{
-		
+	case Qt::LeftButton:
+		this->dragDropUIStart(event);
+		break;
+
+	case Qt::MiddleButton:
+		if (wmd.flag)
+		{
+			wmd.newPoint = event->pos();
+			this->allWidgetMove(wmd);
+			wmd.oldPoint = wmd.newPoint;
+		}
+		break;
+
+	default:
+		break;
 	}
+	
 
 	QWidget::mouseMoveEvent(event);
 }
 
+void DesignWidget::wheelEvent(QWheelEvent* event)
+{
+	if ((event->buttons() == Qt::LeftButton) || (event->buttons() == Qt::RightButton))
+	{
+		QWidget::wheelEvent(event);
+		return;
+	}
+
+	if (event->delta() > 0) {
+		wzd.flag = true;
+		this->allWidgetZoom(wzd);
+	}
+	else
+	{
+		wzd.flag = false;
+		this->allWidgetZoom(wzd);
+	}
+
+	QWidget::wheelEvent(event);
+}
+
 void DesignWidget::dragEnterEvent(QDragEnterEvent* event)
 {
-	/*if (event->source() == this)
-		event->ignore();
-	else*/
-	event->accept();
+	this->dragDropUIMove(event);
 }
 
 void DesignWidget::dragLeaveEvent(QDragLeaveEvent* event)
 {
-	//QWidget::dragLeaveEvent(event);
 	QWidget::dragLeaveEvent(event);
 }
 
 void DesignWidget::dragMoveEvent(QDragMoveEvent* event)
 {
-	QWidget::dragMoveEvent(event);
+	this->dragDropUIMove(static_cast<QDragMoveEvent*>(event));
 }
 
 void DesignWidget::dropEvent(QDropEvent* event)
 {
-	if (event->mimeData()->hasFormat("dd/data"))
-	{
-		QByteArray itemData = event->mimeData()->data("dd/data");
-		QDataStream dataStream(&itemData, QIODevice::ReadOnly);
-		QString addr;
-		QPoint offset;
-		dataStream >> addr >> offset;;
-
-		QWidget* pWidget = (QWidget*)(addr.toULongLong());
-
-		pWidget->move(event->pos()-offset);
-		
-		event->setDropAction(Qt::MoveAction); //c.移动操作
-		event->accept();
-	}
-	else
-	{
-		event->ignore();
-	}
+	this->dragDropUIEnd(event);
 }

@@ -12,7 +12,7 @@ class MainUI : public QWidget
 public:
 	MainUI(QWidget *parent = nullptr);
 	virtual ~MainUI();
-	RectangleBlock b;
+	//RectangleBlock b;
 
 private:
 	Ui::MainUI ui;

@@ -1,3 +1,1 @@
-#pragma once
-
-#include "../main/ACGDreamFrame.h"
+#include "../src/main/ACGDreamFrame.h"

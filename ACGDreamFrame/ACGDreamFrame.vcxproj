@@ -120,7 +120,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\Animation\API\AnimationAPI.cpp" />
-    <ClCompile Include="main\ACGDreamFrame.cpp" />
+    <ClCompile Include="src\main\ACGDreamFrame.cpp" />
     <ClCompile Include="src\Animation\Animation.cpp" />
     <ClCompile Include="src\UI\Components\PushButton\PushButtonStyle1.cpp" />
     <ClCompile Include="src\UI\Components\ScrollArea\ScrollAreaStyle1.cpp" />
@@ -144,7 +144,7 @@
     <QtMoc Include="src\UI\Settings\Settings.h" />
     <QtMoc Include="src\Animation\MoveAnimation\MoveAnimation.h" />
     <QtMoc Include="src\Animation\Animation.h" />
-    <QtMoc Include="main\ACGDreamFrame.h" />
+    <QtMoc Include="src\main\ACGDreamFrame.h" />
     <ClInclude Include="src\Animation\API\AnimationAPI.h" />
     <ClInclude Include="src\UI\Components\PushButton\PushButtonStyle1.h" />
     <QtMoc Include="src\UI\Components\ScrollArea\ScrollAreaStyle1.h" />

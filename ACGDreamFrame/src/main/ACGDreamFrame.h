@@ -1,8 +1,8 @@
 #pragma once
 
-#include "../include/ACGDreamFrameH.h"
-#include "../src/UI/UIMain/UIMain.h"
-#include "../src/Animation/Animation.h"
+#include "../../include/ACGDreamFrameH.h"
+#include "../UI/UIMain/UIMain.h"
+#include "../Animation/Animation.h"
 
 //__declspec(dllexport) class ACGDreamFrame : public QObject
 //{
