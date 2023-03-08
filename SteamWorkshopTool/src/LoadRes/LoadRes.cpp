@@ -129,7 +129,7 @@ bool LoadRes::initJson()
 			continue;
 		}
 
-		JsonOperation json(file.readAll(), this);
+		ACGDREAM_DL::JsonOperation json(file.readAll(), this);
 
 		SteamGet::instance()->addData(json.analyticAll());
 	}

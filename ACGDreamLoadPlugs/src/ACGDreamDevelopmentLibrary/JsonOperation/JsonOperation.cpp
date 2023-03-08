@@ -1,34 +1,42 @@
 #include "JsonOperation.h"
 
-JsonOperation::JsonOperation(const QString& str, QObject *parent)
+ACGDREAM_DL::JsonOperation::JsonOperation(const QString& str, QObject *parent)
 	: QObject(parent)
 {
 	json = str;
 }
 
-JsonOperation::~JsonOperation()
+ACGDREAM_DL::JsonOperation::~JsonOperation()
 {
 	
 }
 
-QString JsonOperation::toString(const QJsonValue& value)
+bool ACGDREAM_DL::JsonOperation::JsonDocumentSet(QJsonDocument& jsonDocument, QJsonParseError& jsonParserError)
 {
-    if (value.isBool())
+    if (!this->json.isEmpty())
     {
-        return QString::number(value.toBool());
+        jsonDocument = QJsonDocument::fromJson(json.toLocal8Bit(), &jsonParserError);
     }
-    else if (value.isDouble())
+    else if (this->jsonObject != nullptr)
     {
-        return QString::number(value.toDouble());
+        jsonDocument.setObject(*(this->jsonObject));
     }
-    return value.toString();
+    else
+    {
+        return false;
+    }
+
+    return true;
 }
 
-QMap<QString, QString> JsonOperation::analytic(const QString& key)
+QVariantMap ACGDREAM_DL::JsonOperation::analytic(const QString& key)
 {
-    QMap<QString, QString> list;
+    QVariantMap list;
     QJsonParseError jsonParserError;
-    QJsonDocument jsonDocument = QJsonDocument::fromJson(json.toLocal8Bit(), &jsonParserError);
+    QJsonDocument jsonDocument;
+    
+    this->JsonDocumentSet(jsonDocument, jsonParserError);
+    
     if (!(!jsonDocument.isNull() && jsonParserError.error == QJsonParseError::NoError))
     {
         error = jsonParserError.error;
@@ -75,7 +83,7 @@ QMap<QString, QString> JsonOperation::analytic(const QString& key)
         if (object.contains(keyStr))
         {
             QJsonValue value = object.value(keyStr);
-            QString strName = toString(value);
+            QString strName = value.toString();
             list[key] = strName;
         }
     }
@@ -85,16 +93,19 @@ QMap<QString, QString> JsonOperation::analytic(const QString& key)
     if(error != QJsonParseError::NoError)
         emit this->errorAnalytic(error);
 
-    return list;
+	return list;
 }
 
-QMap<QString, QString> JsonOperation::analyticAll()
+QVariantMap ACGDREAM_DL::JsonOperation::analyticAll()
 {
     QJsonObject::Iterator it;
     QJsonParseError jsonParserError;
-    QJsonDocument jsonDocument = QJsonDocument::fromJson(json.toLocal8Bit(), &jsonParserError);
+    QJsonDocument jsonDocument;
+
+	this->JsonDocumentSet(jsonDocument, jsonParserError);
+
     QJsonObject object = jsonDocument.object();
-    QMap<QString, QString> list;
+    QVariantMap list;
     QMap<QString, QJsonObject> listValue1;
     QMap<QString, QJsonObject> listValue2;
 
@@ -103,10 +114,10 @@ QMap<QString, QString> JsonOperation::analyticAll()
         if (it.value().isObject())
         {
             listValue1[QString(it.key() + ".")] = it.value().toObject();
-        }
+		}
         else
         {
-            list[it.key()] = toString(it.value());
+            list[it.key()] = it.value().toString();
         }
         
     }
@@ -124,7 +135,7 @@ QMap<QString, QString> JsonOperation::analyticAll()
                 }
                 else
                 {
-                    list[i.key() + it.key()] = toString(it.value());
+                    list[i.key() + it.key()] = it.value().toString();
                 }
             }
         }
@@ -141,13 +152,13 @@ QMap<QString, QString> JsonOperation::analyticAll()
     return list;
 }
 
-QString JsonOperation::analyticBackKey(const QString& key, unsigned int pos)
+QVariant ACGDREAM_DL::JsonOperation::analyticBackKey(const QString& key, unsigned int pos)
 {
-    QMap<QString, QString> tempList = analytic(key);
-    QMap<QString, QString>::iterator i = tempList.begin();
+    QVariantMap tempList = analytic(key);
+    QVariantMap::iterator i = tempList.begin();
     if (tempList.size() <= 0)
     {
-        return "";
+        return QVariant();
     }
     else if (pos < tempList.size())
     {
@@ -157,13 +168,13 @@ QString JsonOperation::analyticBackKey(const QString& key, unsigned int pos)
     return i.key();
 }
 
-QString JsonOperation::analyticBackValue(const QString& key, unsigned int pos)
+QVariant ACGDREAM_DL::JsonOperation::analyticBackValue(const QString& key, unsigned int pos)
 {
-    QMap<QString, QString> tempList = analytic(key);
-    QMap<QString, QString>::iterator i = tempList.begin();
+    QVariantMap tempList = analytic(key);
+    QVariantMap::iterator i = tempList.begin();
     if (tempList.size() <= 0)
     {
-        return "";
+        return QVariant();
     }
     else if(pos < tempList.size() - 1)
     {
@@ -175,9 +186,9 @@ QString JsonOperation::analyticBackValue(const QString& key, unsigned int pos)
 }
 
 template <typename ... T>
-QMap<QString, QString> JsonOperation::analytics(const QString& key, const T& ... keys)
+QVariantMap ACGDREAM_DL::JsonOperation::analytics(const QString& key, const T& ... keys)
 {
-    QMap<QString, QString> list = analytic(key);
-    list.insert(analytic(keys...));
-    return list;
+    QVariantMap jsonMap = analytic(key);
+    jsonMap.insert(analytic(keys...));
+    return jsonMap;
 }

@@ -59,9 +59,6 @@
     <QtMoc Include="src\StaticData\SteamGet\SteamGet.h">
       <Filter>Header Files</Filter>
     </QtMoc>
-    <QtMoc Include="src\JsonOperation\JsonOperation.h">
-      <Filter>Header Files</Filter>
-    </QtMoc>
     <QtMoc Include="src\UI\Components\ListWidgetItemWidget\WidgetStyle1\Widget1.h">
       <Filter>Header Files</Filter>
     </QtMoc>
@@ -109,9 +106,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\StaticData\SteamGet\SteamGet.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\JsonOperation\JsonOperation.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\UI\Components\ListWidgetItemWidget\WidgetStyle1\Widget1.cpp">

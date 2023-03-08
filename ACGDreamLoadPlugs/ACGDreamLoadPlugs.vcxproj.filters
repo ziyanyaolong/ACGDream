@@ -26,18 +26,48 @@
     <ClInclude Include="include\ACGDreamLoadPlugs.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\ADDLib\JsonOperation.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="other\预计需要实现的功能.txt">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\PluginReg\PluginReg.cpp">
+    <ClCompile Include="src\PluginCore\PluginReg\PluginReg.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\PluginCalInterface\PluginCalInterface.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\PluginCore\PluginCore.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ACGDreamDevelopmentLibrary\JsonOperation\JsonOperation.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="src\PluginReg\PluginReg.h">
+    <QtMoc Include="src\PluginCore\PluginReg\PluginReg.h">
       <Filter>Header Files</Filter>
     </QtMoc>
     <QtMoc Include="src\PluginCalInterface\PluginCalInterface.h">
       <Filter>Header Files</Filter>
     </QtMoc>
+    <QtMoc Include="src\PluginCore\PluginCore.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="src\ACGDreamDevelopmentLibrary\JsonOperation\JsonOperation.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="assets\Json\PluginAnalytic.json" />
+    <None Include="other\Plugin.drawio" />
+  </ItemGroup>
+  <ItemGroup>
+    <QtRcc Include="res.qrc">
+      <Filter>Resource Files</Filter>
+    </QtRcc>
   </ItemGroup>
 </Project>

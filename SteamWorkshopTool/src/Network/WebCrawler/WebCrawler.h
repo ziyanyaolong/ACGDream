@@ -21,8 +21,8 @@ private:
 	QString* webAddress = nullptr;
 
 public:
-	WebCrawler(QObject *parent = Q_NULLPTR);
-	~WebCrawler();
+	explicit WebCrawler(QObject *parent = Q_NULLPTR);
+	virtual ~WebCrawler();
 	QVector<void*> otherData;
 
 	const QString& getWebData() { return *webData; }

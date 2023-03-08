@@ -32,12 +32,12 @@
   </ImportGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="QtSettings">
     <QtInstall>5.15.2_msvc2019_64</QtInstall>
-    <QtModules>core;xml;sql;opengl;network;gui;axserver;axcontainer;svg;multimedia;uitools;widgets;winextras;multimediawidgets;3dcore;3danimation;3dextras;3dinput;3dlogic;3drender;openglextensions;serialbus;networkauth;virtualkeyboard;</QtModules>
+    <QtModules>core;xml;sql;opengl;network;gui;axserver;axcontainer;svg;multimedia;uitools;widgets;winextras;multimediawidgets;3dcore;3danimation;3dextras;3dinput;3dlogic;3drender;openglextensions;serialbus;networkauth;virtualkeyboard</QtModules>
     <QtBuildConfig>debug</QtBuildConfig>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'" Label="QtSettings">
     <QtInstall>5.15.2_msvc2019_64</QtInstall>
-    <QtModules>core;opengl;gui;multimedia;uitools;widgets;openglextensions;</QtModules>
+    <QtModules>core;opengl;gui;multimedia;uitools;widgets;openglextensions</QtModules>
     <QtBuildConfig>release</QtBuildConfig>
   </PropertyGroup>
   <Target Name="QtMsBuildNotFound" BeforeTargets="CustomBuild;ClCompile" Condition="!Exists('$(QtMsBuild)\qt.targets') or !Exists('$(QtMsBuild)\qt.props')">
@@ -115,10 +115,24 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\ACGDreamLoadPlugs.h" />
-    <QtMoc Include="src\PluginReg\PluginReg.h" />
+    <ClInclude Include="include\ADDLib\JsonOperation.h" />
+    <ClInclude Include="other\预计需要实现的功能.txt" />
+    <QtMoc Include="src\ACGDreamDevelopmentLibrary\JsonOperation\JsonOperation.h" />
+    <QtMoc Include="src\PluginCore\PluginCore.h" />
+    <QtMoc Include="src\PluginCore\PluginReg\PluginReg.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\PluginReg\PluginReg.cpp" />
+    <ClCompile Include="src\ACGDreamDevelopmentLibrary\JsonOperation\JsonOperation.cpp" />
+    <ClCompile Include="src\PluginCalInterface\PluginCalInterface.cpp" />
+    <ClCompile Include="src\PluginCore\PluginCore.cpp" />
+    <ClCompile Include="src\PluginCore\PluginReg\PluginReg.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="assets\Json\PluginAnalytic.json" />
+    <None Include="other\Plugin.drawio" />
+  </ItemGroup>
+  <ItemGroup>
+    <QtRcc Include="res.qrc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">

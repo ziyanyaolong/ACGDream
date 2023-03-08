@@ -7,7 +7,6 @@ ACGDream::ACGDream(QMainWindow* parent)
 
 	this->initDirs();
 
-
 	pluginThread = new QThread(this);
 	pluginReg = new PluginReg(nullptr);
 	
@@ -19,37 +18,37 @@ ACGDream::ACGDream(QMainWindow* parent)
 
 	setBackground(QImage(QCoreApplication::applicationDirPath() + "/BG.png"));
 
-	connect(pluginReg, &PluginReg::removeUISignal, this, [&](QWidget* widget) {
-		this->removeWidght(widget);
-		}, Qt::QueuedConnection);
+	//connect(pluginReg, &PluginCore::removeUISignal, this, [&](QWidget* widget) {
+	//	this->removeWidght(widget);
+	//	}, Qt::QueuedConnection);
 
-	connect(pluginReg, &PluginReg::loading, this, [&](QString name) {
-		this->initDirs(name);
-		});
+	//connect(pluginReg, &PluginCore::loading, this, [&](QString name) {
+	//	this->initDirs(name);
+	//	});
 
-	connect(pluginReg, &PluginReg::loadError, this, [&](const QString& name, const QString& info) {
-		QMessageBox::critical(this, name, info);
-		});
+	//connect(pluginReg, &PluginCore::loadError, this, [&](const QString& name, const QString& info) {
+	//	QMessageBox::critical(this, name, info);
+	//	});
 
-	connect(pluginReg, &PluginReg::regPluginMainUI, this, [&](PluginCalInterface* plugin) {
-		QWidget* pTempWidget = plugin->createMainUI();
-		if (this->addWidght(pTempWidget) == nullptr)
-		{
-			QMetaObject::invokeMethod(pluginReg,
-				"backPluginMainUI",
-				Qt::QueuedConnection,
-				Q_ARG(PluginCalInterface*, plugin),
-				Q_ARG(QWidget*, nullptr));
-		}
-		else
-		{
-			QMetaObject::invokeMethod(pluginReg,
-				"backPluginMainUI",
-				Qt::QueuedConnection,
-				Q_ARG(PluginCalInterface*, plugin),
-				Q_ARG(QWidget*, pTempWidget));
-		}
-		});
+	//connect(pluginReg, &PluginCore::regPluginMainUI, this, [&](PluginCalInterface* plugin) {
+	//	QWidget* pTempWidget = plugin->createMainUI();
+	//	if (this->addWidght(pTempWidget) == nullptr)
+	//	{
+	//		QMetaObject::invokeMethod(pluginReg,
+	//			"backPluginMainUI",
+	//			Qt::QueuedConnection,
+	//			Q_ARG(PluginCalInterface*, plugin),
+	//			Q_ARG(QWidget*, nullptr));
+	//	}
+	//	else
+	//	{
+	//		QMetaObject::invokeMethod(pluginReg,
+	//			"backPluginMainUI",
+	//			Qt::QueuedConnection,
+	//			Q_ARG(PluginCalInterface*, plugin),
+	//			Q_ARG(QWidget*, pTempWidget));
+	//	}
+	//	});
 
 	connect(ui.actions, &QAction::triggered, this, [&]() {
 		auto actionsSet = ((QAction*)(sender()));

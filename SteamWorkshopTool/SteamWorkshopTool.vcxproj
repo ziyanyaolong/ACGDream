@@ -71,14 +71,14 @@
       <LanguageStandard_C>stdc11</LanguageStandard_C>
       <BrowseInformation>true</BrowseInformation>
       <AdditionalOptions>/utf-8</AdditionalOptions>
-      <AdditionalIncludeDirectories>$(SolutionDir)ACGDreamLoadPlugs/include/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)ACGDreamLoadPlugs/include/;$(SolutionDir)ACGDreamDevelopmentLibrary/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Bscmake>
       <PreserveSbr>true</PreserveSbr>
     </Bscmake>
     <Link>
-      <AdditionalLibraryDirectories>$(SolutionDir)bin\Debug\Extra\</AdditionalLibraryDirectories>
-      <AdditionalDependencies>ACGDreamLoadPlugs.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)bin\Debug\Extra\;$(SolutionDir)bin\Debug\DevLib\</AdditionalLibraryDirectories>
+      <AdditionalDependencies>ACGDreamLoadPlugs.lib;ACGDreamDevelopmentLibrary.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -89,10 +89,10 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
       <LanguageStandard_C>stdc11</LanguageStandard_C>
-      <AdditionalIncludeDirectories>$(SolutionDir)ACGDreamLoadPlugs/include/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)ACGDreamDevelopmentLibrary/include;$(SolutionDir)ACGDreamLoadPlugs/include/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>$(SolutionDir)bin\Release\Extra\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)bin\Release\Extra\;$(SolutionDir)bin\Release\DevLib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>ACGDreamLoadPlugs.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -133,7 +133,6 @@
     <ClCompile Include="src\UI\Components\ListWidgetItemWidget\ListWidgetItemWidget.cpp" />
     <ClCompile Include="src\Network\ModAnalytic\ModAnalytic.cpp" />
     <ClCompile Include="src\StaticData\SteamGet\SteamGet.cpp" />
-    <ClCompile Include="src\JsonOperation\JsonOperation.cpp" />
     <ClCompile Include="src\UI\Components\ListWidgetItemWidget\WidgetStyle1\Widget1.cpp" />
     <ClCompile Include="src\LoadRes\LoadRes.cpp" />
     <QtRcc Include="SteamWorkshopTool.qrc" />
@@ -170,7 +169,6 @@
     <ClInclude Include="src\StaticData\StaticData.h" />
     <QtMoc Include="src\LoadRes\LoadRes.h" />
     <QtMoc Include="src\UI\Components\ListWidgetItemWidget\WidgetStyle1\Widget1.h" />
-    <QtMoc Include="src\JsonOperation\JsonOperation.h" />
     <QtMoc Include="src\StaticData\SteamGet\SteamGet.h" />
     <QtMoc Include="src\Network\ModAnalytic\ModAnalytic.h" />
     <QtMoc Include="src\UI\Components\ListWidgetItemWidget\ListWidgetItemWidget.h" />

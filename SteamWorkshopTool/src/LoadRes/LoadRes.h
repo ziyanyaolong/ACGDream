@@ -6,8 +6,9 @@
 #include <QFile>
 #include <QCoreApplication>
 
+#include <ADDLib/JsonOperation.h>
+
 #include "../StaticData/StaticData.h"
-#include "../JsonOperation/JsonOperation.h"
 #include "../Network/WebCrawler/WebCrawler.h"
 
 class LoadRes : public QObject

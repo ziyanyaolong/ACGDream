@@ -7,9 +7,10 @@
 #include <QNetworkReply>
 #include <QMetaType>
 
+#include <ADDLib/JsonOperation.h>
+
 #include "../../StaticData/SteamGet/SteamGet.h"
 #include "../../ModDataTable/ModDataTable.h"
-#include "../../JsonOperation/JsonOperation.h"
 
 class WebsiteAnalytic : public QObject
 {
@@ -23,8 +24,8 @@ private:
 	QString unicodeToUtf8(const QString& str);
 
 public:
-	WebsiteAnalytic(QObject *parent = Q_NULLPTR);
-	~WebsiteAnalytic();
+	explicit WebsiteAnalytic(QObject *parent = Q_NULLPTR);
+	virtual ~WebsiteAnalytic();
 
 	QVector<ModDataTable*>& getModDataTabelList() { return finishData; }
 

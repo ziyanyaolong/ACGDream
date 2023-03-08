@@ -4,13 +4,15 @@
 #include <QString>
 #include <QMap>
 
+#include <QVariant>
+
 class SteamGet : public QObject
 {
 	Q_OBJECT
 
 private:
 	static SteamGet* _me_;
-	QMap<QString, QString> _map;
+	QVariantMap _map;
 
 private:
 	enum class Event
@@ -48,19 +50,25 @@ signals:
 
 public slots:
 
-	void addData(const QMap<QString, QString>& list)
+	void addData(const QVariantMap& list)
 	{
-		for (auto i = list.begin(); i != list.end() ; i++)
-		{
-			_map[i.key()] = i.value();
-		}
+		_map = list;
 	}
 
-	void addData(const QString& key, const QString& value)
-	{ 
-		_map[key] = value; 
+	void addData(const QString& key, const QVariant& value)
+	{
+		auto it = _map.find(key);
+		if (it == _map.end())
+		{
+			it.value() = value;
+		}
+		else
+		{
+			_map.insert(key, value);
+		}
+
 		emit addDataKey(key);
-		emit addDataValue(value);
+		emit addDataValue(value.toString());
 		emit operationalEvent(SteamGet::Event::Add, SteamGet::Info::Normal);
 	}
 
@@ -70,7 +78,7 @@ public slots:
 		if (i != _map.end())
 		{
 			emit removeDataKey(key);
-			emit removeDataValue(*i);
+			emit removeDataValue(i.value().toString());
 			_map.erase(i);
 			emit operationalEvent(SteamGet::Event::Remove, SteamGet::Info::Normal);
 			return true;
@@ -85,9 +93,9 @@ public slots:
 		if (temp != _map.end())
 		{
 			emit findDataKey(key);
-			emit findDataValue(temp.value());
+			emit findDataValue(temp.value().toString());
 			emit operationalEvent(SteamGet::Event::Find, SteamGet::Info::Normal);
-			return temp.value();
+			return temp.value().toString();
 		}
 		emit operationalEvent(SteamGet::Event::Find, SteamGet::Info::Error);
 		return "";

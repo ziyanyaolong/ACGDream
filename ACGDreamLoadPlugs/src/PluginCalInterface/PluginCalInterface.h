@@ -13,6 +13,7 @@ Q_PLUGIN_METADATA(IID PluginCalInterface_iid FILE fileName)	\
 #include <QObject>
 #include <QThread>
 #include <QWidget>
+#include <QList>
 #include <QEventLoop>
 #include <QPluginLoader>
 
@@ -21,36 +22,8 @@ class PluginCalInterface : public QObject
 {
 	Q_OBJECT
 
-private:
-	friend class PluginReg;
-
-	const ACGDream* _acgDream = nullptr;
-	bool separateThread = false;
-	QWidget* mainUI = nullptr;
-	QPluginLoader* pluginLoaderObject = nullptr;
-
-	inline void setPluginLoader(QPluginLoader* pluginLoader) { pluginLoaderObject = pluginLoader; }
-	inline QPluginLoader* getPluginLoader() { return pluginLoaderObject; }
-
-protected slots:
-	virtual void pRun() = 0;
-
-protected:
-	PluginCalInterface(QObject* parent = Q_NULLPTR) : QObject(parent) {}
-
-	inline bool setSeparateThread(bool choice) { separateThread = choice; }
-	inline QWidget* getMainUI() { return mainUI; }
-	inline void regMainUI() { QEventLoop e(this); emit this->regMainUIS(); connect(this, &PluginCalInterface::quitRegMainUILock, &e, &QEventLoop::quit); e.exec(QEventLoop::WaitForMoreEvents); }
-	
 public:
-	virtual ~PluginCalInterface()
-	{
-		if (mainUI)
-		{
-			emit deleteMainUI(mainUI);
-			mainUI = nullptr;
-		}
-	}
+	virtual ~PluginCalInterface();
 
 	inline const ACGDream* getACGDream() { return _acgDream; }
 
@@ -59,13 +32,46 @@ public:
 
 	typedef QWidget* (*createMainUIPoniter)();
 
+protected:
+	virtual void pRun() = 0;
+
+	PluginCalInterface(QObject* parent = Q_NULLPTR) : QObject(parent) {}
+
+	inline QWidget* getMainUI() { return mainUI; }
+
+	inline bool setSeparateThread(bool choice) { separateThread = choice; }
+
+	inline auto getAccessoryModuleList() { return accessoryModuleList; }
+
+	void regMainUI();
+
+
+private:
+	friend class PluginReg;
+	friend class PluginCore;
+
+	typedef QMap<QString, bool> ModuleAttachedList;
+
+	const ACGDream* _acgDream = nullptr;
+
+	bool separateThread = false;
+
+	QWidget* mainUI = nullptr;
+	QList<QPluginLoader*> accessoryModuleList;
+	QPluginLoader* pluginLoader = nullptr;
+	QString name = "";
+	quint32 dependencyCount = 0;
+
+	inline void setPluginLoader(QPluginLoader* pluginLoader) { pluginLoader = pluginLoader; }
+	inline QPluginLoader* getPluginLoader() { return pluginLoader; }
+
 signals:
 	void regMainUIS();
 	void quitRegMainUILock();
 	void deleteMainUI(QWidget* widget);
 
 public slots:
-	void backPluginMainUI(QWidget* widget) { mainUI = widget; emit quitRegMainUILock(); }
+	void backPluginMainUI(QWidget* widget);
 
 };
 
