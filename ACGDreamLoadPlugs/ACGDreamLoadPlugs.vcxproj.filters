@@ -32,6 +32,9 @@
     <ClInclude Include="other\预计需要实现的功能.txt">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\PluginData\PluginMetadata\PluginMetadata.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\PluginCore\PluginReg\PluginReg.cpp">
@@ -44,6 +47,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\ACGDreamDevelopmentLibrary\JsonOperation\JsonOperation.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\PluginData\PluginMetadata\PluginMetadata.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ACGDreamDevelopmentLibrary\LogADX\LogADX.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -60,6 +69,9 @@
     <QtMoc Include="src\ACGDreamDevelopmentLibrary\JsonOperation\JsonOperation.h">
       <Filter>Header Files</Filter>
     </QtMoc>
+    <QtMoc Include="src\ACGDreamDevelopmentLibrary\LogADX\LogADX.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
   </ItemGroup>
   <ItemGroup>
     <None Include="assets\Json\PluginAnalytic.json" />
@@ -69,5 +81,8 @@
     <QtRcc Include="res.qrc">
       <Filter>Resource Files</Filter>
     </QtRcc>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="src\PluginCore\PluginReg\otherCode.txt" />
   </ItemGroup>
 </Project>

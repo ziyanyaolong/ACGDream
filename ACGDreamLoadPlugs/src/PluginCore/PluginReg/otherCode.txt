@@ -1,0 +1,245 @@
+bool PluginReg::unloadPluginsProcess(QPluginLoader* pluginLoader)
+{
+	if (pluginLoader->isLoaded())
+	{
+		auto plugin = (qobject_cast<PluginCalInterface*>(pluginLoader->instance()));
+
+		if (plugin == nullptr)
+		{
+			this->loadError(ErrorList::EmptyPointer, plugin->objectName(), pluginLoader);
+			pluginLoader->deleteLater();
+			return false;
+		}
+
+		auto pluginAccessoryModuleList = plugin->getAccessoryModuleList();
+
+		if (pluginAccessoryModuleList != nullptr)
+		{
+			for (auto pluginAM = pluginAccessoryModuleList->begin(); pluginAM != pluginAccessoryModuleList->end(); pluginAM++)
+			{
+				this->unloadPluginsProcess(*pluginAM);
+			}
+		}
+
+		pluginAccessoryModuleList->clear();
+		delete pluginAccessoryModuleList;
+		pluginAccessoryModuleList = nullptr;
+
+		if ((pluginLoader->unload()) == false)
+		{
+			this->loadError(pluginLoader->objectName(), QString("卸载失败,其他实例正在使用此插件!"));
+			pluginLoader->deleteLater();
+			return false;
+		}
+	}
+	else
+	{
+		this->loadError(pluginLoader->objectName(), QString("卸载失败,插件实例未运行!"));
+		pluginLoader->deleteLater();
+		return false;
+	}
+	pluginLoader->deleteLater();
+	return true;
+}
+
+void PluginReg::loadPluginsProcess0()
+{
+	foreach(auto i, plugins)
+	{
+		if (i == nullptr)
+		{
+			continue;
+		}
+		else if (!i->isLoaded())
+		{
+			PluginCalInterface* plugin = nullptr;
+
+			QT_TRY
+			{
+				plugin = qobject_cast<PluginCalInterface*>(i->instance());
+			}
+				QT_CATCH(QException e)
+			{
+				this->loadError(i->fileName(), QString(e.what()));
+				continue;
+			}
+			QT_CATCH(...)
+			{
+				this->loadError(i->fileName(), i->errorString());
+				continue;
+			}
+
+			if (plugin)
+			{
+				continue;
+			}
+
+			plugin->setPluginLoader(i);
+
+			connect(plugin, &PluginCalInterface::regMainUIS, this, [&]() {
+				emit this->regPluginMainUI((PluginCalInterface*)(sender()));
+				});
+
+			connect(plugin, &PluginCalInterface::deleteMainUI, this, &PluginReg::removeUISignal);
+
+			QT_TRY
+			{
+				plugin->pRun();
+			}
+				QT_CATCH(QException e)
+			{
+				this->loadError(i->fileName(), QString(e.what()));
+				continue;
+			}
+			QT_CATCH(...)
+			{
+				this->loadError(i->fileName(), i->errorString());
+				continue;
+			}
+
+		}
+		else
+		{
+			continue;
+		}
+	}
+
+
+	PluginCalInterface* plugin = nullptr;
+
+	QT_TRY
+	{
+		plugin = qobject_cast<PluginCalInterface*>(pluginLoader->instance());
+	}
+		QT_CATCH(QException e)
+	{
+		this->loadError(pluginLoader->fileName(), QString(e.what()));
+		return -1;
+	}
+	QT_CATCH(...)
+	{
+		this->loadError(pluginLoader->fileName(), pluginLoader->errorString());
+		return -1;
+	}
+
+	if (!pluginLoader->isLoaded())
+	{
+		this->loadError(pluginLoader->fileName(), pluginLoader->errorString());
+		return -1;
+	}
+	else if (plugin)
+	{
+
+	}
+	else
+	{
+		this->loadError(pluginLoader->fileName(), QString("插件指针为空,请检查插件是否有问题!"));
+		return -1;
+	}
+
+	return 1;
+}
+
+void PluginReg::loadPluginsProcess1(const QString& name, QPluginLoader* pluginLoader)
+{
+	PluginCalInterface* plugin = nullptr;
+
+	QT_TRY
+	{
+		plugin = qobject_cast<PluginCalInterface*>(pluginLoader->instance());
+	}
+		QT_CATCH(QException e)
+	{
+		this->loadError(pluginLoader->fileName(), QString(e.what()));
+		return -1;
+	}
+	QT_CATCH(...)
+	{
+		this->loadError(pluginLoader->fileName(), pluginLoader->errorString());
+		return -1;
+	}
+
+	if (!pluginLoader->isLoaded())
+	{
+		this->loadError(pluginLoader->fileName(), pluginLoader->errorString());
+		return -1;
+	}
+	else if (plugin)
+	{
+		plugin->setPluginLoader(pluginLoader);
+
+		connect(plugin, &PluginCalInterface::regMainUIS, this, [&]() {
+			emit this->regPluginMainUI((PluginCalInterface*)(sender()));
+			});
+
+		connect(plugin, &PluginCalInterface::deleteMainUI, this, &PluginReg::removeUISignal);
+
+		plugins[name] = pluginLoader;
+
+		QT_TRY
+		{
+			plugin->pRun();
+		}
+			QT_CATCH(QException e)
+		{
+			this->loadError(pluginLoader->fileName(), QString(e.what()));
+			return -1;
+		}
+		QT_CATCH(...)
+		{
+			this->loadError(pluginLoader->fileName(), pluginLoader->errorString());
+			return -1;
+		}
+	}
+	else
+	{
+		this->loadError(pluginLoader->fileName(), QString("插件指针为空,请检查插件是否有问题!"));
+		return -1;
+	}
+
+	return 1;
+}
+//
+void PluginReg::unloadAllPlugins()
+{
+	for (auto plugin = plugins.begin(); plugin != plugins.end(); plugin++)
+	{
+		if (plugin.value())
+		{
+			this->unloadPluginsProcess(plugin.value());
+		}
+	}
+	plugins.clear();
+}
+
+void PluginReg::unloadPlugin(QList<QPluginLoader*>& pluginLoaderList)
+{
+	auto pluginLoader = plugins.find(pluginName);
+	if (pluginLoader != plugins.end())
+	{
+		if (pluginLoader.value())
+		{
+			this->unloadPluginsProcess(pluginLoader.value());
+			pluginLoader.value()->unload();
+			plugins.erase(pluginLoader);
+		}
+
+		return true;
+	}
+	return false;
+}
+
+void PluginReg::loadAllPlugins(const QString& dirPath, const QStringList& fileNames)
+{
+	unloadAllPlugins();
+	if (list.isEmpty())
+	{
+		emit this->loadError(ErrorList::FilePathEmpty, QString(), nullptr);
+		return;
+	}
+
+	foreach(QString fileName, list)
+	{
+		this->loadPlugin(dirPath, fileName);
+	}
+}

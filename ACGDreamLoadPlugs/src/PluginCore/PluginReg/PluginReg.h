@@ -21,14 +21,16 @@
 
 #include "../../PluginCalInterface/PluginCalInterface.h"
 
+#include "../../PluginData/PluginMetadata/PluginMetadata.h"
+
 class PluginReg : public QObject
 {
 	Q_OBJECT
 
 public:
-	enum class ReturnData
+	enum class ReturnFTE
 	{
-		FALSE,
+		FALSE = 0x0,
 		TRUE,
 		ERROR
 	};
@@ -52,7 +54,7 @@ public:
 		EmptyPointer,
 		NoPluginData,
 		RepeatedLoading,
-		NoMetaData,
+		NoMetadata,
 		OpenFileError,
 		NoAnalytic,
 		Unknown
@@ -61,29 +63,34 @@ public:
 	enum class LoadError
 	{
 		Normal = 0x0,
+		EmptyPluginLoader,
+		RepeatedAdd,
 		Unknown
 	};
 
 	enum class UnloadError
 	{
 		Normal = 0x0,
+		EmptyPluginLoader,
+		RepeatedAdd,
 		NoLoading,
 		NoRegister,
+		UnloadingFail,
 		Unknown
 	};
 
-	struct PluginDependencyData
-	{
-		QPluginLoader* pluginLoader = nullptr;
-		QString name = "";																
-		quint32 dependencyCount = 0;
-		quint32 dependencyNeedCount = 0;
-	};
+	typedef QList<PluginMetadata*> PreList;
+	typedef QMap<QString, PreList> PreMapList;
+	typedef QMap<QString, PluginMetadata*> PluginLoaded;
+	typedef QMap<QString, PluginMetadata*> PluginMap;
 
-	typedef QList<PluginDependencyData*> PreloadList;
-	typedef QMap<QString, PreloadList> PluginMapList;
-	typedef QMap<QString, QPluginLoader*> PluginLoaded;
-	typedef QMap<QString, QPluginLoader*> PluginMap;
+	void readAllFile(const QString& dirPath);
+
+	void loadPlugin(const QString& dirPath, const QString& fileName);
+	void loadAllPlugins(const QString& dirPath, const QStringList& fileNames);
+
+	void unloadPlugin(const QString& name, PluginMetadata* pluginMetadata = nullptr);
+	void unloadAllPlugins();
 
 	explicit PluginReg(QObject* parent = Q_NULLPTR);
 	virtual ~PluginReg();
@@ -91,41 +98,38 @@ public:
 private:
 	friend class PluginCore;
 
-	PluginMapList pluginPreloadList; //预加载队列
+	PreMapList pluginPreLoadList; //预加载队列
+	PreMapList pluginPreUnloadList; //预卸载队列
 	PluginLoaded pluginLoaded; //已加载队列
-	// PluginMap plugins; //所有插件表
 
 	QList<QString> analyticTable;
 	QString name;
 
-	void preloaderTest(const QString& name, QPluginLoader* pluginLoader, bool flag);
+	void preLoaderTest(const QString& name, PluginMetadata* pluginMetadata, bool flag);
+	void preUnloaderTest(QPluginLoader* pluginLoader, bool flag);
 
-	PluginCalInterface* wakeUpPreloader(QPluginLoader* pluginLoader);
-	PluginCalInterface* pluginInit(QPluginLoader* pluginLoader);
+	PluginCalInterface* pluginLoading(PluginMetadata* pluginMetadata);
+	ReturnFTE pluginUnloading(PluginMetadata* pluginMetadata);
+
+	PluginCalInterface* wakeUpPreLoader(PluginMetadata* pluginMetadata);
+	ReturnFTE wakeUpPreUnloader(PluginMetadata* pluginMetadata);
 
 signals:
 	void removeUISignal(QWidget* widget);
 
 	void loading(const QString& name);
-	void loaded(const QString& name, QPluginLoader* pluginLoader, bool flag);
-	void loadError(ErrorList loadError, const QString& name, const QString& tips, QPluginLoader* plugin);
+	void loaded(const QString& name, PluginMetadata* pluginMetadata, bool flag);
+	void loadError(ErrorList loadError, PluginMetadata* pluginMetadata);
 
 	void unloading(const QString& name);
-	void unloaded(const QString& name, QPluginLoader* pluginLoader);
-	void unloadError(UnloadError unloadError, const QString& name, QPluginLoader* plugin);
+	void unloaded(const QString& name, PluginMetadata* pluginMetadata);
+	void unloadError(UnloadError unloadError, PluginMetadata* pluginMetadata);
 
 	void regPluginMainUI(PluginCalInterface* plugin);
 	void backReadAllFile(const QString& dirPath, const QStringList& fileNames);
 
 	void errorReport(ErrorType type, ErrorList error);
-	void initCompletePlugin(QPluginLoader* pluginLoader, PluginCalInterface* plugin);
-
-public slots:
-	void readAllFile(const QString& dirPath);
-	void loadPlugin(const QString& dirPath, const QString& fileName);
-	void loadAllPlugins(const QString& dirPath, const QStringList& fileNames);
-	void unloadPlugin(const QString& name, QPluginLoader* pluginLoader = nullptr);
-	void unloadAllPlugins();
+	void initCompletePlugin(PluginMetadata* pluginMetadata, PluginCalInterface* plugin);
 	//void backPluginMainUI(PluginCalInterface* plugin, QWidget* mainWidget);
 	
 };

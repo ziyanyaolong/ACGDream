@@ -22,7 +22,7 @@ PluginCore::~PluginCore()
 	}
 }
 
-void PluginCore::runPlugin(QPluginLoader* pluginLoader, PluginCalInterface* plugin)
+void PluginCore::runPlugin(PluginMetadata* pluginMetadata, PluginCalInterface* plugin)
 {
 	plugin->pRun();
 }

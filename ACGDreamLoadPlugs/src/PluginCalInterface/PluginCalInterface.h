@@ -17,6 +17,8 @@ Q_PLUGIN_METADATA(IID PluginCalInterface_iid FILE fileName)	\
 #include <QEventLoop>
 #include <QPluginLoader>
 
+#include "../PluginData/PluginMetadata/PluginMetadata.h"
+
 class ACGDream;
 class PluginCalInterface : public QObject
 {
@@ -41,10 +43,7 @@ protected:
 
 	inline bool setSeparateThread(bool choice) { separateThread = choice; }
 
-	inline auto getAccessoryModuleList() { return accessoryModuleList; }
-
 	void regMainUI();
-
 
 private:
 	friend class PluginReg;
@@ -57,13 +56,11 @@ private:
 	bool separateThread = false;
 
 	QWidget* mainUI = nullptr;
-	QList<QPluginLoader*> accessoryModuleList;
-	QPluginLoader* pluginLoader = nullptr;
-	QString name = "";
-	quint32 dependencyCount = 0;
+	
+	const PluginMetadata* pluginMetadata = nullptr;
 
 	inline void setPluginLoader(QPluginLoader* pluginLoader) { pluginLoader = pluginLoader; }
-	inline QPluginLoader* getPluginLoader() { return pluginLoader; }
+	inline const PluginMetadata* getPluginMetadata() { return pluginMetadata; }
 
 signals:
 	void regMainUIS();
