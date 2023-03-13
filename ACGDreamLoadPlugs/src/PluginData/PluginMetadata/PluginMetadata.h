@@ -5,12 +5,13 @@
 #include <QPluginLoader>
 #include <QMutex>
 #include <QList>
+#include <QMetaType>
 
-class PluginMetadata
+class PluginMetaData
 {
 public:
-	PluginMetadata();
-	virtual ~PluginMetadata();
+	PluginMetaData();
+	virtual ~PluginMetaData();
 
 	enum class TablePoint
 	{
@@ -28,10 +29,11 @@ public:
 	quint32 dependencyCount = 0;
 	quint32 dependencyNeedCount = 0;
 
-	QList<const PluginMetadata*> dependencyList;
-	QList<const PluginMetadata*> moduleList;
+	QList<const PluginMetaData*> dependencyList;
+	QList<const PluginMetaData*> moduleList;
 
 	quint32 threadID = 0;
+
 	TablePoint tablePoint = TablePoint::None;
 
 	bool isAddressable();

@@ -118,7 +118,7 @@
     <ClInclude Include="include\ADDLib\JsonOperation.h" />
     <ClInclude Include="other\预计需要实现的功能.txt" />
     <QtMoc Include="src\ACGDreamDevelopmentLibrary\LogADX\LogADX.h" />
-    <ClInclude Include="src\PluginData\PluginMetadata\PluginMetadata.h" />
+    <ClInclude Include="src\PluginData\PluginMetaData\PluginMetaData.h" />
     <QtMoc Include="src\ACGDreamDevelopmentLibrary\JsonOperation\JsonOperation.h" />
     <QtMoc Include="src\PluginCore\PluginCore.h" />
     <QtMoc Include="src\PluginCore\PluginReg\PluginReg.h" />
@@ -129,7 +129,7 @@
     <ClCompile Include="src\PluginCalInterface\PluginCalInterface.cpp" />
     <ClCompile Include="src\PluginCore\PluginCore.cpp" />
     <ClCompile Include="src\PluginCore\PluginReg\PluginReg.cpp" />
-    <ClCompile Include="src\PluginData\PluginMetadata\PluginMetadata.cpp" />
+    <ClCompile Include="src\PluginData\PluginMetaData\PluginMetaData.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="assets\Json\PluginAnalytic.json" />

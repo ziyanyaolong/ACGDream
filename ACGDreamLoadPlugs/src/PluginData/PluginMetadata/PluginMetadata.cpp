@@ -1,14 +1,16 @@
-#include "PluginMetadata.h"
+#include "PluginMetaData.h"
 
-PluginMetadata::PluginMetadata()
+PluginMetaData::PluginMetaData()
+{
+	qRegisterMetaType<PluginMetaData>("PluginMetaData");
+	qRegisterMetaType<PluginMetaData>("PluginMetaData&");
+}
+
+PluginMetaData::~PluginMetaData()
 {
 }
 
-PluginMetadata::~PluginMetadata()
-{
-}
-
-bool PluginMetadata::isAddressable()
+bool PluginMetaData::isAddressable()
 {
 	return *atomic;
 }

@@ -9,8 +9,10 @@ PluginCore::PluginCore(QObject *parent)
 	connect(this, &PluginCore::unloadAllPlugins, pluginReg, &PluginReg::unloadAllPlugins);
 	connect(this, &PluginCore::loadPlugin, pluginReg, &PluginReg::loadPlugin);
 	connect(this, &PluginCore::unloadPlugin, pluginReg, &PluginReg::unloadPlugin);
+
 	connect(pluginReg, &PluginReg::initCompletePlugin, this, &PluginCore::runPlugin);
-	connect(this, &PluginCore::backPluginMainUI, this, &PluginCore::setPluginMainUI);
+	connect(pluginReg, &PluginReg::loaded, this, &PluginCore::loaded);
+	connect(pluginReg, &PluginReg::unloaded, this, &PluginCore::unloaded);
 }
 
 PluginCore::~PluginCore()
@@ -22,12 +24,9 @@ PluginCore::~PluginCore()
 	}
 }
 
-void PluginCore::runPlugin(PluginMetadata* pluginMetadata, PluginCalInterface* plugin)
+void PluginCore::runPlugin(PluginMetaData* pluginMetaData, PluginCalInterface* plugin)
 {
+	connect(plugin, &PluginCalInterface::regMainUIS, this, &PluginCore::regUISignal);
+	connect(this, &PluginCore::backPluginMainUI, plugin, &PluginCalInterface::backPluginMainUI, Qt::QueuedConnection);
 	plugin->pRun();
-}
-
-void PluginCore::setPluginMainUI(PluginCalInterface* plugin, QWidget* mainWidget)
-{
-	plugin->mainUI = mainWidget;
 }

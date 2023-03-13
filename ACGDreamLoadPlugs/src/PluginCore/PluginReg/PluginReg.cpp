@@ -60,7 +60,7 @@ PluginReg::~PluginReg()
 	unloadAllPlugins();
 }
 
-void PluginReg::preLoaderTest(const QString& name, PluginMetadata* pluginMetadata, bool flag)
+void PluginReg::preLoaderTest(const QString& name, PluginMetaData* pluginMetaData)
 {
 	QList<QString> list;
 	list.push_back(name);
@@ -81,7 +81,7 @@ void PluginReg::preLoaderTest(const QString& name, PluginMetadata* pluginMetadat
 					continue;
 				}
 
-				if ((*j)->tablePoint != PluginMetadata::TablePoint::InPreLoadTable)
+				if ((*j)->tablePoint != PluginMetaData::TablePoint::InPreLoadTable)
 				{
 					j++;
 					continue;
@@ -91,7 +91,7 @@ void PluginReg::preLoaderTest(const QString& name, PluginMetadata* pluginMetadat
 
 				if ((*j)->dependencyNeedCount > 0)
 				{
-					(*j)->dependencyList.push_back(pluginMetadata);
+					(*j)->dependencyList.push_back(pluginMetaData);
 					continue;
 				}
 
@@ -101,9 +101,9 @@ void PluginReg::preLoaderTest(const QString& name, PluginMetadata* pluginMetadat
 				//唤醒插件
 				this->wakeUpPreLoader(*j);
 
-				(*j)->tablePoint = PluginMetadata::TablePoint::InLoadedTable;
+				(*j)->tablePoint = PluginMetaData::TablePoint::InLoadedTable;
 
-				pluginMetadata->moduleList.push_back(*j);
+				pluginMetaData->moduleList.push_back(*j);
 
 				j = i->erase(j);
 			}
@@ -153,7 +153,7 @@ void PluginReg::preUnloaderTest(QPluginLoader* pluginLoader, bool flag)
 					continue;
 				}
 
-				if ((*j)->tablePoint != PluginMetadata::TablePoint::InPreUnloadTable)
+				if ((*j)->tablePoint != PluginMetaData::TablePoint::InPreUnloadTable)
 				{
 					j++;
 					continue;
@@ -170,7 +170,7 @@ void PluginReg::preUnloaderTest(QPluginLoader* pluginLoader, bool flag)
 
 				this->wakeUpPreUnloader(*j);
 
-				(*j)->tablePoint = PluginMetadata::TablePoint::InUnloadedTable;
+				(*j)->tablePoint = PluginMetaData::TablePoint::InUnloadedTable;
 
 				pluginLoader->deleteLater();
 
@@ -207,19 +207,19 @@ void PluginReg::preUnloaderTest(QPluginLoader* pluginLoader, bool flag)
 	list.clear();
 }
 
-PluginCalInterface* PluginReg::pluginLoading(PluginMetadata* pluginMetadata)
+PluginCalInterface* PluginReg::pluginLoading(PluginMetaData* pluginMetaData)
 {
-	if (pluginMetadata->pluginLoader == nullptr)
+	if (pluginMetaData->pluginLoader == nullptr)
 	{
 		return nullptr;
 	}
-	else if (pluginMetadata->pluginLoader->isLoaded())
+	else if (pluginMetaData->pluginLoader->isLoaded())
 	{
 		return nullptr;
 	}
-	else if (!(pluginMetadata->pluginLoader->load()))
+	else if (!(pluginMetaData->pluginLoader->load()))
 	{
-		this->loadError(ErrorList::LoadFail, pluginMetadata);
+		this->loadError(ErrorList::LoadFail, pluginMetaData);
 		return nullptr;
 	}
 
@@ -227,16 +227,16 @@ PluginCalInterface* PluginReg::pluginLoading(PluginMetadata* pluginMetadata)
 
 	QT_TRY
 	{
-		plugin = qobject_cast<PluginCalInterface*>(pluginMetadata->pluginLoader->instance());
+		plugin = qobject_cast<PluginCalInterface*>(pluginMetaData->pluginLoader->instance());
 	}
-		QT_CATCH(QException e)
+	QT_CATCH(QException e)
 	{
-		this->loadError(ErrorList::Unknown, pluginMetadata);
+		this->loadError(ErrorList::Unknown, pluginMetaData);
 		return plugin;
 	}
 	QT_CATCH(...)
 	{
-		this->loadError(ErrorList::Unknown, pluginMetadata);
+		this->loadError(ErrorList::Unknown, pluginMetaData);
 		return plugin;
 	}
 
@@ -247,53 +247,60 @@ PluginCalInterface* PluginReg::pluginLoading(PluginMetadata* pluginMetadata)
 		//	});
 
 		//connect(plugin, &PluginCalInterface::deleteMainUI, this, &PluginReg::removeUISignal);
-		this->loadError(ErrorList::EmptyPointer, pluginMetadata);
+		this->loadError(ErrorList::EmptyPointer, pluginMetaData);
 		return plugin;
 	}
 
-	plugin->pluginMetadata = pluginMetadata;
+	plugin->pluginMetaData = pluginMetaData;
+
+	pluginLoaded.insert(pluginMetaData->name, pluginMetaData);
+
+	pluginMetaData->tablePoint = PluginMetaData::TablePoint::InLoadedTable;
+
+	emit this->loaded(pluginMetaData->name, pluginMetaData);
+	emit this->initCompletePlugin(pluginMetaData, plugin);
 
 	return plugin;
 }
 
-PluginReg::ReturnFTE PluginReg::pluginUnloading(PluginMetadata* pluginMetadata)
+PluginReg::ReturnFTE PluginReg::pluginUnloading(PluginMetaData* pluginMetaData)
 {
-	if (pluginMetadata->pluginLoader == nullptr)
+	if (pluginMetaData->pluginLoader == nullptr)
 	{
-		emit this->unloadError(UnloadError::EmptyPluginLoader, pluginMetadata);
-		return ReturnFTE::ERROR;
+		emit this->unloadError(UnloadError::EmptyPluginLoader, pluginMetaData);
+		return ReturnFTE::MERROR;
 	}
-	else if (!(pluginMetadata->pluginLoader->isLoaded()))
+	else if (!(pluginMetaData->pluginLoader->isLoaded()))
 	{
-		emit this->unloadError(UnloadError::NoLoading, pluginMetadata);
-		return ReturnFTE::ERROR;
+		emit this->unloadError(UnloadError::NoLoading, pluginMetaData);
+		return ReturnFTE::MERROR;
 	}
-	else if (!(pluginMetadata->pluginLoader->unload()))
+	else if (!(pluginMetaData->pluginLoader->unload()))
 	{
-		emit this->unloadError(UnloadError::UnloadingFail, pluginMetadata);
-		return ReturnFTE::ERROR;
+		emit this->unloadError(UnloadError::UnloadingFail, pluginMetaData);
+		return ReturnFTE::MERROR;
 	}
 
-	return ReturnFTE::TRUE;
+	return ReturnFTE::MTRUE;
 }
 
-PluginCalInterface* PluginReg::wakeUpPreLoader(PluginMetadata* pluginMetadata)
+PluginCalInterface* PluginReg::wakeUpPreLoader(PluginMetaData* pluginMetaData)
 {
-	return this->pluginLoading(pluginMetadata);
+	return this->pluginLoading(pluginMetaData);
 }
 
-PluginReg::ReturnFTE PluginReg::wakeUpPreUnloader(PluginMetadata* pluginMetadata)
+PluginReg::ReturnFTE PluginReg::wakeUpPreUnloader(PluginMetaData* pluginMetaData)
 {
-	return this->pluginUnloading(pluginMetadata);
+	return this->pluginUnloading(pluginMetaData);
 }
 
-void PluginReg::readAllFile(const QString& dirPath)
+QStringList PluginReg::readAllFile(const QString& dirPath)
 {
 	QDir pluginsDir(dirPath);
 
 	if (!pluginsDir.exists())
 	{
-		return;
+		return QStringList();
 	}
 
 	QStringList filters;
@@ -301,7 +308,7 @@ void PluginReg::readAllFile(const QString& dirPath)
 	filters.append("*.dll");
 	pluginsDir.setNameFilters(filters);
 
-	emit this->backReadAllFile(dirPath, pluginsDir.entryList(QDir::Files));
+	return pluginsDir.entryList(QDir::Files);
 }
 
 void PluginReg::loadPlugin(const QString& dirPath, const QString& fileName)
@@ -333,7 +340,7 @@ void PluginReg::loadPlugin(const QString& dirPath, const QString& fileName)
 		return;
 	}
 
-	auto jsonValue = jsonMap.find("Name");
+	auto jsonValue = jsonMap.find("MetaData.PluginName");
 
 	if (jsonValue == jsonMap.end())
 	{
@@ -356,39 +363,47 @@ void PluginReg::loadPlugin(const QString& dirPath, const QString& fileName)
 		emit this->loadError(ErrorList::NoMetadata,  nullptr);
 		return;
 	}
-	else if ((pluginPreLoadList.find(pluginName) == pluginPreLoadList.end()) || (pluginLoaded.find(pluginName) == pluginLoaded.end()))
+	else if (pluginLoaded.find(pluginName) != pluginLoaded.end())
 	{
 		pluginLoader->deleteLater();
 		emit this->loadError(ErrorList::RepeatedLoading, nullptr);
 		return;
 	}
 
-	PluginMetadata* pluginMetadata = new PluginMetadata();
-	pluginMetadata->name = pluginName;
-	pluginMetadata->pluginLoader = pluginLoader;
+	PluginMetaData* pluginMetaData = new PluginMetaData();
+	pluginMetaData->name = pluginName;
+	pluginMetaData->pluginLoader = pluginLoader;
 
 	//发射正在加载中的信号
 	emit this->loading(fileName);
 
 	//获取是否有依赖需求
-	jsonValue = jsonMap.find("Developers");
+	jsonValue = jsonMap.find("MetaData.Dependencys");
 
-	if (jsonValue != jsonMap.end() && (jsonValue->type() == QVariant::ByteArray))
+	qDebug() << jsonValue->type();
+
+	if ((jsonValue != jsonMap.end()) && (jsonValue->type() == QVariant::List))
 	{
 		//读取依赖列表
-		QByteArray developerByteArray = jsonValue->toByteArray();
-		QDataStream dataStream(developerByteArray);
+		auto qvList = jsonValue->toList();
+		//QByteArray developerByteArray = ;
+		//QDataStream dataStream(developerByteArray);
 		QList<QString> developerList;
 
-		while (!dataStream.atEnd())
+		for (auto i = qvList.begin(); i != qvList.end(); i++)
 		{
-			dataStream >> developerList;
+			developerList.push_back(i->toString());
 		}
 
-		pluginMetadata->dependencyCount = developerByteArray.size();
-		pluginMetadata->dependencyNeedCount = developerByteArray.size();
+		//while (!dataStream.atEnd())
+		//{
+		//	dataStream >> developerList;
+		//}
 
-		PreMapList::iterator pplIt;
+		pluginMetaData->dependencyCount = developerList.size();
+		pluginMetaData->dependencyNeedCount = developerList.size();
+
+		PreMapList::iterator pplIt = pluginPreLoadList.begin();
 
 		//加入到预加载列表
 		for (auto i = developerList.begin(); i != developerList.end(); i++)
@@ -401,32 +416,33 @@ void PluginReg::loadPlugin(const QString& dirPath, const QString& fileName)
 				pplIt = pluginPreLoadList.insert(*i, preList);
 			}
 
-			pplIt->push_back(pluginMetadata);
+			pplIt->push_back(pluginMetaData);
 		}
+
+		pluginMetaData->tablePoint = PluginMetaData::TablePoint::InPreLoadTable;
 	}
 	else
 	{
-		auto plugin = this->pluginLoading(pluginMetadata);
-
-		//读取完成
-		emit this->loaded(pluginName, pluginMetadata, false);
-		emit this->initCompletePlugin(pluginMetadata, plugin);
+		auto plugin = this->pluginLoading(pluginMetaData);
 	}
 }
 
-void PluginReg::loadAllPlugins(const QString& dirPath, const QStringList& fileNames)
+void PluginReg::loadAllPlugins(const QString& dirPath)
 {
 	unloadAllPlugins();
 
-	foreach(QString fileName, fileNames)
+	QStringList fileNames = readAllFile(dirPath);
+	qDebug() << fileNames.size();
+	for (quint32 i = 0; i < fileNames.size(); i++)
 	{
-		this->loadPlugin(dirPath, fileName);
+		qDebug() << fileNames[i];
+		this->loadPlugin(dirPath, fileNames[i]);
 	}
 }
 
-void PluginReg::unloadPlugin(const QString& name, PluginMetadata* pluginMetadata)
+void PluginReg::unloadPlugin(const QString& name, PluginMetaData* pluginMetaData)
 {
-	PluginMetadata* pl = pluginMetadata;
+	PluginMetaData* pl = pluginMetaData;
 
 	//对于可选参数pluginLoader检测是否在注册表中注册
 	if (pl == nullptr)
@@ -434,13 +450,13 @@ void PluginReg::unloadPlugin(const QString& name, PluginMetadata* pluginMetadata
 		auto nameIt = pluginLoaded.find(name);
 		if (nameIt == pluginLoaded.end())
 		{
-			emit this->unloadError(UnloadError::NoRegister, pluginMetadata);
+			emit this->unloadError(UnloadError::NoRegister, pluginMetaData);
 			return;
 		}
 
 		if (nameIt.value() == nullptr)
 		{
-			emit this->unloadError(UnloadError::NoRegister, pluginMetadata);
+			emit this->unloadError(UnloadError::NoRegister, pluginMetaData);
 			return;
 		}
 
@@ -449,20 +465,20 @@ void PluginReg::unloadPlugin(const QString& name, PluginMetadata* pluginMetadata
 
 	emit this->unloading(pl->name);
 
-	if (pl->pluginLoader)
+	if (pl->pluginLoader == nullptr)
 	{
 		emit this->unloadError(UnloadError::EmptyPluginLoader, pl);
 		return;
 	}
 	else if (pl->dependencyCount != 0)
 	{
-		if (pl->tablePoint == PluginMetadata::TablePoint::InPreUnloadTable)
+		if (pl->tablePoint == PluginMetaData::TablePoint::InPreUnloadTable)
 		{
 			emit this->unloadError(UnloadError::RepeatedAdd, pl);
 			return;
 		}
 
-		pl->tablePoint = PluginMetadata::TablePoint::InPreUnloadTable;
+		pl->tablePoint = PluginMetaData::TablePoint::InPreUnloadTable;
 
 		pl->dependencyNeedCount = pl->dependencyCount;
 
@@ -487,13 +503,32 @@ void PluginReg::unloadPlugin(const QString& name, PluginMetadata* pluginMetadata
 		emit this->unloadError(UnloadError::NoLoading, pl);
 		return;
 	}
-	else if (pl->pluginLoader->unload())
+	else if (!(pl->pluginLoader->unload()))
 	{
 		emit this->unloadError(UnloadError::UnloadingFail, pl);
 		return;
 	}
 
+	auto it = pluginLoaded.find(pl->name);
+
+	if (it == pluginLoaded.end())
+	{
+		this->unloadError(UnloadError::NoInLoadedList, pluginMetaData);
+	}
+	else
+	{
+		pluginLoaded.erase(it);
+	}
+
+	pl->tablePoint = PluginMetaData::TablePoint::InUnloadedTable;
+
 	emit this->unloaded(pl->name, pl);
+
+	pl->dependencyList.clear();
+	pl->moduleList.clear();
+	pl->pluginLoader->deleteLater();
+	delete pl;
+	pl = nullptr;
 }
 
 void PluginReg::unloadAllPlugins()

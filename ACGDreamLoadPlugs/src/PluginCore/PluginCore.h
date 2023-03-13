@@ -22,13 +22,20 @@ public:
 
 signals:
 	void loadPlugin(const QString& dirPath, const QString& fileName);
-	void loadAllPlugins(const QString& dirPath, const QStringList& fileNames);
-	void unloadPlugin(const QString& name, PluginMetadata* pluginMetadata = nullptr);
+	void loadAllPlugins(const QString& dirPath);
+
+	void unloadPlugin(const QString& name, PluginMetaData* pluginMetaData = nullptr);
 	void unloadAllPlugins();
+
+	void loaded(const QString& name, PluginMetaData* pluginMetaData);
+	void unloaded(const QString& name, PluginMetaData* pluginMetaData);
+
+	void removeUISignal(QWidget* widget);
+	void regUISignal(PluginCalInterface* plugin, PluginCalInterface::pCreateMainUIPoniterFunc func);
+
 	void backPluginMainUI(PluginCalInterface* plugin, QWidget* mainWidget);
 
 private slots:
-	void runPlugin(PluginMetadata* pluginMetadata, PluginCalInterface* plugin);
-	void setPluginMainUI(PluginCalInterface* plugin, QWidget* mainWidget);
+	void runPlugin(PluginMetaData* pluginMetaData, PluginCalInterface* plugin);
 
 };

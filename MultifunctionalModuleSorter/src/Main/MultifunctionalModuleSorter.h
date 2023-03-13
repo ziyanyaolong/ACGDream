@@ -15,7 +15,7 @@ public:
     explicit MultifunctionalModuleSorter();
     virtual ~MultifunctionalModuleSorter();
 
-    virtual QWidget* createMainUI() override { return new MainUI(); }
+	ACGD_CREATE_MAIN_UI(createMUI, MainUI)
 
 private:
     virtual void pRun() override;

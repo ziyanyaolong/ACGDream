@@ -7,7 +7,7 @@ MultifunctionalModuleSorter::MultifunctionalModuleSorter()
 
 void MultifunctionalModuleSorter::pRun()
 {
-	emit this->regMainUI();
+	emit this->regMainUI(&createMUI);
 
 	this->ui = static_cast<MainUI*>(this->getMainUI());
 }

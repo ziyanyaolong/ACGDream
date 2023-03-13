@@ -17,7 +17,13 @@ Q_PLUGIN_METADATA(IID PluginCalInterface_iid FILE fileName)	\
 #include <QEventLoop>
 #include <QPluginLoader>
 
-#include "../PluginData/PluginMetadata/PluginMetadata.h"
+#include "../PluginData/PluginMetaData/PluginMetaData.h"
+
+#define ACGD_CREATE_MAIN_UI(funcName, UI_Type, ...)	\
+static QWidget* funcName()							\
+{													\
+	return new UI_Type(__VA_ARGS__);				\
+}													\
 
 class ACGDream;
 class PluginCalInterface : public QObject
@@ -32,18 +38,18 @@ public:
 
 	virtual QWidget* createMainUI() { return nullptr; }
 
-	typedef QWidget* (*createMainUIPoniter)();
+	typedef QWidget* (*pCreateMainUIPoniterFunc)();
 
 protected:
 	virtual void pRun() = 0;
 
-	PluginCalInterface(QObject* parent = Q_NULLPTR) : QObject(parent) {}
+	PluginCalInterface(QObject* parent = Q_NULLPTR);
 
 	inline QWidget* getMainUI() { return mainUI; }
 
 	inline bool setSeparateThread(bool choice) { separateThread = choice; }
 
-	void regMainUI();
+	void regMainUI(pCreateMainUIPoniterFunc func);
 
 private:
 	friend class PluginReg;
@@ -57,18 +63,18 @@ private:
 
 	QWidget* mainUI = nullptr;
 	
-	const PluginMetadata* pluginMetadata = nullptr;
+	const PluginMetaData* pluginMetaData = nullptr;
 
 	inline void setPluginLoader(QPluginLoader* pluginLoader) { pluginLoader = pluginLoader; }
-	inline const PluginMetadata* getPluginMetadata() { return pluginMetadata; }
+	inline const PluginMetaData* getPluginMetaData() { return pluginMetaData; }
 
 signals:
-	void regMainUIS();
+	void regMainUIS(PluginCalInterface* plugin, pCreateMainUIPoniterFunc func);
 	void quitRegMainUILock();
 	void deleteMainUI(QWidget* widget);
 
 public slots:
-	void backPluginMainUI(QWidget* widget);
+	void backPluginMainUI(PluginCalInterface* plugin, QWidget* widget);
 
 };
 

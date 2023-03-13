@@ -16,12 +16,13 @@
 #include <QByteArray>
 #include <QDataStream>
 #include <QReadWriteLock>
+#include <QMetaType>
 
 #include "../../ACGDreamDevelopmentLibrary/JsonOperation/JsonOperation.h"
 
 #include "../../PluginCalInterface/PluginCalInterface.h"
 
-#include "../../PluginData/PluginMetadata/PluginMetadata.h"
+#include "../../PluginData/PluginMetaData/PluginMetaData.h"
 
 class PluginReg : public QObject
 {
@@ -30,14 +31,14 @@ class PluginReg : public QObject
 public:
 	enum class ReturnFTE
 	{
-		FALSE = 0x0,
-		TRUE,
-		ERROR
+		MFALSE,
+		MTRUE,
+		MERROR
 	};
 
 	enum class ErrorType
 	{
-		ReadAllFile = 0x0,
+		ReadAllFile,
 		Load,
 		Unload,
 		File,
@@ -46,7 +47,7 @@ public:
 
 	enum class ErrorList
 	{
-		Normal = 0x0,
+		Normal,
 		FilePathEmpty,
 		DirPathEmpty,
 		LoadFail,
@@ -62,7 +63,7 @@ public:
 
 	enum class LoadError
 	{
-		Normal = 0x0,
+		Normal,
 		EmptyPluginLoader,
 		RepeatedAdd,
 		Unknown
@@ -70,26 +71,27 @@ public:
 
 	enum class UnloadError
 	{
-		Normal = 0x0,
+		Normal,
 		EmptyPluginLoader,
 		RepeatedAdd,
 		NoLoading,
+		NoInLoadedList,
 		NoRegister,
 		UnloadingFail,
 		Unknown
 	};
 
-	typedef QList<PluginMetadata*> PreList;
+	typedef QList<PluginMetaData*> PreList;
 	typedef QMap<QString, PreList> PreMapList;
-	typedef QMap<QString, PluginMetadata*> PluginLoaded;
-	typedef QMap<QString, PluginMetadata*> PluginMap;
+	typedef QMap<QString, PluginMetaData*> PluginLoaded;
+	typedef QMap<QString, PluginMetaData*> PluginMap;
 
-	void readAllFile(const QString& dirPath);
+	QStringList readAllFile(const QString& dirPath);
 
 	void loadPlugin(const QString& dirPath, const QString& fileName);
-	void loadAllPlugins(const QString& dirPath, const QStringList& fileNames);
+	void loadAllPlugins(const QString& dirPath);
 
-	void unloadPlugin(const QString& name, PluginMetadata* pluginMetadata = nullptr);
+	void unloadPlugin(const QString& name, PluginMetaData* pluginMetaData = nullptr);
 	void unloadAllPlugins();
 
 	explicit PluginReg(QObject* parent = Q_NULLPTR);
@@ -105,31 +107,27 @@ private:
 	QList<QString> analyticTable;
 	QString name;
 
-	void preLoaderTest(const QString& name, PluginMetadata* pluginMetadata, bool flag);
+	void preLoaderTest(const QString& name, PluginMetaData* pluginMetaData);
 	void preUnloaderTest(QPluginLoader* pluginLoader, bool flag);
 
-	PluginCalInterface* pluginLoading(PluginMetadata* pluginMetadata);
-	ReturnFTE pluginUnloading(PluginMetadata* pluginMetadata);
+	PluginCalInterface* pluginLoading(PluginMetaData* pluginMetaData);
+	ReturnFTE pluginUnloading(PluginMetaData* pluginMetaData);
 
-	PluginCalInterface* wakeUpPreLoader(PluginMetadata* pluginMetadata);
-	ReturnFTE wakeUpPreUnloader(PluginMetadata* pluginMetadata);
+	PluginCalInterface* wakeUpPreLoader(PluginMetaData* pluginMetaData);
+	ReturnFTE wakeUpPreUnloader(PluginMetaData* pluginMetaData);
 
 signals:
-	void removeUISignal(QWidget* widget);
-
 	void loading(const QString& name);
-	void loaded(const QString& name, PluginMetadata* pluginMetadata, bool flag);
-	void loadError(ErrorList loadError, PluginMetadata* pluginMetadata);
+	void loaded(const QString& name, PluginMetaData* pluginMetaData);
+	void loadError(ErrorList loadError, PluginMetaData* pluginMetaData);
 
 	void unloading(const QString& name);
-	void unloaded(const QString& name, PluginMetadata* pluginMetadata);
-	void unloadError(UnloadError unloadError, PluginMetadata* pluginMetadata);
+	void unloaded(const QString& name, PluginMetaData* pluginMetaData);
+	void unloadError(UnloadError unloadError, PluginMetaData* pluginMetaData);
 
-	void regPluginMainUI(PluginCalInterface* plugin);
-	void backReadAllFile(const QString& dirPath, const QStringList& fileNames);
+	//void regPluginMainUI(PluginCalInterface* plugin);
 
 	void errorReport(ErrorType type, ErrorList error);
-	void initCompletePlugin(PluginMetadata* pluginMetadata, PluginCalInterface* plugin);
-	//void backPluginMainUI(PluginCalInterface* plugin, QWidget* mainWidget);
+	void initCompletePlugin(PluginMetaData* pluginMetaData, PluginCalInterface* plugin);
 	
 };

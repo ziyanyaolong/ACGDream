@@ -106,8 +106,8 @@ QVariantMap ACGDREAM_DL::JsonOperation::analyticAll()
 
     QJsonObject object = jsonDocument.object();
     QVariantMap list;
-    QMap<QString, QJsonObject> listValue1;
-    QMap<QString, QJsonObject> listValue2;
+    QVariantMap listValue1;
+    QVariantMap listValue2;
 
     for (auto it = object.begin(); it != object.end(); it++)
     {
@@ -115,24 +115,33 @@ QVariantMap ACGDREAM_DL::JsonOperation::analyticAll()
         {
             listValue1[QString(it.key() + ".")] = it.value().toObject();
 		}
+        else if (it.value().isArray())
+        {
+            list[it.key()] = it.value().toArray().toVariantList();
+        }
         else
         {
             list[it.key()] = it.value().toString();
         }
         
     }
-    while (listValue1.size() > 0)
+
+    while (!(listValue1.isEmpty()))
     {
         listValue2.clear();
         for (auto i = listValue1.begin(); i != listValue1.end(); i++)
         {
-            QJsonObject& value = i.value();
+            QJsonObject value = i.value().toJsonObject(); 
             for (auto it = value.begin(); it != value.end(); it++)
             {
                 if(it.value().isObject())
                 {
                     listValue2[i.key() + it.key() + "."] = it.value().toObject();
                 }
+				else if (it.value().isArray())
+				{
+                    list[i.key() + it.key()] = it.value().toArray().toVariantList();
+				}
                 else
                 {
                     list[i.key() + it.key()] = it.value().toString();

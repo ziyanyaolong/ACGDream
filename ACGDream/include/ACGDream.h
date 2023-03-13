@@ -26,7 +26,7 @@ class ACGDream : public ACGDreamFrame
 	Q_OBJECT
 
 private:
-	PluginReg* pluginReg;
+	PluginCore* pluginCore;
 	QThread* pluginThread;
 
 protected:

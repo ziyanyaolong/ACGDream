@@ -29,7 +29,7 @@ public:
 	virtual ~SteamWorkshopTool();
 	virtual void pRun() override;
 	//void initPicture();
-	virtual QWidget* createMainUI() override { return new SWTUI(); }
+	ACGD_CREATE_MAIN_UI(createMUI, SWTUI)
 
 signals:
 

@@ -24,7 +24,7 @@ public:
 	~QtRegularExpressionValidation();
 	virtual void pRun();
 
-	virtual QWidget* createMainUI() override { return new MainUI(); }
+	ACGD_CREATE_MAIN_UI(createMUI, MainUI)
 
 signals:
 	void sendInfo(const QString&);

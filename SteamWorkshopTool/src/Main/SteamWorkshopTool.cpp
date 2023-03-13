@@ -44,7 +44,7 @@ SteamWorkshopTool::~SteamWorkshopTool()
 
 void SteamWorkshopTool::pRun()
 {
-	emit this->regMainUI();
+	emit this->regMainUI(&createMUI);
 
 	this->ui = static_cast<SWTUI*>(this->getMainUI());
 

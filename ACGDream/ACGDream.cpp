@@ -8,9 +8,9 @@ ACGDream::ACGDream(QMainWindow* parent)
 	this->initDirs();
 
 	pluginThread = new QThread(this);
-	pluginReg = new PluginReg(nullptr);
+	pluginCore = new PluginCore(nullptr);
 	
-	pluginReg->moveToThread(pluginThread);
+	pluginCore->moveToThread(pluginThread);
 	if (!pluginThread->isRunning())
 	{
 		pluginThread->start();
@@ -18,19 +18,45 @@ ACGDream::ACGDream(QMainWindow* parent)
 
 	setBackground(QImage(QCoreApplication::applicationDirPath() + "/BG.png"));
 
+	//插件信号处理和传递
 	//connect(pluginReg, &PluginCore::removeUISignal, this, [&](QWidget* widget) {
 	//	this->removeWidght(widget);
 	//	}, Qt::QueuedConnection);
 
-	//connect(pluginReg, &PluginCore::loading, this, [&](QString name) {
-	//	this->initDirs(name);
-	//	});
+	connect(pluginCore, &PluginCore::loaded, this, [&](const QString& name, PluginMetaData* pluginMetaData) {
+		this->initDirs(name);
+		});
+
+	connect(pluginCore, &PluginCore::unloaded, this, [&](const QString& name, PluginMetaData* pluginMetaData) {
+		this->initDirs(name);
+		});
+
+	connect(pluginCore, &PluginCore::regUISignal, this, [&](PluginCalInterface* plugin, PluginCalInterface::pCreateMainUIPoniterFunc func) {
+		QWidget* pTempWidget = func();
+
+		if (this->addWidght(pTempWidget) == nullptr)
+		{
+			QMetaObject::invokeMethod(pluginCore,
+				"backPluginMainUI",
+				Qt::QueuedConnection,
+				Q_ARG(PluginCalInterface*, plugin),
+				Q_ARG(QWidget*, nullptr));
+		}
+		else
+		{
+			QMetaObject::invokeMethod(pluginCore,
+				"backPluginMainUI",
+				Qt::QueuedConnection,
+				Q_ARG(PluginCalInterface*, plugin),
+				Q_ARG(QWidget*, pTempWidget));
+		}
+		});
 
 	//connect(pluginReg, &PluginCore::loadError, this, [&](const QString& name, const QString& info) {
 	//	QMessageBox::critical(this, name, info);
 	//	});
 
-	//connect(pluginReg, &PluginCore::regPluginMainUI, this, [&](PluginCalInterface* plugin) {
+	//connect(pluginReg, &PluginCore::backPluginMainUI, this, [&](PluginCalInterface* plugin, QWidget* mainWidget) {
 	//	QWidget* pTempWidget = plugin->createMainUI();
 	//	if (this->addWidght(pTempWidget) == nullptr)
 	//	{
@@ -50,6 +76,7 @@ ACGDream::ACGDream(QMainWindow* parent)
 	//	}
 	//	});
 
+	//界面按钮等处理和传递
 	connect(ui.actions, &QAction::triggered, this, [&]() {
 		auto actionsSet = ((QAction*)(sender()));
 		if (!actionsSet->isEnabled())
@@ -60,7 +87,7 @@ ACGDream::ACGDream(QMainWindow* parent)
 		actionsSet->setEnabled(false);
 		this->clearAllWidget();
 
-		QMetaObject::invokeMethod(pluginReg,
+		QMetaObject::invokeMethod(pluginCore,
 			"loadAllPlugins",
 			Qt::QueuedConnection,
 			Q_ARG(const QString&, QCoreApplication::applicationDirPath() + "/Extra"));
@@ -76,12 +103,12 @@ ACGDream::ACGDream(QMainWindow* parent)
 ACGDream::~ACGDream()
 {
 	//加载模块退出
-	if (pluginReg)
+	if (pluginCore)
 	{
-		pluginReg->deleteLater();
+		pluginCore->deleteLater();
 	}
 
-	pluginReg = nullptr;
+	pluginCore = nullptr;
 
 	if (pluginThread)
 	{
