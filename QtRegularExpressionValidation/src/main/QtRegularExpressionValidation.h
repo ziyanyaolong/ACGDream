@@ -14,14 +14,14 @@
 class _declspec(dllexport) QtRegularExpressionValidation : public PluginCalInterface
 {
 	Q_OBJECT
-		RegPlugin("QtRegularExpressionValidation.json")
+		ACGDRegPlugin("QtRegularExpressionValidation.json")
 
 private:
 	MainUI* ui = nullptr;
 
 public:
 	explicit QtRegularExpressionValidation();
-	~QtRegularExpressionValidation();
+	virtual ~QtRegularExpressionValidation();
 	virtual void pRun();
 
 	ACGD_CREATE_MAIN_UI(createMUI, MainUI)

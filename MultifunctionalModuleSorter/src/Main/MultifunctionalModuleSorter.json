@@ -1,5 +1,7 @@
 {
   "PluginName": "MultifunctionalModuleSorter",
   "Version": "0.0.1",
-  "Dependencys": ""
+  "Dependencys": [
+    "SteamWorkshopTool"
+  ]
 }

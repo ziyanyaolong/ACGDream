@@ -28,5 +28,6 @@ void PluginCore::runPlugin(PluginMetaData* pluginMetaData, PluginCalInterface* p
 {
 	connect(plugin, &PluginCalInterface::regMainUIS, this, &PluginCore::regUISignal);
 	connect(this, &PluginCore::backPluginMainUI, plugin, &PluginCalInterface::backPluginMainUI, Qt::QueuedConnection);
+	connect(plugin, &PluginCalInterface::removeMainUI, this, &PluginCore::removeUISignal);
 	plugin->pRun();
 }

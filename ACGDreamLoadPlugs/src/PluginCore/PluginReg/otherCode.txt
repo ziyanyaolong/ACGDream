@@ -1,245 +1,218 @@
-bool PluginReg::unloadPluginsProcess(QPluginLoader* pluginLoader)
+void PluginReg::preLoaderTest(const QString& name, PluginMetaData* pluginMetaData)
 {
-	if (pluginLoader->isLoaded())
+	if (pluginPreLoadList.isEmpty())
 	{
-		auto plugin = (qobject_cast<PluginCalInterface*>(pluginLoader->instance()));
-
-		if (plugin == nullptr)
-		{
-			this->loadError(ErrorList::EmptyPointer, plugin->objectName(), pluginLoader);
-			pluginLoader->deleteLater();
-			return false;
-		}
-
-		auto pluginAccessoryModuleList = plugin->getAccessoryModuleList();
-
-		if (pluginAccessoryModuleList != nullptr)
-		{
-			for (auto pluginAM = pluginAccessoryModuleList->begin(); pluginAM != pluginAccessoryModuleList->end(); pluginAM++)
-			{
-				this->unloadPluginsProcess(*pluginAM);
-			}
-		}
-
-		pluginAccessoryModuleList->clear();
-		delete pluginAccessoryModuleList;
-		pluginAccessoryModuleList = nullptr;
-
-		if ((pluginLoader->unload()) == false)
-		{
-			this->loadError(pluginLoader->objectName(), QString("卸载失败,其他实例正在使用此插件!"));
-			pluginLoader->deleteLater();
-			return false;
-		}
-	}
-	else
-	{
-		this->loadError(pluginLoader->objectName(), QString("卸载失败,插件实例未运行!"));
-		pluginLoader->deleteLater();
-		return false;
-	}
-	pluginLoader->deleteLater();
-	return true;
-}
-
-void PluginReg::loadPluginsProcess0()
-{
-	foreach(auto i, plugins)
-	{
-		if (i == nullptr)
-		{
-			continue;
-		}
-		else if (!i->isLoaded())
-		{
-			PluginCalInterface* plugin = nullptr;
-
-			QT_TRY
-			{
-				plugin = qobject_cast<PluginCalInterface*>(i->instance());
-			}
-				QT_CATCH(QException e)
-			{
-				this->loadError(i->fileName(), QString(e.what()));
-				continue;
-			}
-			QT_CATCH(...)
-			{
-				this->loadError(i->fileName(), i->errorString());
-				continue;
-			}
-
-			if (plugin)
-			{
-				continue;
-			}
-
-			plugin->setPluginLoader(i);
-
-			connect(plugin, &PluginCalInterface::regMainUIS, this, [&]() {
-				emit this->regPluginMainUI((PluginCalInterface*)(sender()));
-				});
-
-			connect(plugin, &PluginCalInterface::deleteMainUI, this, &PluginReg::removeUISignal);
-
-			QT_TRY
-			{
-				plugin->pRun();
-			}
-				QT_CATCH(QException e)
-			{
-				this->loadError(i->fileName(), QString(e.what()));
-				continue;
-			}
-			QT_CATCH(...)
-			{
-				this->loadError(i->fileName(), i->errorString());
-				continue;
-			}
-
-		}
-		else
-		{
-			continue;
-		}
-	}
-
-
-	PluginCalInterface* plugin = nullptr;
-
-	QT_TRY
-	{
-		plugin = qobject_cast<PluginCalInterface*>(pluginLoader->instance());
-	}
-		QT_CATCH(QException e)
-	{
-		this->loadError(pluginLoader->fileName(), QString(e.what()));
-		return -1;
-	}
-	QT_CATCH(...)
-	{
-		this->loadError(pluginLoader->fileName(), pluginLoader->errorString());
-		return -1;
-	}
-
-	if (!pluginLoader->isLoaded())
-	{
-		this->loadError(pluginLoader->fileName(), pluginLoader->errorString());
-		return -1;
-	}
-	else if (plugin)
-	{
-
-	}
-	else
-	{
-		this->loadError(pluginLoader->fileName(), QString("插件指针为空,请检查插件是否有问题!"));
-		return -1;
-	}
-
-	return 1;
-}
-
-void PluginReg::loadPluginsProcess1(const QString& name, QPluginLoader* pluginLoader)
-{
-	PluginCalInterface* plugin = nullptr;
-
-	QT_TRY
-	{
-		plugin = qobject_cast<PluginCalInterface*>(pluginLoader->instance());
-	}
-		QT_CATCH(QException e)
-	{
-		this->loadError(pluginLoader->fileName(), QString(e.what()));
-		return -1;
-	}
-	QT_CATCH(...)
-	{
-		this->loadError(pluginLoader->fileName(), pluginLoader->errorString());
-		return -1;
-	}
-
-	if (!pluginLoader->isLoaded())
-	{
-		this->loadError(pluginLoader->fileName(), pluginLoader->errorString());
-		return -1;
-	}
-	else if (plugin)
-	{
-		plugin->setPluginLoader(pluginLoader);
-
-		connect(plugin, &PluginCalInterface::regMainUIS, this, [&]() {
-			emit this->regPluginMainUI((PluginCalInterface*)(sender()));
-			});
-
-		connect(plugin, &PluginCalInterface::deleteMainUI, this, &PluginReg::removeUISignal);
-
-		plugins[name] = pluginLoader;
-
-		QT_TRY
-		{
-			plugin->pRun();
-		}
-			QT_CATCH(QException e)
-		{
-			this->loadError(pluginLoader->fileName(), QString(e.what()));
-			return -1;
-		}
-		QT_CATCH(...)
-		{
-			this->loadError(pluginLoader->fileName(), pluginLoader->errorString());
-			return -1;
-		}
-	}
-	else
-	{
-		this->loadError(pluginLoader->fileName(), QString("插件指针为空,请检查插件是否有问题!"));
-		return -1;
-	}
-
-	return 1;
-}
-//
-void PluginReg::unloadAllPlugins()
-{
-	for (auto plugin = plugins.begin(); plugin != plugins.end(); plugin++)
-	{
-		if (plugin.value())
-		{
-			this->unloadPluginsProcess(plugin.value());
-		}
-	}
-	plugins.clear();
-}
-
-void PluginReg::unloadPlugin(QList<QPluginLoader*>& pluginLoaderList)
-{
-	auto pluginLoader = plugins.find(pluginName);
-	if (pluginLoader != plugins.end())
-	{
-		if (pluginLoader.value())
-		{
-			this->unloadPluginsProcess(pluginLoader.value());
-			pluginLoader.value()->unload();
-			plugins.erase(pluginLoader);
-		}
-
-		return true;
-	}
-	return false;
-}
-
-void PluginReg::loadAllPlugins(const QString& dirPath, const QStringList& fileNames)
-{
-	unloadAllPlugins();
-	if (list.isEmpty())
-	{
-		emit this->loadError(ErrorList::FilePathEmpty, QString(), nullptr);
 		return;
 	}
 
-	foreach(QString fileName, list)
+	QList<QString> list;
+	QList<QString> tempList;
+
+	list.push_back(name);
+
+	QList<QString>::iterator listIt = list.begin();
+
+	//加载插件(如果插件被加载则再次检测是否有其附属)
+	for (auto i = pluginPreLoadList.begin(); i != pluginPreLoadList.end();)
 	{
-		this->loadPlugin(dirPath, fileName);
+		if (i.key() == *listIt)
+		{
+			for (auto j = i->begin(); j != i->end();)
+			{
+				//防止出现空项
+				while ((*j) == nullptr)
+				{
+					j = i->erase(j);
+					continue;
+				}
+
+				if ((*j)->tablePoint != PluginMetaData::TablePoint::InPreLoadTable)
+				{
+					j++;
+					continue;
+				}
+
+				(*j)->dependencyList.push_back(pluginMetaData);
+
+				((*j)->dependencyNeedCount)--;
+
+				if ((*j)->dependencyNeedCount > 0)
+				{
+					j++;
+					continue;
+				}
+
+				//添加到队列
+				tempList.push_back((*j)->name);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
+
+				//唤醒插件
+				this->wakeUpPreLoader(*j);
+
+				(*j)->tablePoint = PluginMetaData::TablePoint::InLoadedTable;
+
+				pluginMetaData->moduleList.push_back(*j);
+
+				j = i->erase(j);
+			}
+
+			//检测如果所有附属全部加载完成,则删除此键值
+			if (i->isEmpty())
+			{
+				//这里不需要把迭代器后面的值传给i,因为后面要么直接赋值为begin,要么直接结束
+				pluginPreLoadList.erase(i);
+			}
+
+			if (listIt != list.end())
+			{
+				list.erase(listIt);
+				list += tempList;
+				listIt = list.begin();
+				tempList.clear();
+
+				i = pluginPreLoadList.begin();
+
+				if (listIt != list.end())
+				{
+					continue;
+				}
+				else
+				{
+					break;
+				}
+			}
+			else
+			{
+				break;
+			}
+		}
+		i++;
 	}
+
+	//用完清理,好习惯
+	list.clear();
 }
+
+void PluginReg::preUnloaderTest(const QString& name, PluginMetaData* pluginMetaData)
+{
+	if (pluginPreUnloadList.isEmpty())
+	{
+		return;
+	}
+
+	QList<QString> list;
+	QList<QString> tempList;
+
+	list.push_back(name);
+
+	QList<QString>::iterator listIt = list.begin();
+
+	//卸载插件(如果插件被卸载则再次检测是否有其附属)
+	for (auto i = pluginPreUnloadList.begin(); i != pluginPreUnloadList.end();)
+	{
+		if (i.key() == *listIt)
+		{
+			for (auto j = i->begin(); j != i->end();)
+			{
+				while ((*j) == nullptr)
+				{
+					j = i->erase(j);
+					continue;
+				}
+
+				if ((*j)->tablePoint != PluginMetaData::TablePoint::InPreUnloadTable)
+				{
+					j++;
+					continue;
+				}
+
+				((*j)->dependencyNeedCount)--;
+
+				if ((*j)->dependencyNeedCount > 0)
+				{
+					j++;
+					continue;
+				}
+
+				tempList.push_back((*j)->name);
+
+				this->wakeUpPreUnloader(*j);
+
+				(*j)->tablePoint = PluginMetaData::TablePoint::InUnloadedTable;
+
+				j = i->erase(j);
+			}
+
+			//检测如果所有附属全部卸载完成,则删除此键值
+			if (i->isEmpty())
+			{
+				//这里不需要把迭代器后面的值传给i,因为后面要么直接赋值为begin,要么直接结束
+				pluginPreUnloadList.erase(i);
+			}
+
+			if (listIt != list.end())
+			{
+				list.erase(listIt);
+				list += tempList;
+				listIt = list.begin();
+				tempList.clear();
+
+				i = pluginPreUnloadList.begin();
+
+				if (listIt != list.end())
+				{
+					continue;
+				}
+				else
+				{
+					break;
+				}
+			}
+			else
+			{
+				break;
+			}
+		}
+		i++;
+	}
+
+	//用完清理,好习惯
+	list.clear();
+}
+
+for (auto it1 = it0.value().begin(); it1 != it0.value().end();)
+			{
+				tempIsAdd0 = false;
+				for (auto it2 = tempList.begin(); it2 != tempList.end(); it2++)
+				{
+					if ((it0) == (*it2))
+					{
+						if (it1 != it0.value().end())
+						{
+							it1 = it0.value().erase(it1);
+							tempIsAdd0 = true;
+						}
+
+					}
+				}
+				if (!tempIsAdd0)
+				{
+					it1++;
+				}
+			}
+
+			if (it0.value().isEmpty())
+			{
+				if (it0 != pluginPreLoadList.end())
+				{
+					tempIsAdd0 = true;
+					it0 = pluginPreLoadList.erase(it0);
+				}
+				else
+				{
+					break;
+				}
+			}
+			else
+			{
+				it0++;
+			}

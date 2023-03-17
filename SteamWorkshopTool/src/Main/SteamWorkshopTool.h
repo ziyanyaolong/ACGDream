@@ -15,7 +15,7 @@
 class _declspec(dllexport) SteamWorkshopTool : public PluginCalInterface
 {
 	Q_OBJECT
-		RegPlugin("SteamWorkshopTool.json")
+		ACGDRegPlugin("SteamWorkshopTool.json")
 
 private:
 	SWTUI* ui = nullptr;

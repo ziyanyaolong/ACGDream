@@ -9,7 +9,7 @@
 class _declspec(dllexport) MultifunctionalModuleSorter : public PluginCalInterface
 {
 	Q_OBJECT
-		RegPlugin("MultifunctionalModuleSorter.json")
+        ACGDRegPlugin("MultifunctionalModuleSorter.json")
 
 public:
     explicit MultifunctionalModuleSorter();

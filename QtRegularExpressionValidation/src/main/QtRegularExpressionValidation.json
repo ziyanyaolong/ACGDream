@@ -2,6 +2,7 @@
   "PluginName": "QtRegularExpressionValidation",
   "Version": "0.0.1",
   "Dependencys": [
+    "MultifunctionalModuleSorter",
     "SteamWorkshopTool"
   ]
 }

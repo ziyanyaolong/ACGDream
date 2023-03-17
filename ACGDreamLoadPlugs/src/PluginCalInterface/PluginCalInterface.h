@@ -6,7 +6,7 @@
 #pragma execution_character_set("utf-8")
 #endif
 
-#define RegPlugin(fileName) \
+#define ACGDRegPlugin(fileName) \
 Q_INTERFACES(PluginCalInterface) \
 Q_PLUGIN_METADATA(IID PluginCalInterface_iid FILE fileName)	\
 
@@ -71,7 +71,7 @@ private:
 signals:
 	void regMainUIS(PluginCalInterface* plugin, pCreateMainUIPoniterFunc func);
 	void quitRegMainUILock();
-	void deleteMainUI(QWidget* widget);
+	void removeMainUI(QWidget* widget);
 
 public slots:
 	void backPluginMainUI(PluginCalInterface* plugin, QWidget* widget);

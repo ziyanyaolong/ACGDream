@@ -17,6 +17,7 @@
 #include <QDataStream>
 #include <QReadWriteLock>
 #include <QMetaType>
+#include <QCollator>
 
 #include "../../ACGDreamDevelopmentLibrary/JsonOperation/JsonOperation.h"
 
@@ -108,13 +109,20 @@ private:
 	QString name;
 
 	void preLoaderTest(const QString& name, PluginMetaData* pluginMetaData);
-	void preUnloaderTest(QPluginLoader* pluginLoader, bool flag);
+	void preUnloaderTest(const QString& name, PluginMetaData* pluginMetaData);
 
 	PluginCalInterface* pluginLoading(PluginMetaData* pluginMetaData);
 	ReturnFTE pluginUnloading(PluginMetaData* pluginMetaData);
 
 	PluginCalInterface* wakeUpPreLoader(PluginMetaData* pluginMetaData);
 	ReturnFTE wakeUpPreUnloader(PluginMetaData* pluginMetaData);
+
+	ReturnFTE casePluginList(PluginMetaData::TablePoint tablePoint, PluginMetaData* pluginMetaData, void* pointer = nullptr);
+	ReturnFTE casePluginListErase(PluginMetaData* pluginMetaData, void* pointer);
+	ReturnFTE casePluginListPush(PluginMetaData::TablePoint tablePoint, PluginMetaData* pluginMetaData, void* pointer);
+
+	//ReturnFTE pluginListClear(PluginMetaData* pluginMetaData = nullptr, void* it = nullptr);
+	ReturnFTE sortPluginList();
 
 signals:
 	void loading(const QString& name);
@@ -129,5 +137,7 @@ signals:
 
 	void errorReport(ErrorType type, ErrorList error);
 	void initCompletePlugin(PluginMetaData* pluginMetaData, PluginCalInterface* plugin);
+
+	void pluginCleared(const QString& name);
 	
 };

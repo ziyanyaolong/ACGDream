@@ -19,9 +19,9 @@ ACGDream::ACGDream(QMainWindow* parent)
 	setBackground(QImage(QCoreApplication::applicationDirPath() + "/BG.png"));
 
 	//插件信号处理和传递
-	//connect(pluginReg, &PluginCore::removeUISignal, this, [&](QWidget* widget) {
-	//	this->removeWidght(widget);
-	//	}, Qt::QueuedConnection);
+	connect(pluginCore, &PluginCore::removeUISignal, this, [&](QWidget* widget) {
+		this->removeWidght(widget);
+		});
 
 	connect(pluginCore, &PluginCore::loaded, this, [&](const QString& name, PluginMetaData* pluginMetaData) {
 		this->initDirs(name);

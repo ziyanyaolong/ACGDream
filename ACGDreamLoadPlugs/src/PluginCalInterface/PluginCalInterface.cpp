@@ -11,7 +11,8 @@ PluginCalInterface::~PluginCalInterface()
 {
 	if (mainUI)
 	{
-		emit deleteMainUI(mainUI);
+		disconnect(mainUI);
+		emit this->removeMainUI(mainUI);
 	}
 
 	mainUI = nullptr;

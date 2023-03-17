@@ -8,6 +8,7 @@ PluginReg::PluginReg(QObject* parent)
 		});
 
 	connect(this, &PluginReg::loaded, this, &PluginReg::preLoaderTest);
+	connect(this, &PluginReg::unloaded, this, &PluginReg::preUnloaderTest);
 
 	QDir dir(QCoreApplication::applicationDirPath() + "/Config");
 
@@ -62,149 +63,82 @@ PluginReg::~PluginReg()
 
 void PluginReg::preLoaderTest(const QString& name, PluginMetaData* pluginMetaData)
 {
-	QList<QString> list;
-	list.push_back(name);
-
-	QList<QString>::iterator listIt = list.begin();
-
-	//加载插件(如果插件被加载则再次检测是否有其附属)
-	for (auto i = pluginPreLoadList.begin(); i != pluginPreLoadList.end();)
+	if (pluginPreLoadList.isEmpty())
 	{
-		if (i.key() == *listIt)
-		{
-			for (auto j = i->begin(); j != i->end();)
-			{
-				//防止出现空项
-				while ((*j) == nullptr)
-				{
-					j = i->erase(j);
-					continue;
-				}
-
-				if ((*j)->tablePoint != PluginMetaData::TablePoint::InPreLoadTable)
-				{
-					j++;
-					continue;
-				}
-
-				(*j)->dependencyNeedCount--;
-
-				if ((*j)->dependencyNeedCount > 0)
-				{
-					(*j)->dependencyList.push_back(pluginMetaData);
-					continue;
-				}
-
-				//添加到队列
-				list.push_back((*j)->name);
-
-				//唤醒插件
-				this->wakeUpPreLoader(*j);
-
-				(*j)->tablePoint = PluginMetaData::TablePoint::InLoadedTable;
-
-				pluginMetaData->moduleList.push_back(*j);
-
-				j = i->erase(j);
-			}
-
-			//检测如果所有附属全部加载完成,则删除此键值
-			if (i->isEmpty())
-			{
-				//这里不需要把迭代器后面的值传给i,因为后面要么直接赋值为begin,要么直接结束
-				pluginPreLoadList.erase(i);
-			}
-
-			if (listIt != list.end())
-			{
-				listIt = list.erase(listIt);
-				i = pluginPreLoadList.begin();
-				continue;
-			}
-			else
-			{
-				break;
-			}
-		}
-		i++;
+		return;
 	}
 
-	//用完清理,好习惯
-	list.clear();
+	auto it0 = pluginPreLoadList.find(name);
+
+	if (it0 == pluginPreLoadList.end())
+	{
+		return;
+	}
+
+	QList<PluginMetaData*> wakeList;
+
+	for (auto it1 = it0.value().begin(); it1 != it0.value().end(); it1++)
+	{
+		((*it1)->dependencyNeedCount)--;
+
+		(*it1)->dependencyList.push_back(pluginMetaData);
+
+		if ((*it1)->dependencyNeedCount > 0)
+		{
+			continue;
+		}
+
+		wakeList.push_back(*it1);
+	}
+
+	if (wakeList.isEmpty())
+	{
+		return;
+	}
+
+	for (auto it1 = wakeList.begin(); it1 != wakeList.end(); it1++)
+	{
+		this->wakeUpPreLoader(*it1);
+	}
 }
 
-void PluginReg::preUnloaderTest(QPluginLoader* pluginLoader, bool flag)
+void PluginReg::preUnloaderTest(const QString& name, PluginMetaData* pluginMetaData)
 {
-	QList<QString> list;
-	list.push_back(name);
-
-	QList<QString>::iterator listIt = list.begin();
-
-	//卸载插件(如果插件被卸载则再次检测是否有其附属)
-	for (auto i = pluginPreUnloadList.begin(); i != pluginPreUnloadList.end();)
+	if (pluginPreUnloadList.isEmpty())
 	{
-		if (i.key() == *listIt)
-		{
-			for (auto j = i->begin(); j != i->end();)
-			{
-				while ((*j) == nullptr)
-				{
-					j = i->erase(j);
-					continue;
-				}
-
-				if ((*j)->tablePoint != PluginMetaData::TablePoint::InPreUnloadTable)
-				{
-					j++;
-					continue;
-				}
-
-				(*j)->dependencyNeedCount--;
-
-				if ((*j)->dependencyNeedCount > 0)
-				{
-					continue;
-				}
-
-				list.push_back((*j)->name);
-
-				this->wakeUpPreUnloader(*j);
-
-				(*j)->tablePoint = PluginMetaData::TablePoint::InUnloadedTable;
-
-				pluginLoader->deleteLater();
-
-				pluginLoader = nullptr;
-
-				delete (*j);
-				(*j) = nullptr;
-
-				j = i->erase(j);
-			}
-
-			//检测如果所有附属全部卸载完成,则删除此键值
-			if (i->isEmpty())
-			{
-				//这里不需要把迭代器后面的值传给i,因为后面要么直接赋值为begin,要么直接结束
-				pluginPreLoadList.erase(i);
-			}
-
-			if (listIt != list.end())
-			{
-				listIt = list.erase(listIt);
-				i = pluginPreUnloadList.begin();
-				continue;
-			}
-			else
-			{
-				break;
-			}
-		}
-		i++;
+		return;
 	}
 
-	//用完清理,好习惯
-	list.clear();
+	auto it0 = pluginPreUnloadList.find(name);
+
+	if (it0 == pluginPreUnloadList.end())
+	{
+		return;
+	}
+
+	QList<PluginMetaData*> wakeList;
+
+	for (auto it1 = it0.value().begin(); it1 != it0.value().end(); it1++)
+	{
+		((*it1)->dependencyNeedCount)--;
+
+		if ((*it1)->dependencyNeedCount > 0)
+		{
+			continue;
+		}
+
+		wakeList.push_back(*it1);
+	}
+
+	if (wakeList.isEmpty())
+	{
+		return;
+	}
+
+	for (auto it1 = wakeList.begin(); it1 != wakeList.end(); it1++)
+	{
+		this->wakeUpPreUnloader(*it1);
+	}
 }
 
 PluginCalInterface* PluginReg::pluginLoading(PluginMetaData* pluginMetaData)
@@ -253,9 +187,7 @@ PluginCalInterface* PluginReg::pluginLoading(PluginMetaData* pluginMetaData)
 
 	plugin->pluginMetaData = pluginMetaData;
 
-	pluginLoaded.insert(pluginMetaData->name, pluginMetaData);
-
-	pluginMetaData->tablePoint = PluginMetaData::TablePoint::InLoadedTable;
+	this->casePluginList(PluginMetaData::TablePoint::InLoadedTable, pluginMetaData);
 
 	emit this->loaded(pluginMetaData->name, pluginMetaData);
 	emit this->initCompletePlugin(pluginMetaData, plugin);
@@ -265,23 +197,38 @@ PluginCalInterface* PluginReg::pluginLoading(PluginMetaData* pluginMetaData)
 
 PluginReg::ReturnFTE PluginReg::pluginUnloading(PluginMetaData* pluginMetaData)
 {
+	ReturnFTE fte = ReturnFTE::MFALSE;
+
 	if (pluginMetaData->pluginLoader == nullptr)
 	{
 		emit this->unloadError(UnloadError::EmptyPluginLoader, pluginMetaData);
-		return ReturnFTE::MERROR;
+		fte = ReturnFTE::MERROR;
 	}
 	else if (!(pluginMetaData->pluginLoader->isLoaded()))
 	{
 		emit this->unloadError(UnloadError::NoLoading, pluginMetaData);
-		return ReturnFTE::MERROR;
+		fte = ReturnFTE::MERROR;
 	}
 	else if (!(pluginMetaData->pluginLoader->unload()))
 	{
 		emit this->unloadError(UnloadError::UnloadingFail, pluginMetaData);
-		return ReturnFTE::MERROR;
+		fte = ReturnFTE::MERROR;
+		return fte;
 	}
 
-	return ReturnFTE::MTRUE;
+	this->casePluginList(PluginMetaData::TablePoint::InUnloadedTable, pluginMetaData);
+
+	emit this->unloaded(pluginMetaData->name, pluginMetaData);
+
+	pluginMetaData->dependencyList.clear();
+	pluginMetaData->moduleList.clear();
+	pluginMetaData->pluginLoader->deleteLater();
+	delete pluginMetaData;
+	pluginMetaData = nullptr;
+
+	fte = ReturnFTE::MTRUE;
+
+	return fte;
 }
 
 PluginCalInterface* PluginReg::wakeUpPreLoader(PluginMetaData* pluginMetaData)
@@ -292,6 +239,318 @@ PluginCalInterface* PluginReg::wakeUpPreLoader(PluginMetaData* pluginMetaData)
 PluginReg::ReturnFTE PluginReg::wakeUpPreUnloader(PluginMetaData* pluginMetaData)
 {
 	return this->pluginUnloading(pluginMetaData);
+}
+
+PluginReg::ReturnFTE PluginReg::casePluginList(PluginMetaData::TablePoint tablePoint, PluginMetaData* pluginMetaData, void* pointer)
+{
+	ReturnFTE fte = ReturnFTE::MFALSE;
+
+	if (this->casePluginListErase(pluginMetaData, pointer) != ReturnFTE::MTRUE)
+	{
+		fte = ReturnFTE::MERROR;
+	}
+	else if (this->casePluginListPush(tablePoint, pluginMetaData, pointer) != ReturnFTE::MTRUE)
+	{
+		fte = ReturnFTE::MERROR;
+	}
+	else
+	{
+		fte = ReturnFTE::MTRUE;
+	}
+
+	return fte;
+}
+
+PluginReg::ReturnFTE PluginReg::casePluginListErase(PluginMetaData* pluginMetaData, void* pointer)
+{
+	if (pluginMetaData == nullptr)
+	{
+		return ReturnFTE::MERROR;
+	}
+
+	ReturnFTE fte = ReturnFTE::MFALSE;
+
+	switch (pluginMetaData->tablePoint)
+	{
+	case PluginMetaData::TablePoint::None:
+		pluginMetaData->tablePoint = PluginMetaData::TablePoint::None;
+
+		fte = ReturnFTE::MTRUE;
+		break;
+
+	case PluginMetaData::TablePoint::InPreLoadTable:
+	{
+		if (pluginPreLoadList.isEmpty())
+		{
+			fte = ReturnFTE::MERROR;
+			break;
+		}
+
+		QStringList tempList;
+
+		if (pointer)
+		{
+			tempList = (*(reinterpret_cast<QStringList*>(pointer)));
+		}
+		else
+		{
+			for (auto it0 = pluginMetaData->dependencyList.begin(); it0 != pluginMetaData->dependencyList.end(); it0++)
+			{
+				tempList.push_back((*(it0))->name);
+			}
+		}
+
+		for (auto it0 = tempList.begin(); it0 != tempList.end(); it0++)
+		{
+			auto it1 = pluginPreLoadList.find(*it0);
+
+			if (it1 == pluginPreLoadList.end())
+			{
+				continue;
+			}
+
+			auto it2 = qFind(it1.value().begin(), it1.value().end(), pluginMetaData);
+
+			if (it2 == it1.value().end())
+			{
+				continue;
+			}
+
+			it1.value().erase(it2);
+
+			if (it1.value().isEmpty())
+			{
+				pluginPreLoadList.erase(it1);
+			}
+		}
+
+		tempList.clear();
+
+		pluginMetaData->tablePoint = PluginMetaData::TablePoint::None;
+
+		fte = ReturnFTE::MTRUE;
+	}
+	break;
+
+	case PluginMetaData::TablePoint::InPreUnloadTable:
+	{
+		if (pluginPreUnloadList.isEmpty())
+		{
+			fte = ReturnFTE::MERROR;
+			break;
+		}
+
+		QStringList tempList;
+
+		if (pointer)
+		{
+			tempList = (*(reinterpret_cast<QStringList*>(pointer)));
+		}
+		else
+		{
+			for (auto it0 = pluginMetaData->dependencyList.begin(); it0 != pluginMetaData->dependencyList.end(); it0++)
+			{
+				tempList.push_back((*(it0))->name);
+			}
+		}
+
+		for (auto it0 = tempList.begin(); it0 != tempList.end(); it0++)
+		{
+			auto it1 = pluginPreUnloadList.find(*it0);
+
+			if (it1 == pluginPreUnloadList.end())
+			{
+				continue;
+			}
+
+			auto it2 = qFind(it1.value().begin(), it1.value().end(), pluginMetaData);
+
+			if (it2 == it1.value().end())
+			{
+				continue;
+			}
+
+			it1.value().erase(it2);
+
+			if (it1.value().isEmpty())
+			{
+				pluginPreUnloadList.erase(it1);
+			}
+		}
+
+		tempList.clear();
+
+		pluginMetaData->tablePoint = PluginMetaData::TablePoint::None;
+
+		fte = ReturnFTE::MTRUE;
+	}
+	break;
+
+	case PluginMetaData::TablePoint::InLoadedTable:
+	{
+		QString pluginName = pluginMetaData->name;
+
+		if (pluginName.isEmpty())
+		{
+			fte = ReturnFTE::MERROR;
+			break;
+		}
+
+		PluginReg::PluginLoaded::iterator it0;
+
+		if (pointer == nullptr)
+		{
+			it0 = pluginLoaded.find(pluginName);
+		}
+		else
+		{
+			it0 = (*(reinterpret_cast<PluginReg::PluginLoaded::iterator*>(pointer)));
+		}
+
+
+		if (it0 == pluginLoaded.end())
+		{
+			fte = ReturnFTE::MERROR;
+			break;
+		}
+		else if ((*it0) == nullptr)
+		{
+			pluginLoaded.erase(it0);
+			fte = ReturnFTE::MFALSE;
+			break;
+		}
+
+		pluginLoaded.erase(it0);
+
+		pluginMetaData->tablePoint = PluginMetaData::TablePoint::None;
+
+		fte = ReturnFTE::MTRUE;
+	}
+	break;
+
+	case PluginMetaData::TablePoint::InUnloadedTable:
+		pluginMetaData->tablePoint = PluginMetaData::TablePoint::None;
+
+		fte = ReturnFTE::MTRUE;
+		break;
+
+	case PluginMetaData::TablePoint::Unknown:
+		fte = ReturnFTE::MERROR;
+		break;
+
+	default:
+		fte = ReturnFTE::MERROR;
+		break;
+	}
+
+	return fte;
+}
+
+PluginReg::ReturnFTE PluginReg::casePluginListPush(PluginMetaData::TablePoint tablePoint, PluginMetaData* pluginMetaData, void* pointer)
+{
+	if (pluginMetaData->tablePoint != PluginMetaData::TablePoint::None)
+	{
+		return ReturnFTE::MFALSE;
+	}
+
+	ReturnFTE fte = ReturnFTE::MFALSE;
+	switch (tablePoint)
+	{
+	case PluginMetaData::TablePoint::None:
+		fte = ReturnFTE::MTRUE;
+		break;
+
+	case PluginMetaData::TablePoint::InPreLoadTable:
+	{
+		if (pointer == nullptr)
+		{
+			fte = ReturnFTE::MERROR;
+			break;
+		}
+
+		auto pDList = reinterpret_cast<QStringList*>(pointer);
+		for (auto it0 = pDList->begin(); it0 != pDList->end(); it0++)
+		{
+			auto it1 = pluginPreLoadList.find(*it0);
+
+			if (it1 == pluginPreLoadList.end())
+			{
+				PreList preList;
+				preList.push_back(pluginMetaData);
+				pluginPreLoadList.insert(*it0, preList);
+			}
+			else
+			{
+				it1.value().push_back(pluginMetaData);
+			}
+		}
+
+		pluginMetaData->tablePoint = PluginMetaData::TablePoint::InPreLoadTable;
+
+		fte = ReturnFTE::MTRUE;
+	}
+	break;
+
+	case PluginMetaData::TablePoint::InPreUnloadTable:
+	{
+		if (pointer == nullptr)
+		{
+			fte = ReturnFTE::MERROR;
+			break;
+		}
+
+		auto pDList = reinterpret_cast<QStringList*>(pointer);
+		for (auto it0 = pDList->begin(); it0 != pDList->end(); it0++)
+		{
+			auto it1 = pluginPreUnloadList.find(*it0);
+
+			if (it1 == pluginPreUnloadList.end())
+			{
+				PreList preList;
+				preList.push_back(pluginMetaData);
+				pluginPreUnloadList.insert(*it0, preList);
+			}
+			else
+			{
+				it1.value().push_back(pluginMetaData);
+			}
+		}
+
+		pluginMetaData->tablePoint = PluginMetaData::TablePoint::InPreUnloadTable;
+
+		fte = ReturnFTE::MTRUE;
+	}
+	break;
+
+	case PluginMetaData::TablePoint::InLoadedTable:
+		pluginLoaded.insert(pluginMetaData->name, pluginMetaData);
+
+		pluginMetaData->tablePoint = PluginMetaData::TablePoint::InLoadedTable;
+
+		fte = ReturnFTE::MTRUE;
+		break;
+
+	case PluginMetaData::TablePoint::InUnloadedTable:
+		pluginMetaData->tablePoint = PluginMetaData::TablePoint::InUnloadedTable;
+
+		fte = ReturnFTE::MTRUE;
+		break;
+
+	case PluginMetaData::TablePoint::Unknown:
+		fte = ReturnFTE::MERROR;
+		break;
+
+	default:
+		fte = ReturnFTE::MERROR;
+		break;
+	}
+
+	return fte;
+}
+
+PluginReg::ReturnFTE PluginReg::sortPluginList()
+{
+	return ReturnFTE::MTRUE;
 }
 
 QStringList PluginReg::readAllFile(const QString& dirPath)
@@ -382,44 +641,45 @@ void PluginReg::loadPlugin(const QString& dirPath, const QString& fileName)
 
 	qDebug() << jsonValue->type();
 
-	if ((jsonValue != jsonMap.end()) && (jsonValue->type() == QVariant::List))
+	QStringList developerList;
+
+	if (jsonValue != jsonMap.end())
 	{
 		//读取依赖列表
-		auto qvList = jsonValue->toList();
-		//QByteArray developerByteArray = ;
-		//QDataStream dataStream(developerByteArray);
-		QList<QString> developerList;
-
-		for (auto i = qvList.begin(); i != qvList.end(); i++)
+		if (jsonValue->type() == QVariant::List)
 		{
-			developerList.push_back(i->toString());
+			auto qvList = jsonValue->toList();
+
+			for (auto i = qvList.begin(); i != qvList.end(); i++)
+			{
+				auto name = i->toString();
+				if (name.isEmpty())
+				{
+					continue;
+				}
+				developerList.push_back(i->toString());
+			}
 		}
+		else
+		{
+			auto name = jsonValue.value().toString();
+			if (!(name.isEmpty()))
+			{
+				developerList.push_back(name);
+			}
+		}
+	}
 
-		//while (!dataStream.atEnd())
-		//{
-		//	dataStream >> developerList;
-		//}
-
+	if (!(developerList.isEmpty()))
+	{
 		pluginMetaData->dependencyCount = developerList.size();
 		pluginMetaData->dependencyNeedCount = developerList.size();
 
 		PreMapList::iterator pplIt = pluginPreLoadList.begin();
 
-		//加入到预加载列表
-		for (auto i = developerList.begin(); i != developerList.end(); i++)
-		{
-			pplIt = pluginPreLoadList.find(*i);
+		this->casePluginList(PluginMetaData::TablePoint::InPreLoadTable, pluginMetaData, reinterpret_cast<void*>(&developerList));
 
-			if (pplIt == pluginPreLoadList.end())
-			{
-				PreList preList;
-				pplIt = pluginPreLoadList.insert(*i, preList);
-			}
-
-			pplIt->push_back(pluginMetaData);
-		}
-
-		pluginMetaData->tablePoint = PluginMetaData::TablePoint::InPreLoadTable;
+		developerList.clear();
 	}
 	else
 	{
@@ -432,10 +692,9 @@ void PluginReg::loadAllPlugins(const QString& dirPath)
 	unloadAllPlugins();
 
 	QStringList fileNames = readAllFile(dirPath);
-	qDebug() << fileNames.size();
+
 	for (quint32 i = 0; i < fileNames.size(); i++)
 	{
-		qDebug() << fileNames[i];
 		this->loadPlugin(dirPath, fileNames[i]);
 	}
 }
@@ -489,53 +748,67 @@ void PluginReg::unloadPlugin(const QString& name, PluginMetaData* pluginMetaData
 			if (ppuIt == pluginPreUnloadList.end())
 			{
 				PreList preList;
-				pluginPreUnloadList.insert((*i)->name, preList);
+				ppuIt = pluginPreUnloadList.insert((*i)->name, preList);
 			}
 
 			ppuIt.value().push_back(pl);
 		}
 
+		auto plIt = pluginLoaded.find(pl->name);
+
+		if (plIt == pluginLoaded.end())
+		{
+			emit this->unloadError(UnloadError::NoInLoadedList, pluginMetaData);
+		}
+		else
+		{
+			pluginLoaded.erase(plIt);
+		}
+
 		return;
-
-	}
-	else if (!(pl->pluginLoader->isLoaded()))
-	{
-		emit this->unloadError(UnloadError::NoLoading, pl);
-		return;
-	}
-	else if (!(pl->pluginLoader->unload()))
-	{
-		emit this->unloadError(UnloadError::UnloadingFail, pl);
-		return;
 	}
 
-	auto it = pluginLoaded.find(pl->name);
-
-	if (it == pluginLoaded.end())
-	{
-		this->unloadError(UnloadError::NoInLoadedList, pluginMetaData);
-	}
-	else
-	{
-		pluginLoaded.erase(it);
-	}
-
-	pl->tablePoint = PluginMetaData::TablePoint::InUnloadedTable;
-
-	emit this->unloaded(pl->name, pl);
-
-	pl->dependencyList.clear();
-	pl->moduleList.clear();
-	pl->pluginLoader->deleteLater();
-	delete pl;
-	pl = nullptr;
+	emit this->pluginUnloading(pl);
 }
 
 void PluginReg::unloadAllPlugins()
 {
-	for (auto i = pluginLoaded.begin(); i != pluginLoaded.end(); i++)
+	//清理预加载插件列表
+	if (!(pluginPreLoadList.isEmpty()))
 	{
-		this->unloadPlugin(i.key(), i.value());
+		for (auto it0 = pluginPreLoadList.begin(); it0 != pluginPreLoadList.end(); it0++)
+		{
+			for (auto it1 = it0.value().begin(); it1 != it0.value().end(); it1++)
+			{
+				(*it1)->dependencyList.clear();
+				(*it1)->moduleList.clear();
+				(*it1)->pluginLoader->deleteLater();
+				delete (*it1);
+				(*it1) = nullptr;
+			}
+			it0.value().clear();
+		}
+		pluginPreLoadList.clear();
+	}
+
+	auto it = pluginLoaded.begin();
+	while (it != pluginLoaded.end())
+	{
+		if (it.value() == nullptr)
+		{
+			it = pluginLoaded.erase(it);
+			continue;
+		}
+
+		this->unloadPlugin(it.key(), it.value());
+		if (!(pluginLoaded.isEmpty()))
+		{
+			it = pluginLoaded.begin();
+		}
+		else
+		{
+			it = pluginLoaded.end();
+		}
 	}
 }
 

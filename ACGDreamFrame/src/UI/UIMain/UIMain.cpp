@@ -153,6 +153,11 @@ QPushButton* UIMain::addWidght(QWidget* widget)
 
 bool UIMain::removeWidght(const QWidget* widget)
 {
+	if (widget == nullptr)
+	{
+		return false;
+	}
+
 	for (QMap<QPushButton*, QWidget*>::iterator i = pushButtonMap.begin(); i != pushButtonMap.end(); i++)
 	{
 		auto tempWidget = i.value();
