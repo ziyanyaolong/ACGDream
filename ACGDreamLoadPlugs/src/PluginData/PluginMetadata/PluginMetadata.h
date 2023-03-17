@@ -29,8 +29,8 @@ public:
 	quint32 dependencyCount = 0;
 	quint32 dependencyNeedCount = 0;
 
-	QList<const PluginMetaData*> dependencyList;
-	QList<const PluginMetaData*> moduleList;
+	QStringList dependencyList;
+	QStringList moduleList;
 
 	quint32 threadID = 0;
 

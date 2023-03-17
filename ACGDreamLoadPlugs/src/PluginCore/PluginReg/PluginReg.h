@@ -84,7 +84,6 @@ public:
 
 	typedef QList<PluginMetaData*> PreList;
 	typedef QMap<QString, PreList> PreMapList;
-	typedef QMap<QString, PluginMetaData*> PluginLoaded;
 	typedef QMap<QString, PluginMetaData*> PluginMap;
 
 	QStringList readAllFile(const QString& dirPath);
@@ -103,9 +102,10 @@ private:
 
 	PreMapList pluginPreLoadList; //预加载队列
 	PreMapList pluginPreUnloadList; //预卸载队列
-	PluginLoaded pluginLoaded; //已加载队列
+	PluginMap pluginLoaded; //已加载队列
+	QStringList pluginUnloaded; //已卸载队列
 
-	QList<QString> analyticTable;
+	QStringList analyticTable;
 	QString name;
 
 	void preLoaderTest(const QString& name, PluginMetaData* pluginMetaData);

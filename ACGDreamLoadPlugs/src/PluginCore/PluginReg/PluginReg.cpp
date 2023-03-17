@@ -81,8 +81,6 @@ void PluginReg::preLoaderTest(const QString& name, PluginMetaData* pluginMetaDat
 	{
 		((*it1)->dependencyNeedCount)--;
 
-		(*it1)->dependencyList.push_back(pluginMetaData);
-
 		if ((*it1)->dependencyNeedCount > 0)
 		{
 			continue;
@@ -176,11 +174,6 @@ PluginCalInterface* PluginReg::pluginLoading(PluginMetaData* pluginMetaData)
 
 	if (plugin == nullptr)
 	{
-		//connect(plugin, &PluginCalInterface::regMainUIS, this, [&]() {
-		//	emit this->regPluginMainUI((PluginCalInterface*)(sender()));
-		//	});
-
-		//connect(plugin, &PluginCalInterface::deleteMainUI, this, &PluginReg::removeUISignal);
 		this->loadError(ErrorList::EmptyPointer, pluginMetaData);
 		return plugin;
 	}
@@ -220,13 +213,15 @@ PluginReg::ReturnFTE PluginReg::pluginUnloading(PluginMetaData* pluginMetaData)
 
 	emit this->unloaded(pluginMetaData->name, pluginMetaData);
 
-	pluginMetaData->dependencyList.clear();
-	pluginMetaData->moduleList.clear();
-	pluginMetaData->pluginLoader->deleteLater();
 	delete pluginMetaData;
 	pluginMetaData = nullptr;
 
 	fte = ReturnFTE::MTRUE;
+
+	if (pluginLoaded.isEmpty() && pluginPreLoadList.isEmpty() && pluginPreUnloadList.isEmpty())
+	{
+		pluginUnloaded.clear();
+	}
 
 	return fte;
 }
@@ -294,10 +289,7 @@ PluginReg::ReturnFTE PluginReg::casePluginListErase(PluginMetaData* pluginMetaDa
 		}
 		else
 		{
-			for (auto it0 = pluginMetaData->dependencyList.begin(); it0 != pluginMetaData->dependencyList.end(); it0++)
-			{
-				tempList.push_back((*(it0))->name);
-			}
+			tempList = pluginMetaData->dependencyList;
 		}
 
 		for (auto it0 = tempList.begin(); it0 != tempList.end(); it0++)
@@ -348,10 +340,7 @@ PluginReg::ReturnFTE PluginReg::casePluginListErase(PluginMetaData* pluginMetaDa
 		}
 		else
 		{
-			for (auto it0 = pluginMetaData->dependencyList.begin(); it0 != pluginMetaData->dependencyList.end(); it0++)
-			{
-				tempList.push_back((*(it0))->name);
-			}
+			tempList = pluginMetaData->dependencyList;
 		}
 
 		for (auto it0 = tempList.begin(); it0 != tempList.end(); it0++)
@@ -396,7 +385,7 @@ PluginReg::ReturnFTE PluginReg::casePluginListErase(PluginMetaData* pluginMetaDa
 			break;
 		}
 
-		PluginReg::PluginLoaded::iterator it0;
+		PluginReg::PluginMap::iterator it0;
 
 		if (pointer == nullptr)
 		{
@@ -404,7 +393,7 @@ PluginReg::ReturnFTE PluginReg::casePluginListErase(PluginMetaData* pluginMetaDa
 		}
 		else
 		{
-			it0 = (*(reinterpret_cast<PluginReg::PluginLoaded::iterator*>(pointer)));
+			it0 = (*(reinterpret_cast<PluginReg::PluginMap::iterator*>(pointer)));
 		}
 
 
@@ -531,6 +520,8 @@ PluginReg::ReturnFTE PluginReg::casePluginListPush(PluginMetaData::TablePoint ta
 		break;
 
 	case PluginMetaData::TablePoint::InUnloadedTable:
+		pluginUnloaded.push_back(pluginMetaData->name);
+
 		pluginMetaData->tablePoint = PluginMetaData::TablePoint::InUnloadedTable;
 
 		fte = ReturnFTE::MTRUE;
@@ -639,8 +630,6 @@ void PluginReg::loadPlugin(const QString& dirPath, const QString& fileName)
 	//获取是否有依赖需求
 	jsonValue = jsonMap.find("MetaData.Dependencys");
 
-	qDebug() << jsonValue->type();
-
 	QStringList developerList;
 
 	if (jsonValue != jsonMap.end())
@@ -672,12 +661,31 @@ void PluginReg::loadPlugin(const QString& dirPath, const QString& fileName)
 
 	if (!(developerList.isEmpty()))
 	{
+		pluginMetaData->dependencyList = developerList;
 		pluginMetaData->dependencyCount = developerList.size();
 		pluginMetaData->dependencyNeedCount = developerList.size();
 
-		PreMapList::iterator pplIt = pluginPreLoadList.begin();
+		for (auto it0 = developerList.begin(); it0 != developerList.end(); it0++)
+		{
+			auto it1 = pluginLoaded.find(*(it0));
 
-		this->casePluginList(PluginMetaData::TablePoint::InPreLoadTable, pluginMetaData, reinterpret_cast<void*>(&developerList));
+			if (it1 == pluginLoaded.end())
+			{
+				continue;
+			}
+
+			(pluginMetaData->dependencyNeedCount)--;
+		}
+
+		if (pluginMetaData->dependencyNeedCount > 0)
+		{
+			this->casePluginList(PluginMetaData::TablePoint::InPreLoadTable, pluginMetaData);
+		}
+		else
+		{
+			this->casePluginList(PluginMetaData::TablePoint::InLoadedTable, pluginMetaData);
+			auto plugin = this->pluginLoading(pluginMetaData);
+		}
 
 		developerList.clear();
 	}
@@ -693,9 +701,9 @@ void PluginReg::loadAllPlugins(const QString& dirPath)
 
 	QStringList fileNames = readAllFile(dirPath);
 
-	for (quint32 i = 0; i < fileNames.size(); i++)
+	for (auto it = fileNames.begin(); it != fileNames.end(); it++)
 	{
-		this->loadPlugin(dirPath, fileNames[i]);
+		this->loadPlugin(dirPath, *it);
 	}
 }
 
@@ -737,38 +745,55 @@ void PluginReg::unloadPlugin(const QString& name, PluginMetaData* pluginMetaData
 			return;
 		}
 
-		pl->tablePoint = PluginMetaData::TablePoint::InPreUnloadTable;
-
 		pl->dependencyNeedCount = pl->dependencyCount;
 
-		for (auto i = pl->dependencyList.begin(); i != pl->dependencyList.end(); i++)
-		{
-			auto ppuIt = pluginPreUnloadList.find((*i)->name);
+		QStringList tempList = pl->dependencyList;
 
-			if (ppuIt == pluginPreUnloadList.end())
+		for (auto it = tempList.begin(); it != tempList.end(); it++)
+		{
+			auto plIt = pluginUnloaded.indexOf(*it);
+			
+			if (plIt != -1)
 			{
-				PreList preList;
-				ppuIt = pluginPreUnloadList.insert((*i)->name, preList);
+				(pl->dependencyNeedCount)--;
 			}
 
-			ppuIt.value().push_back(pl);
-		}
-
-		auto plIt = pluginLoaded.find(pl->name);
-
-		if (plIt == pluginLoaded.end())
-		{
-			emit this->unloadError(UnloadError::NoInLoadedList, pluginMetaData);
-		}
-		else
-		{
-			pluginLoaded.erase(plIt);
+			if (pl->dependencyNeedCount > 0)
+			{
+				switch (this->casePluginList(PluginMetaData::TablePoint::InPreUnloadTable, pluginMetaData))
+				{
+				case PluginReg::ReturnFTE::MFALSE:
+					break;
+				case PluginReg::ReturnFTE::MTRUE:
+					break;
+				case PluginReg::ReturnFTE::MERROR:
+					break;
+				default:
+					break;
+				}
+			}
+			else
+			{
+				switch (this->pluginUnloading(pl))
+				{
+				case PluginReg::ReturnFTE::MFALSE:
+					break;
+				case PluginReg::ReturnFTE::MTRUE:
+					break;
+				case PluginReg::ReturnFTE::MERROR:
+					break;
+				default:
+					break;
+				}
+			}
 		}
 
 		return;
 	}
-
-	emit this->pluginUnloading(pl);
+	else
+	{
+		emit this->pluginUnloading(pl);
+	}
 }
 
 void PluginReg::unloadAllPlugins()
@@ -780,15 +805,26 @@ void PluginReg::unloadAllPlugins()
 		{
 			for (auto it1 = it0.value().begin(); it1 != it0.value().end(); it1++)
 			{
-				(*it1)->dependencyList.clear();
-				(*it1)->moduleList.clear();
-				(*it1)->pluginLoader->deleteLater();
 				delete (*it1);
 				(*it1) = nullptr;
 			}
 			it0.value().clear();
 		}
 		pluginPreLoadList.clear();
+	}
+
+	if (!(pluginPreUnloadList.isEmpty()))
+	{
+		for (auto it0 = pluginPreUnloadList.begin(); it0 != pluginPreUnloadList.end(); it0++)
+		{
+			for (auto it1 = it0.value().begin(); it1 != it0.value().end(); it1++)
+			{
+				delete (*it1);
+				(*it1) = nullptr;
+			}
+			it0.value().clear();
+		}
+		pluginPreUnloadList.clear();
 	}
 
 	auto it = pluginLoaded.begin();
